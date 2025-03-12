@@ -13,8 +13,8 @@
 
 <body>
 <div class="d-flex">
-    <nav class="navbar bg-dark" style="width: 125px; height: 100vh" data-bs-theme="dark">
-        <div class="container-fluid flex-column justify-content-start align-items-start h-100 min-vh-10">
+    <nav class="navbar bg-dark min-vh-100" style="width: 125px;" data-bs-theme="dark">
+        <div class="container-fluid flex-column justify-content-start align-items-start h-100">
             {% if not current_user.is_anonymous %}
             <a class="navbar-brand fw-bold border-bottom"
                href="{{ url_for('home_user', username=current_user.username) }}">
@@ -78,10 +78,10 @@
         </div>
     </nav>
 
-    <div class="container p-2">
+    <div class="container m-2">
         {% block content %}
         {% endblock %}
-        <div class="container">
+        <div class="container m-2">
             {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
             {% for category, message in messages %}
