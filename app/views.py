@@ -1,7 +1,6 @@
 from flask import render_template, redirect, url_for, flash, request, send_file, send_from_directory
 from app import app
-from app.forms import ChooseForm, LoginForm, ChangePasswordForm, RegisterForm, FormLogout, FormGoRegister, \
-    FormGoChangePassword
+from app.forms import ChooseForm, LoginForm, ChangePasswordForm, RegisterForm, FormRedirect
 from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
 from app import db
@@ -17,6 +16,7 @@ def home():
 
 
 @app.route('/<username>')
+@login_required
 def home_user(username):
     username = current_user.username
     return render_template('home.html', title=f"Home {username}", username=username)
@@ -53,7 +53,7 @@ def login():
     if current_user.is_authenticated:
         return redirect(url_for('home'))
     form_login = LoginForm()
-    form_register = FormGoRegister()
+    form_register = FormRedirect()
     if 'submit' in request.form and form_login.validate_on_submit():
         user = db.session.scalar(
             sa.select(User).where(User.username == form_login.username.data)
@@ -175,17 +175,16 @@ def logout():
 @app.route('/settings', methods=['GET', 'POST'])
 @login_required
 def settings():
-    form_logout = FormLogout()
-    form_change_password = FormGoChangePassword()
-    if 'logout' in request.form and form_logout.validate_on_submit():
-        return redirect(url_for('logout'))
-    elif 'change_password' in request.form and form_change_password.validate_on_submit():
-        return redirect(url_for('change_password'))
+    form = FormRedirect()
+    if form.validate_on_submit():
+        if form.logout.data:
+            return redirect(url_for('logout'))
+        elif form.change_password.data:
+            return redirect(url_for('change_password'))
     return render_template(
         'settings.html',
         title='Settings',
-        form_logout=form_logout,
-        form_change_password=form_change_password
+        form=form
     )
 
 

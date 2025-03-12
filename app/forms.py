@@ -69,13 +69,7 @@ class ChangePasswordForm(FlaskForm):
     submit = SubmitField('Update Password')
 
 
-class FormGoRegister(FlaskForm):
+class FormRedirect(FlaskForm):
     register = SubmitField('Register')
-
-
-class FormLogout(FlaskForm):
     logout = SubmitField('Logout')
-
-
-class FormGoChangePassword(FlaskForm):
     change_password = SubmitField('Change Password')
