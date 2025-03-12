@@ -19,7 +19,14 @@ def home():
 @login_required
 def home_user(username):
     username = current_user.username
-    return render_template('home.html', title=f"Home {username}", username=username)
+    return render_template('home_user.html', title=f"Home {username}", username=username)
+
+
+@app.route('/admin/<username>')
+@login_required
+def home_admin(username):
+    username = current_user.username
+    return render_template('home_admin.html', title=f"Home {username}", username=username)
 
 
 @app.route('/register', methods=['GET', 'POST'])
