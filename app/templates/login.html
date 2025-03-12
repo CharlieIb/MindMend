@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% import "bootstrap_wtf.html" as wtf %}
+
+{% block content %}
+<div class="container">
+    <form action="" method="POST" novalidate>
+        {{ form_login.hidden_tag() }}
+        {{ wtf.form_field(form_login.username, False) }}
+        {{ wtf.form_field(form_login.password, False) }}
+        {{ wtf.form_field(form_login.remember_me, False) }}
+        <div class="d-flex">
+            <div>
+                {{ wtf.form_field(form_login.submit, False) }}
+            </div>
+            <div class="ms-3">
+                {{ form_register.hidden_tag() }}
+                {{ wtf.form_field(form_register.register, False) }}
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

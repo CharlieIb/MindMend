@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% import "bootstrap_wtf.html" as wtf %}
+
+{% block content %}
+<div class="container">
+    <form action="" method="POST" novalidate>
+        {{ form_logout.hidden_tag() }}
+        {{ wtf.form_field(form_logout.logout, False) }}
+        {{ form_change_password.hidden_tag() }}
+        {{ wtf.form_field(form_change_password.change_password, False) }}
+    </form>
+</div>
+{% endblock %}

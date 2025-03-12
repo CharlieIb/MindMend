@@ -1,6 +1,7 @@
 from flask import render_template, redirect, url_for, flash, request, send_file, send_from_directory
 from app import app
-from app.forms import ChooseForm, LoginForm, ChangePasswordForm, RegisterForm
+from app.forms import ChooseForm, LoginForm, ChangePasswordForm, RegisterForm, FormLogout, FormGoRegister, \
+    FormGoChangePassword
 from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
 from app import db
@@ -13,6 +14,12 @@ import io
 @app.route('/')
 def home():
     return render_template('index.html', title='Home')
+
+
+@app.route('/<username>')
+def home_user(username):
+    username = current_user.username
+    return render_template('home.html', title=f"Home {username}", username=username)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -45,20 +52,28 @@ def register():
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('home'))
-    form = LoginForm()
-    if form.validate_on_submit():
+    form_login = LoginForm()
+    form_register = FormGoRegister()
+    if 'submit' in request.form and form_login.validate_on_submit():
         user = db.session.scalar(
-            sa.select(User).where(User.username == form.username.data)
+            sa.select(User).where(User.username == form_login.username.data)
         )
-        if user is None or not user.check_password(form.password.data):
+        if user is None or not user.check_password(form_login.password.data):
             flash('Invalid username or password', 'danger')
             return redirect(url_for('login'))
-        login_user(user, remember=form.remember_me.data)
+        login_user(user, remember=form_login.remember_me.data)
         next_page = request.args.get('next')
         if not next_page or urlsplit(next_page).netloc != '':
-            next_page = url_for('home')
+            next_page = url_for('home_user', username=current_user.username)
         return redirect(next_page)
-    return render_template('generic_form.html', title='Sign In', form=form)
+    elif 'register' in request.form and form_register.validate_on_submit():
+        return redirect(url_for('register'))
+    return render_template(
+        'login.html',
+        title='Sign In',
+        form_login=form_login,
+        form_register=form_register
+    )
 
 
 @app.route('/admin', methods=['GET', 'POST'])
@@ -155,6 +170,23 @@ def change_password():
 def logout():
     logout_user()
     return redirect(url_for('home'))
+
+
+@app.route('/settings', methods=['GET', 'POST'])
+@login_required
+def settings():
+    form_logout = FormLogout()
+    form_change_password = FormGoChangePassword()
+    if 'logout' in request.form and form_logout.validate_on_submit():
+        return redirect(url_for('logout'))
+    elif 'change_password' in request.form and form_change_password.validate_on_submit():
+        return redirect(url_for('change_password'))
+    return render_template(
+        'settings.html',
+        title='Settings',
+        form_logout=form_logout,
+        form_change_password=form_change_password
+    )
 
 
 # Error handlers

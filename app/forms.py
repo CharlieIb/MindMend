@@ -65,5 +65,17 @@ class ChangePasswordForm(FlaskForm):
     confirm_password = PasswordField('Confirm Password', validators=[
         DataRequired(),
         EqualTo('new_password', message='Passwords must match'),
-     ])
+    ])
     submit = SubmitField('Update Password')
+
+
+class FormGoRegister(FlaskForm):
+    register = SubmitField('Register')
+
+
+class FormLogout(FlaskForm):
+    logout = SubmitField('Logout')
+
+
+class FormGoChangePassword(FlaskForm):
+    change_password = SubmitField('Change Password')
