@@ -26,6 +26,7 @@
                 </li>
             </ul>
             <ul class="navbar-nav flex-column justify-content-evenly w-100 flex-grow-1">
+            {% if not current_user.is_anonymous %}
                 <li class="nav-item border-top">
                     <a class="nav-link" aria-current="page" href="">
                         CheckIn
@@ -47,11 +48,18 @@
                     </a>
                 </li>
                 <li class="nav-item border-top">
-                    <a class="nav-link" aria-current="page" href="">
+                    <a class="nav-link" aria-current="page" href="{{ url_for('settings') }}">
                         Settings
                     </a>
                 </li>
+            {% else %}
+                <li class="nav-item border-top">
+                    <a class="nav-link" aria-current="page" href="{{ url_for('login') }}">
+                        Login
+                    </a>
+                </li>
             </ul>
+            {% endif %}
         </div>
     </nav>
 
