@@ -1,0 +1,5 @@
+# .gitignore
+
+# system generated
+.idea
+__pycache__
