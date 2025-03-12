@@ -16,10 +16,17 @@
     <nav class="navbar bg-dark min-vh-100" style="width: 125px;" data-bs-theme="dark">
         <div class="container-fluid flex-column justify-content-start align-items-start h-100">
             {% if not current_user.is_anonymous %}
-            <a class="navbar-brand fw-bold border-bottom"
-               href="{{ url_for('home_user', username=current_user.username) }}">
-                MindMend
-            </a>
+                {% if current_user.role == 'Normal' %}
+                    <a class="navbar-brand fw-bold border-bottom"
+                       href="{{ url_for('home_user', username=current_user.username) }}">
+                        MindMend
+                    </a>
+                {% else %}
+                    <a class="navbar-brand fw-bold border-bottom"
+                       href="{{ url_for('home_admin', username=current_user.username) }}">
+                        MindMend
+                    </a>
+                {% endif %}
             {% else %}
             <a class="navbar-brand fw-bold border-bottom" href="{{ url_for('home') }}">
                 MindMend
@@ -28,11 +35,19 @@
             <ul class="navbar-nav flex-column">
                 <li class="nav-item">
                     {% if not current_user.is_anonymous %}
-                    <a class="nav-link"
-                       aria-current="page"
-                       href="{{ url_for('home_user', username=current_user.username) }}">
-                        Home
-                    </a>
+                        {% if current_user.role == 'Normal' %}
+                            <a class="nav-link"
+                               aria-current="page"
+                               href="{{ url_for('home_user', username=current_user.username) }}">
+                                MindMirror
+                            </a>
+                        {% else %}
+                            <a class="nav-link"
+                               aria-current="page"
+                               href="{{ url_for('home_admin', username=current_user.username) }}">
+                                Home
+                            </a>
+                        {% endif %}
                     {% else %}
                     <a class="nav-link" aria-current="page" href="{{ url_for('home') }}">
                         Home
@@ -42,26 +57,34 @@
             </ul>
             <ul class="navbar-nav flex-column justify-content-evenly w-100 flex-grow-1">
                 {% if not current_user.is_anonymous %}
-                <li class="nav-item border-top">
-                    <a class="nav-link" aria-current="page" href="">
-                        CheckIn
-                    </a>
-                </li>
-                <li class="nav-item border-top">
-                    <a class="nav-link" aria-current="page" href="">
-                        Screening
-                    </a>
-                </li>
-                <li class="nav-item border-top">
-                    <a class="nav-link" aria-current="page" href="">
-                        ReachOut
-                    </a>
-                </li>
-                <li class="nav-item border-top">
-                    <a class="nav-link" aria-current="page" href="">
-                        Uplift
-                    </a>
-                </li>
+                    {% if current_user.role == 'Normal' %}
+                        <li class="nav-item border-top">
+                            <a class="nav-link" aria-current="page" href="">
+                                CheckIn
+                            </a>
+                        </li>
+                        <li class="nav-item border-top">
+                            <a class="nav-link" aria-current="page" href="">
+                                Screening
+                            </a>
+                        </li>
+                        <li class="nav-item border-top">
+                            <a class="nav-link" aria-current="page" href="">
+                                UpLift
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item border-top">
+                            <a class="nav-link" aria-current="page" href="">
+                                ReachOut
+                            </a>
+                        </li>
+                        <li class="nav-item border-top">
+                            <a class="nav-link" aria-current="page" href="{{ url_for('admin') }}">
+                                Admin
+                            </a>
+                        </li>
+                    {% endif %}
                 <li class="nav-item border-top">
                     <a class="nav-link" aria-current="page" href="{{ url_for('settings') }}">
                         Settings
@@ -73,12 +96,12 @@
                         Login
                     </a>
                 </li>
+                {% endif %}
             </ul>
-            {% endif %}
         </div>
     </nav>
 
-    <div class="container m-2">
+    <div class="container mx-auto my-2">
         {% block content %}
         {% endblock %}
         <div class="container m-2">
