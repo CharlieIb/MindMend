@@ -15,18 +15,33 @@
 <div class="d-flex">
     <nav class="navbar bg-dark" style="width: 125px; height: 100vh" data-bs-theme="dark">
         <div class="container-fluid flex-column justify-content-start align-items-start h-100 min-vh-10">
+            {% if not current_user.is_anonymous %}
+            <a class="navbar-brand fw-bold border-bottom"
+               href="{{ url_for('home_user', username=current_user.username) }}">
+                MindMend
+            </a>
+            {% else %}
             <a class="navbar-brand fw-bold border-bottom" href="{{ url_for('home') }}">
                 MindMend
             </a>
+            {% endif %}
             <ul class="navbar-nav flex-column">
                 <li class="nav-item">
+                    {% if not current_user.is_anonymous %}
+                    <a class="nav-link"
+                       aria-current="page"
+                       href="{{ url_for('home_user', username=current_user.username) }}">
+                        Home
+                    </a>
+                    {% else %}
                     <a class="nav-link" aria-current="page" href="{{ url_for('home') }}">
                         Home
                     </a>
                 </li>
+                {% endif %}
             </ul>
             <ul class="navbar-nav flex-column justify-content-evenly w-100 flex-grow-1">
-            {% if not current_user.is_anonymous %}
+                {% if not current_user.is_anonymous %}
                 <li class="nav-item border-top">
                     <a class="nav-link" aria-current="page" href="">
                         CheckIn
@@ -52,7 +67,7 @@
                         Settings
                     </a>
                 </li>
-            {% else %}
+                {% else %}
                 <li class="nav-item border-top">
                     <a class="nav-link" aria-current="page" href="{{ url_for('login') }}">
                         Login
