@@ -1,1 +1,2 @@
-# ./app/helpers/__init__.py
+# ./app/utils/__init__.py
+from .build_heatmap import HeatMap
