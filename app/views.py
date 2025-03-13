@@ -187,14 +187,33 @@ def settings():
         form=form
     )
 
+
 # Features
 # MindMirror - landing page
-@app.route('/MindMirror')
+@app.route('/MindMirror', methods=['GET', 'POST'])
 @login_required
 def mind_mirror():
     curr_day, curr_month, curr_year = datetime.now().day, datetime.now().month, datetime.now().year
     month = HeatMap(curr_day, curr_month, curr_year).month_display()
-    return render_template('MindMirror.html', title='MindMirror', month=month)
+    year = HeatMap(curr_day, curr_month, curr_year).year_display()
+    display = 'month'
+    form_display = ChooseForm()
+    if form_display.validate_on_submit():
+        if form_display.change.data == 'year':
+            display = 'month'
+        elif form_display.change.data == 'month':
+            display = 'year'
+    return render_template(
+        'MindMirror.html',
+        title='MindMirror',
+        curr_day=curr_day,
+        curr_month=curr_month,
+        curr_year=curr_year,
+        month=month,
+        year=year,
+        display=display,
+        form_display=form_display
+    )
 
 
 # Error handlers

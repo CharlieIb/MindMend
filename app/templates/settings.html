@@ -2,11 +2,13 @@
 {% import "bootstrap_wtf.html" as wtf %}
 
 {% block content %}
-<div class="container">
-    <form action="" method="POST" novalidate>
-        {{ form.hidden_tag() }}
-        {{ wtf.form_field(form.logout, False) }}
-        {{ wtf.form_field(form.change_password, False) }}
-    </form>
-</div>
+<h1>Settings</h1>
+<h2>Account Actions</h2>
+<form action="" method="POST" novalidate>
+    {{ form.hidden_tag() }}
+    {{ wtf.form_field(form.logout, False) }}
+    {{ wtf.form_field(form.change_password, False) }}
+</form>
+<h2>Share Data</h2>
+<!-- bool form -->
 {% endblock %}
