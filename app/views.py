@@ -6,27 +6,45 @@ import sqlalchemy as sa
 from app import db
 from app.models import User
 from urllib.parse import urlsplit
-import csv
-import io
+from app.utils import HeatMap
+from datetime import datetime
 
 
+# Not logged In Access
 @app.route('/')
 def home():
     return render_template('index.html', title='Home')
 
 
-@app.route('/<username>')
-@login_required
-def home_user(username):
-    username = current_user.username
-    return render_template('home_user.html', title=f"Home {username}", username=username)
-
-
-@app.route('/admin/<username>')
-@login_required
-def home_admin(username):
-    username = current_user.username
-    return render_template('home_admin.html', title=f"Home {username}", username=username)
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    form_login = LoginForm()
+    form_register = FormRedirect()
+    if 'submit' in request.form and form_login.validate_on_submit():
+        user = db.session.scalar(
+            sa.select(User).where(User.username == form_login.username.data)
+        )
+        if user is None or not user.check_password(form_login.password.data):
+            flash('Invalid username or password', 'danger')
+            return redirect(url_for('login'))
+        login_user(user, remember=form_login.remember_me.data)
+        next_page = request.args.get('next')
+        if not next_page or urlsplit(next_page).netloc != '':
+            if current_user.role == 'Normal':
+                next_page = url_for('mind_mirror')
+            elif current_user.role == 'Admin':
+                next_page = url_for('home_admin', username=current_user.username)
+        return redirect(next_page)
+    elif 'register' in request.form and form_register.validate_on_submit():
+        return redirect(url_for('register'))
+    return render_template(
+        'login.html',
+        title='Sign In',
+        form_login=form_login,
+        form_register=form_register
+    )
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -55,32 +73,12 @@ def register():
     return render_template('register.html', title='Register', form=form)
 
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
-    form_login = LoginForm()
-    form_register = FormRedirect()
-    if 'submit' in request.form and form_login.validate_on_submit():
-        user = db.session.scalar(
-            sa.select(User).where(User.username == form_login.username.data)
-        )
-        if user is None or not user.check_password(form_login.password.data):
-            flash('Invalid username or password', 'danger')
-            return redirect(url_for('login'))
-        login_user(user, remember=form_login.remember_me.data)
-        next_page = request.args.get('next')
-        if not next_page or urlsplit(next_page).netloc != '':
-            next_page = url_for('home_user', username=current_user.username)
-        return redirect(next_page)
-    elif 'register' in request.form and form_register.validate_on_submit():
-        return redirect(url_for('register'))
-    return render_template(
-        'login.html',
-        title='Sign In',
-        form_login=form_login,
-        form_register=form_register
-    )
+# Only Admin Access
+@app.route('/admin/<username>')
+@login_required
+def home_admin(username):
+    username = current_user.username
+    return render_template('home_admin.html', title=f"Home {username}", username=username)
 
 
 @app.route('/admin', methods=['GET', 'POST'])
@@ -146,12 +144,7 @@ def admin():
     )
 
 
-@app.route('/account')
-@login_required
-def account():
-    return render_template('account.html', title='Account')
-
-
+# User Account Functionality Access
 @app.route('/change_password', methods=['GET', 'POST'])
 @login_required
 def change_password():
@@ -194,10 +187,17 @@ def settings():
         form=form
     )
 
+# Features
+# MindMirror - landing page
+@app.route('/MindMirror')
+@login_required
+def mind_mirror():
+    curr_day, curr_month, curr_year = datetime.now().day, datetime.now().month, datetime.now().year
+    month = HeatMap(curr_day, curr_month, curr_year).month_display()
+    return render_template('MindMirror.html', title='MindMirror', month=month)
+
 
 # Error handlers
-# See: https://en.wikipedia.org/wiki/List_of_HTTP_status_codes
-
 # Error handler for 403 Forbidden
 @app.errorhandler(403)
 def error_403(error):
