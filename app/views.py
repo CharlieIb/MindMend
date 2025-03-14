@@ -107,9 +107,10 @@ def admin():
                 if not user:
                     flash(f"User with ID: {delete_value} does not exist", 'danger')
                     return redirect(url_for('admin'))
-                if admin_count <= 1:
-                    flash('Must have at least one admin', 'danger')
-                    return redirect(url_for('admin'))
+                if user.role == 'Admin':
+                    if admin_count <= 1:
+                        flash('Must have at least one admin', 'danger')
+                        return redirect(url_for('admin'))
                 db.session.delete(user)
                 db.session.commit()
                 flash(f"{user.username} has been deleted successfully", 'success')

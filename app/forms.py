@@ -26,6 +26,9 @@ def valid_email(form, field):
     except EmailNotValidError as e:
         raise ValidationError(f"Email not valid: {e}")
 
+    if not email.lower().endswith('.ac.uk'):
+        raise ValidationError('Must be a university email.')
+
 
 # Forms
 class ChooseForm(FlaskForm):
