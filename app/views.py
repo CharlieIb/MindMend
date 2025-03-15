@@ -204,7 +204,7 @@ def mind_mirror():
         elif form_display.change.data == 'month':
             display = 'year'
     return render_template(
-        'MindMirror.html',
+        'mindmirror.html',
         title='MindMirror',
         curr_day=curr_day,
         curr_month=curr_month,
