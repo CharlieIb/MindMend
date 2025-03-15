@@ -4,5 +4,25 @@
 {% block content %}
 <h1>Welcome {{ current_user.username }}</h1>
 <h2>Here is your personalised Insight</h2>
-{% include 'heatmap.html' %}
+{% if display == 'month' %}
+<div class="d-flex flex-wrap justify-content-center w-100">
+{% else %}
+<div class="w-100">
+{% endif %}
+    {% include 'heatmap.html' %}
+    <div class="mt-3 border rounded-3 p-1 d-flex">
+        <div class="me-3">
+            <h3 class="bg-light text-center rounded-3 py-1" style="width: 150px">Steps</h3>
+            <h4 class="bg-light fw-bold text-center rounded-3 p-3 mb-0">{{ track_health_info.steps }}</h4>
+            <h3 class="bg-light text-center rounded-3 py-1 mt-3" style="width: 150px">Goal</h3>
+            <h4 class="bg-light fw-bold text-center rounded-3 p-3 mb-0">{{ track_health_info.steps_goal }}</h4>
+        </div>
+        <div>
+            <h3 class="bg-light text-center rounded-3 py-1" style="width: 150px">Completed</h3>
+            <h4 class="bg-light fw-bold text-center rounded-3 p-3 mb-0">
+                {{ (track_health_info.steps / track_health_info.steps_goal) * 100 }}%
+            </h4>
+        </div>
+    </div>
+</div>
 {% endblock %}
