@@ -22,8 +22,6 @@ class HeatMap:
     def year_display(self):
         logs_mapping = self._create_logs_mapping(self.fake_data_log_raw())
         days_in_year = []
-        # for m in range(1, 13):
-        #     days_in_year.append([[m, self.yy], calendar.monthcalendar(self.yy, m)])
         for m in range(1, 13):
             month_cal = calendar.monthcalendar(self.yy, m)
             for week in month_cal:
@@ -68,5 +66,3 @@ class HeatMap:
                 {'emotion': log['emotion'], 'colour': log['colour']}
             for log in logs
         }
-
-print(HeatMap().year_display())
