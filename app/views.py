@@ -194,16 +194,19 @@ def settings():
 @app.route('/mindmirror', methods=['GET', 'POST'])
 @login_required
 def mindmirror():
-    curr_day, curr_month, curr_year = datetime.now().day, datetime.now().month, datetime.now().year
-    month = HeatMap(curr_day, curr_month, curr_year).month_display()
-    year = HeatMap(curr_day, curr_month, curr_year).year_display()
-    display = 'month'
-    form_display = ChooseForm()
+    now = datetime.now()
+    curr_day, curr_month, curr_year = now.day, now.month, now.year
+
+    heatmap = HeatMap(curr_day, curr_month, curr_year)
+    month, year = heatmap.month_display(), heatmap.year_display()
+
+    form_display, display = ChooseForm(), 'month'
     if form_display.validate_on_submit():
         if form_display.change.data == 'year':
             display = 'month'
         elif form_display.change.data == 'month':
             display = 'year'
+
     return render_template(
         'mindmirror.html',
         title='MindMirror',
@@ -217,6 +220,7 @@ def mindmirror():
     )
 
 
+# CheckIn
 @app.route('/check-in')
 def emotion_log():
     emotions = [
