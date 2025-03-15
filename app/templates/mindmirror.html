@@ -25,6 +25,10 @@
                             <div class="m-1"
                                  style="height: 20px; width: 20px;">
                             </div>
+                        {% elif day is number and day > curr_day %}
+                            <div class="border border-dark rounded-1 m-1"
+                                 style="height: 20px; width: 20px;">
+                            </div>
                         {% else %}
                             {% if day is not number %}
                                 <div class="border border-success rounded-1 m-1 bg-{{ day[1]['colour'] }} bg-opacity-50"
@@ -52,11 +56,9 @@
                         {% for week in month[1] %}
                             <div class="d-flex flex-nowrap">
                                 {% for day in week %}
-                                    {%
-                                        if day == curr_day and month_index == curr_month
+                                    {% if day == curr_day and month_index == curr_month
                                         or
-                                        day is not number and day[0] == curr_day  and month_index == curr_month
-                                    %}
+                                        day is not number and day[0] == curr_day  and month_index == curr_month %}
                                         {% if day is not number %}
                                             <div class="border border-danger rounded-1 m-1 bg-{{ day[1]['colour'] }} bg-opacity-50"
                                                  style="height: 20px; width: 20px;">
@@ -68,6 +70,12 @@
                                         {% endif %}
                                     {% elif day == 0 %}
                                         <div class="m-1"
+                                             style="height: 20px; width: 20px;">
+                                        </div>
+                                    {% elif day is number and day > curr_day and month_index >= curr_month
+                                        or
+                                        month_index > curr_month %}
+                                        <div class="border border-dark rounded-1 m-1"
                                              style="height: 20px; width: 20px;">
                                         </div>
                                     {% else %}
@@ -95,9 +103,9 @@
     {{ form_display.csrf_token() }}
     {{ form_display.change(value=display) }}
     {% if display == 'month' %}
-        <button class="btn btn-primary fw-bold" style="width: 225px;" type="submit">Year</button>
+        <button class="btn btn-dark fw-bold" style="width: 225px;" type="submit">Year</button>
     {% else %}
-        <button class="btn btn-primary fw-bold" style="width: 225px;" type="submit">Month</button>
+        <button class="btn btn-dark fw-bold" style="width: 225px;" type="submit">Month</button>
     {% endif %}
 </form>
 <!-- could separate into different HTML file to keep a modular and more organised code,
