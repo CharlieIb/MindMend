@@ -1,92 +1,296 @@
-# Create the DB and all tables
-db.create_all()
-# Create some User objects
-u1 = User(username='amy', email='a@b.com',
-          password_hash=generate_password_hash('amy.pw'))
-u2 = User(username='tom', email='t@b.com',
-          password_hash=generate_password_hash('tom.pw'))
-u3 = User(username='yin', email='y@b.com')
-u3.set_password('yin.pw')
+######################### Test data for model ##########################
+# User table
+user1 = User(username="john_doe", email="john.doe@example.com", role="Normal")
+user2 = User(username="jane_smith", email="jane.smith@example.com", role="Admin")
+user1.set_password("password123")
+user2.set_password("password123")
 
-# Note the id field is not set yet
-u1
-u2
-u3
-
-# Add all new objects to the DB session and commit them
-db.session.add_all([u1, u2, u3])
+db.session.add(user1)
+db.session.add(user2)
 db.session.commit()
 
-# Alternative way of adding new objects to the session
-db.session.add(u1)
-db.session.add(u2)
-db.session.add(u3)
+# Location table
+location1 = Location(name="Office")
+location2 = Location(name="Home")
+location3 = Location(name="Bar")
+location4 = Location(name="Gym")
+
+db.session.add(location1)
+db.session.add(location2)
+db.session.add(location3)
+db.session.add(location4)
 db.session.commit()
 
-# After the commit, the id fields have been set:
-u1
-u2
-u3
+# Activity Table
+activity1 = Activity(name="Working")
+activity2 = Activity(name="Commuting")
+activity3 = Activity(name="Socialising")
+activity4 = Activity(name="Exercising")
 
-# Delete all tables, but not the DB
-# db.drop_all()
 
-# Objects read from the database are already in
-# the session and don't need to be added
-user = db.session.get(User, 1)
-user
-user.email='new@b.com'
-user
+db.session.add(activity1)
+db.session.add(activity2)
+db.session.add(activity3)
+db.session.add(activity4)
 db.session.commit()
-user = db.session.get(User, 1)
-user
 
+# People Table
+person1 = Person(name="Colleagues")
+person2 = Person(name="Friends")
+person3 = Person(name="Family")
 
-# If something goes wrong, undo any changes made by
-# rolling back the current transaction
-db.session.rollback()
-
-
-# Deleting an object
-u = db.session.get(User, 3)
-print(u)
-db.session.delete(u)
-db.session.commit()  
-u=db.session.get(User, 3)
-print(u)
-
-# Adding back the object just deleted
-u3 = User(username='yin', email='y@b.com')
-u3.set_password('yin.pw')
-db.session.add(u3)
+db.session.add(person1)
+db.session.add(person2)
+db.session.add(person3)
 db.session.commit()
 
 
-# Queries
-q = db.select(User)
-results = db.session.execute(q)
-results.all()
+# EmotionLog Table
+emotion_log1 = EmotionLog(
+    user_id=user1.id,
+    emotion="Happy",
+    steps=10000,
+    activity_duration=30,
+    heart_rate=75,
+    blood_pressure="120/80",
+    free_notes="Felt great today!",
+    location_id=location1.location_id,
+    activity_id=activity1.activity_id,
+    person_id=person1.person_id,
+)
+
+emotion_log2 = EmotionLog(
+    user_id=user2.id,
+    emotion="Stressed",
+    steps=3000,
+    activity_duration=45,
+    heart_rate=85,
+    blood_pressure="130/85",
+    free_notes="Busy day at work.",
+    location_id=location3.location_id,
+    activity_id=activity3.activity_id,
+    person_id=person2.person_id,
+)
+
+db.session.add(emotion_log1)
+db.session.add(emotion_log2)
+db.session.commit()
+
+## Conditions table
+conditions = [
+    Condition(cond_id=1, name="Anxiety", threshold=10),
+    Condition(cond_id=2, name="Depression", threshold=15),
+    Condition(cond_id=3, name="Insomnia", threshold=8),
+]
+
+db.session.add_all(conditions)
+db.session.commit()
+
+## Test_results
+test_result1 = TestResult(
+    user_id=user1.id,
+    cond_id=conditions[0].cond_id,
+    result="Above threshold",
+)
+
+test_result2 = TestResult(
+    user_id=user2.id,
+    cond_id=conditions[1].cond_id,
+    result="Normal",
+)
+
+db.session.add(test_result1)
+db.session.add(test_result2)
+db.session.commit()
 
 
-q=db.select(User.username, User.email)
-db.session.execute(q).all()
-db.session.execute(q).first()
+# Notifications (not representative of actual messages
 
-q=db.select(User.username, User.email).where(User.username=='amy')
-db.session.execute(q).one()
-db.session.execute(q).one_or_none()
+notification1 = Notification(
+    user_id=user1.id,
+    message="Your test results are ready!",
+    is_read=False,
+)
 
+notification2 = Notification(
+    user_id=user2.id,
+    message="New therapeutic recommendations available.",
+    is_read=False,
+)
 
-q = db.select(User)
-db.session.scalars(q).all()
-
-q=db.select(User.username, User.email)
-db.session.scalar(q)
-
-q=db.select(User.username, User.email).where(User.username=='amy')
-db.session.scalars(q).all()
-db.session.scalars(q).first()
-db.session.scalars(q).one()
-db.session.scalars(q).one_or_none()
+# Adding notifications to the session
+db.session.add(notification1)
+db.session.add(notification2)
+db.session.commit()
 
 
+## Support request(not representative of final)
+support_request1 = SupportRequest(
+    user_id=user1.id,
+    description="Need help with understanding my test results.",
+)
+
+support_request2 = SupportRequest(
+    user_id=user2.id,
+    description="Having trouble logging in.",
+)
+
+# Adding support requests to the session
+db.session.add(support_request1)
+db.session.add(support_request2)
+db.session.commit()
+
+# Creating test therapeutic recommendations
+therapeutic_recs = [
+    TherapeuticRec(rec_id=1, description="Cognitive Behavioral Therapy", evidence_based=True, source="APA", treatments="CBT sessions"),
+    TherapeuticRec(rec_id=2, description="Mindfulness Meditation", evidence_based=True, source="NIH", treatments="Daily meditation"),
+    TherapeuticRec(rec_id=3, description="Exercise", evidence_based=True, source="CDC", treatments="30 mins daily"),
+]
+# Creating test resources
+resources = [
+    Resource(resource_id=1, label="Anxiety Workbook", link="https://example.com/anxiety-workbook"),
+    Resource(resource_id=2, label="Depression Guide", link="https://example.com/depression-guide"),
+    Resource(resource_id=3, label="Sleep Hygiene Tips", link="https://example.com/sleep-tips"),
+]
+
+
+# Link conditions to resources
+resource_condition_data = [
+    {"resource_id": 1, "condition_id": 1},  # Anxiety Workbook for Anxiety
+    {"resource_id": 2, "condition_id": 2},  # Depression Guide for Depression
+    {"resource_id": 3, "condition_id": 3},  # Sleep Hygiene Tips for Insomnia
+]
+
+# Link conditions to therapeutic recommendations
+therapeutic_rec_condition_data = [
+    {"therapeutic_id": 1, "condition_id": 1},  # CBT for Anxiety
+    {"therapeutic_id": 1, "condition_id": 2},  # CBT for Depression
+    {"therapeutic_id": 2, "condition_id": 1},  # Mindfulness for Anxiety
+    {"therapeutic_id": 3, "condition_id": 3},  # Exercise for Insomnia
+]
+
+# Adding resources and therapeutic recs to the session
+db.session.add_all(resources)
+db.session.add_all(therapeutic_recs)
+db.session.commit()
+
+# Add therapeutic_rec_condition associations
+import sqlalchemy as sa
+from app/models import therapeutic_rec_condition, resource_condition
+for data in therapeutic_rec_condition_data:
+    stmt = sa.insert(therapeutic_rec_condition).values(**data)
+    db.session.execute(stmt)
+
+# Add resource_condition associations
+for data in resource_condition_data:
+    stmt = sa.insert(resource_condition).values(**data)
+    db.session.execute(stmt)
+
+# Commit the associations
+db.session.commit()
+
+############################ Checking the data is there ###############################
+
+# Query all users
+users = User.query.all()
+for user in users:
+    print(f"User ID: {user.id}, Username: {user.username}, Email: {user.email}, Role: {user.role}")
+
+# Query all locations
+locations = Location.query.all()
+for location in locations:
+    print(f"Location ID: {location.location_id}, Name: {location.name}")
+
+# Query all activities
+activities = Activity.query.all()
+for activity in activities:
+    print(f"Activity ID: {activity.activity_id}, Name: {activity.name}")
+
+# Query all people
+people = Person.query.all()
+for person in people:
+    print(f"Person ID: {person.person_id}, Name: {person.name}")
+
+# Query all emotion logs
+emotion_logs = EmotionLog.query.all()
+for log in emotion_logs:
+    print(f"Log ID: {log.log_id}, User ID: {log.user_id}, Emotion: {log.emotion}, Steps: {log.steps}, Activity Duration: {log.activity_duration}, Heart Rate: {log.heart_rate}, Blood Pressure: {log.blood_pressure}, Free Notes: {log.free_notes}, Location ID: {log.location_id}, Activity ID: {log.activity_id}, Person ID: {log.person_id}")
+
+
+# Query all conditions
+conditions = Condition.query.all()
+for condition in conditions:
+    print(f"Condition ID: {condition.cond_id}, Name: {condition.name}, Threshold: {condition.threshold}")
+
+
+# Query all test results
+test_results = TestResult.query.all()
+for result in test_results:
+    print(f"Test ID: {result.test_id}, User ID: {result.user_id}, Condition ID: {result.cond_id}, Result: {result.result}, Timedate: {result.timedate}")#
+
+
+# Query all notifications
+notifications = Notification.query.all()
+for notification in notifications:
+    print(f"Notification ID: {notification.notification_id}, User ID: {notification.user_id}, Message: {notification.message}, Is Read: {notification.is_read}, Time: {notification.time}")
+
+
+# Query all support requests
+support_requests = SupportRequest.query.all()
+for request in support_requests:
+    print(f"Request ID: {request.request_id}, User ID: {request.user_id}, Description: {request.description}, Time: {request.time}")
+
+# Query all therapeutic recommendations
+therapeutic_recs = TherapeuticRec.query.all()
+for rec in therapeutic_recs:
+    print(f"Rec ID: {rec.rec_id}, Description: {rec.description}, Evidence Based: {rec.evidence_based}, Source: {rec.source}, Treatments: {rec.treatments}")
+
+# Query all resources
+resources = Resource.query.all()
+for resource in resources:
+    print(f"Resource ID: {resource.resource_id}, Label: {resource.label}, Link: {resource.link}")
+
+# Query all therapeutic_rec_condition associations
+associations = db.session.execute(sa.select(therapeutic_rec_condition)).fetchall()
+for association in associations:
+    print(f"Therapeutic ID: {association.therapeutic_id}, Condition ID: {association.condition_id}")
+
+# Query all resource_condition associations
+associations = db.session.execute(sa.select(resource_condition)).fetchall()
+for association in associations:
+    print(f"Resource ID: {association.resource_id}, Condition ID: {association.condition_id}")
+
+
+
+
+############### Joining the Conditions and Therapeutic Recommendations ##########
+import sqlalchemy.orm as so
+
+# Query conditions and their therapeutic recommendations (make sure to import orm as so)
+conditions_with_recs = (
+    db.session.query(Condition)
+    .options(so.joinedload(Condition.therapeutic_recs))
+    .all()
+)
+
+# Print the results
+for condition in conditions_with_recs:
+    print(f"Condition: {condition.name}")
+    for rec in condition.therapeutic_recs:
+        print(f"  - Therapeutic Recommendation: {rec.description}")
+    print()  # Add a blank line for readability
+
+
+# Query conditions and their resources (make sure to import orm as so)
+conditions_with_resources = (
+    db.session.query(Condition)
+    .options(so.joinedload(Condition.resources))
+    .all()
+)
+
+# Print the results
+for condition in conditions_with_resources:
+    print(f"Condition: {condition.name}")
+    for resource in condition.resources:
+        print(f"  - Resource: {resource.label} ({resource.link})")
+    print()  # Add a blank line for readability
