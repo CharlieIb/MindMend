@@ -59,7 +59,7 @@
                 {% if not current_user.is_anonymous %}
                     {% if current_user.role == 'Normal' %}
                         <li class="nav-item border-top">
-                            <a class="nav-link" aria-current="page" href="">
+                            <a class="nav-link" aria-current="page" href="{{ url_for('emotion_log') }}">
                                 CheckIn
                             </a>
                         </li>
