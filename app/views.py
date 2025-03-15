@@ -191,7 +191,7 @@ def settings():
 
 # Features
 # MindMirror - landing page
-@app.route('/MindMirror', methods=['GET', 'POST'])
+@app.route('/mindmirror', methods=['GET', 'POST'])
 @login_required
 def mind_mirror():
     curr_day, curr_month, curr_year = datetime.now().day, datetime.now().month, datetime.now().year
