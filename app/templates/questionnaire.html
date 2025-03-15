@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>Questionnaire</h1>
+    <form method="POST" action="{{ url_for('answer_questionnaire') }}">
+        {{ form.hidden_tag() }}
+        {% for questionnaire in questionnaires %}
+            <h5>Condition {{ questionnaire.id }}</h5>
+            {% for index, question in enumerate(questionnaire.questions) %}
+                <div>
+                    <h8>{{ question.qn }} (Score: {{ question.value }})</h8>
+                    {{ form['question_' ~ questionnaire['id'] ~ '_'  ~ index]() }}
+                    {% if form['question_' ~ questionnaire['id'] ~ '_'  ~ index].errors %}
+                         <div class="error-message">
+                             <span style="color: red;">[{{ error }}]</span>
+                         </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <br>
+        {% endfor %}
+    {{ form.submit() }}
+</div>
+{% endblock %}
