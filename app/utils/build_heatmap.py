@@ -3,16 +3,16 @@ from datetime import datetime
 
 
 class HeatMap:
-    def __init__(self, data_log, dd=None, mm=None, yy=None):
+    def __init__(self, dd=None, mm=None, yy=None, data_log=None):
         now = datetime.now()
         self.dd = dd or now.day
         self.mm = mm or now.month
         self.yy = yy or now.year
-        self.data_log = data_log or None
+        self.data_log = data_log or self.fake_data_log_raw()
 
     def month_display(self):
         month_info = [[self.mm, self.yy], calendar.monthcalendar(self.yy, self.mm)]
-        logs_mapping = self._create_logs_mapping(self.fake_data_log_raw())
+        logs_mapping = self._create_logs_mapping(self.data_log)
         for week in month_info[1]:
             for i, day in enumerate(week):
                 if day != 0 and (day, self.mm, self.yy) in logs_mapping:
@@ -20,7 +20,7 @@ class HeatMap:
         return month_info
 
     def year_display(self):
-        logs_mapping = self._create_logs_mapping(self.fake_data_log_raw())
+        logs_mapping = self._create_logs_mapping(self.data_log)
         days_in_year = []
         for m in range(1, 13):
             month_cal = calendar.monthcalendar(self.yy, m)
