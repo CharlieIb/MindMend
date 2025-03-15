@@ -217,6 +217,20 @@ def mind_mirror():
     )
 
 
+@app.route('/check-in')
+def emotion_log():
+    emotions = [
+        {"title": "Anxious", "feelings": ["Nervous", "Overwhelmed", "Irritable", "Restless", "Worried"],
+         "border": "border-danger"},
+        {"title": "Calm", "feelings": ["Relaxed", "Peaceful", "Content", "At Ease", "Serene"], "border": "border-info"},
+        {"title": "Happy", "feelings": ["Joyful", "Excited", "Optimistic", "Grateful", "Energetic"],
+         "border": "border-warning"},
+        {"title": "Sad", "feelings": ["Down", "Lonely", "Disheartened", "Hopeless", "Heartbroken"],
+         "border": "border-success"}
+    ]
+    return render_template('emotion-log.html', title='Check-In', emotions=emotions)
+
+
 # Error handlers
 # Error handler for 403 Forbidden
 @app.errorhandler(403)
