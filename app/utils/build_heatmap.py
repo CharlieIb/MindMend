@@ -3,12 +3,12 @@ from datetime import datetime
 
 
 class HeatMap:
-    def __init__(self, dd=None, mm=None, yy=None):
+    def __init__(self, data_log, dd=None, mm=None, yy=None):
         now = datetime.now()
         self.dd = dd or now.day
         self.mm = mm or now.month
         self.yy = yy or now.year
-        self.current_day = now.date()
+        self.data_log = data_log or None
 
     def month_display(self):
         month_info = [[self.mm, self.yy], calendar.monthcalendar(self.yy, self.mm)]
