@@ -1,0 +1,1 @@
+|-> make freenote pop up if logged when user clicks on certain day in heatmap, if no freenote flash msg eg: 'no free notes'
