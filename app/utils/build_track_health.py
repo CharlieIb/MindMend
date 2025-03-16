@@ -13,3 +13,6 @@ class TrackHealth:
         self.activity_duration_goal = activity_duration_goal
         self.heart_rate = heart_rate
         self.blood_pressure = blood_pressure
+
+    def steps_percentage_complete(self):
+        return (self.steps / self.steps_goal) * 100

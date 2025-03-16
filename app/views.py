@@ -261,9 +261,10 @@ def mindmirror():
         blood_pressure=blood_pressure
     )
     steps_goal = track_health.steps_goal
+    steps_percentage_complete = track_health.steps_percentage_complete()
     activity_duration_goal = track_health.activity_duration_goal
     track_health_info = {
-        'steps': steps, 'steps_goal': steps_goal,
+        'steps': steps, 'steps_goal': steps_goal, 'steps_percentage_complete': steps_percentage_complete,
         'activity_duration': activity_duration, 'activity_duration_goal': activity_duration_goal,
         'heart_rate': heart_rate,
         'blood_pressure': blood_pressure
