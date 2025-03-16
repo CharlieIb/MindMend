@@ -94,7 +94,7 @@
             </div>
         </div>
     {% endif %}
-    <form class="my-2" action="" method="POST" novalidate enctype="multipart/form-data">
+    <form class="mt-2" action="" method="POST" novalidate enctype="multipart/form-data">
         {{ form_display.csrf_token() }}
         {{ form_display.change(value=display) }}
         {% if display == 'month' %}
