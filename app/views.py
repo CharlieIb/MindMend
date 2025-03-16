@@ -3,7 +3,9 @@ from app import app
 from app import db
 from app.forms import ChooseForm, LoginForm, ChangePasswordForm, RegisterForm, FormRedirect,SelectSymptomsForm, generate_form
 from app.models import User
-from app.utils import HeatMap, TrackHealth, symptom_list, questions_database, ConditionManager, ResourceManager, TherapeuticRecManager, TestResultManager
+from app.utils import (HeatMap, TrackHealth, symptom_list, questions_database,
+                       ConditionManager, ResourceManager, TherapeuticRecManager, TestResultManager,
+                       EmotionLogManager, ActivityManager, LocationManager, PersonManager)
 from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
 from urllib.parse import urlsplit

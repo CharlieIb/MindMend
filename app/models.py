@@ -67,7 +67,7 @@ class EmotionLog(db.Model):
     user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey("user.id"), nullable=False)
     time: so.Mapped[sa.DateTime] = so.mapped_column(sa.DateTime, default=datetime.utcnow)
     emotion: so.Mapped[str] = so.mapped_column(sa.String(50))
-    steps: so.Mapped[int] = so.mapped_column(sa.Integer)
+    steps: so.Mapped[int] = so.mapped_column(sa.Integer) # Maybe update this to be nullable
     activity_duration: so.Mapped[int] = so.mapped_column(nullable=True)
     heart_rate: so.Mapped[int] = so.mapped_column(nullable=True)
     blood_pressure: so.Mapped[str] = so.mapped_column(sa.String(20), nullable=True)
