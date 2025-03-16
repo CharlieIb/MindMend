@@ -4,8 +4,36 @@
 {% block content %}
 <h1>Welcome {{ current_user.username }}</h1>
 <h2>Here is your personalised Insight</h2>
-<div class="{{ 'd-flex flex-wrap justify-content-center w-100' if display == 'month' else 'w-100' }}">
+<div class="w-100 {{ 'd-flex flex-wrap justify-content-center' if display == 'month' }}">
     {% include 'heatmap.html' %}
-    {% include 'track_steps.html' %}
+    {% if display == 'year' %}
+    <div class="d-flex flex-wrap justify-content-center">
+    {% endif %}
+        {% include 'track_steps.html' %}
+        <div class="mt-3 border rounded-3 d-flex flex-column align-items-center p-1 medium_widget">
+            <h3 class="bg-light text-center rounded-3 py-1 w-100">Heart Rate</h3>
+            <div class="d-flex">
+                <div class="me-2">
+                    <h4 class="bg-light text-body-secondary text-center rounded-3 py-1 medium_widget_title">Current</h4>
+                    <h4 class="bg-light fw-bold text-center rounded-3 p-3 mb-0">{{ track_health_info.heart_rate }}</h4>
+                    <h4 class="bg-light text-body-secondary text-center rounded-3 py-1 mt-2 medium_widget_title">Resting</h4>
+                    <h4 class="bg-light fw-bold text-center rounded-3 p-3 mb-0">{{ track_health_info.heart_rate }}</h4>
+                </div>
+                <div>
+                    <h4 class="bg-light text-body-secondary text-center rounded-3 py-1 medium_widget_title">Maximum</h4>
+                    <h4 class="bg-light fw-bold text-center rounded-3 p-3 mb-0">
+                        {{ track_health_info.heart_rate }}
+                    </h4>
+                    <h4 class="bg-light text-body-secondary text-center rounded-3 py-1 mt-2 medium_widget_title">Minimum</h4>
+                    <h4 class="bg-light fw-bold text-center rounded-3 p-3 mb-0">
+                        {{ track_health_info.heart_rate }}
+                    </h4>
+                </div>
+            </div>
+        </div>
+    {% if display == 'year' %}
+    </div>
+    {% endif %}
 </div>
+<!-- Create Macros for widgets to make the template reusable -->
 {% endblock %}
