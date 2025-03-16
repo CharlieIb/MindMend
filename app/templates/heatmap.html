@@ -1,6 +1,6 @@
 <div class="d-flex flex-column align-items-center {{ 'px-3' if display == 'month' }}">
     {% if display == 'month' %}
-        <div class="d-flex flex-column align-items-center mt-3 border rounded-3 p-1" style="width: 315px;">
+        <div class="d-flex flex-column align-items-center mt-3 border rounded-3 p-1 medium_widget">
             <h3 class="bg-light text-center rounded-3 py-1 w-100">CheckIn Activity</h3>
             <div class="bg-light p-3 rounded-3 d-flex flex-column align-items-center w-100">
                 {% for week in month[1] %}
@@ -8,31 +8,21 @@
                         {% for day in week %}
                             {% if day == curr_day or day is not number and day[0] == curr_day %}
                                 {% if day is not number %}
-                                    <div class="border border-danger rounded-1 m-1 bg-{{ day[1]['colour'] }} bg-opacity-50"
-                                         style="height: 20px; width: 20px;">
-                                    </div>
+                                    <div class="border border-danger rounded-1 m-1 bg-{{ day[1]['colour'] }}
+                                    bg-opacity-50 heatmap_day"></div>
                                 {% else %}
-                                    <div class="border border-danger rounded-1 m-1"
-                                         style="height: 20px; width: 20px;">
-                                    </div>
+                                    <div class="border border-danger rounded-1 m-1 heatmap_day"></div>
                                 {% endif %}
                             {% elif day == 0 %}
-                                <div class="m-1"
-                                     style="height: 20px; width: 20px;">
-                                </div>
+                                <div class="m-1 heatmap_day"></div>
                             {% elif day is number and day > curr_day %}
-                                <div class="border border-dark rounded-1 m-1"
-                                     style="height: 20px; width: 20px;">
-                                </div>
+                                <div class="border border-dark rounded-1 m-1 heatmap_day"></div>
                             {% else %}
                                 {% if day is not number %}
-                                    <div class="border border-success rounded-1 m-1 bg-{{ day[1]['colour'] }} bg-opacity-50"
-                                         style="height: 20px; width: 20px;">
-                                    </div>
+                                    <div class="border border-success rounded-1 m-1 bg-{{ day[1]['colour'] }}
+                                    bg-opacity-50 heatmap_day"></div>
                                 {% else %}
-                                    <div class="border border-success rounded-1 m-1"
-                                         style="height: 20px; width: 20px;">
-                                    </div>
+                                    <div class="border border-success rounded-1 m-1 heatmap_day"></div>
                                 {% endif %}
                             {% endif %}
                         {% endfor %}
@@ -55,33 +45,23 @@
                                             or
                                             day is not number and day[0] == curr_day  and month_index == curr_month %}
                                             {% if day is not number %}
-                                                <div class="border border-danger rounded-1 m-1 bg-{{ day[1]['colour'] }} bg-opacity-50"
-                                                     style="height: 20px; width: 20px;">
-                                                </div>
+                                                <div class="border border-danger rounded-1 m-1 bg-{{ day[1]['colour'] }}
+                                                bg-opacity-50 heatmap_day"></div>
                                             {% else %}
-                                                <div class="border border-danger rounded-1 m-1"
-                                                     style="height: 20px; width: 20px;">
-                                                </div>
+                                                <div class="border border-danger rounded-1 m-1 heatmap_day"></div>
                                             {% endif %}
                                         {% elif day == 0 %}
-                                            <div class="m-1"
-                                                 style="height: 20px; width: 20px;">
-                                            </div>
+                                            <div class="m-1 heatmap_day"></div>
                                         {% elif day is number and day > curr_day and month_index >= curr_month
                                             or
                                             month_index > curr_month %}
-                                            <div class="border border-dark rounded-1 m-1"
-                                                 style="height: 20px; width: 20px;">
-                                            </div>
+                                            <div class="border border-dark rounded-1 m-1 heatmap_day"></div>
                                         {% else %}
                                             {% if day is not number %}
-                                                <div class="border border-success rounded-1 m-1 bg-{{ day[1]['colour'] }} bg-opacity-50"
-                                                     style="height: 20px; width: 20px;">
-                                                </div>
+                                                <div class="border border-success rounded-1 m-1 bg-{{ day[1]['colour'] }}
+                                                bg-opacity-50 heatmap_day"></div>
                                             {% else %}
-                                                <div class="border border-success rounded-1 m-1"
-                                                     style="height: 20px; width: 20px;">
-                                                </div>
+                                                <div class="border border-success rounded-1 m-1 heatmap_day"></div>
                                             {% endif %}
                                         {% endif %}
                                     {% endfor %}
@@ -89,7 +69,7 @@
                             {% endfor %}
                         </div>
                     {% endfor %}
-                    <div style="min-width: 1rem;"></div>
+                    <div class="gap_year_display"></div>
                 </div>
             </div>
         </div>

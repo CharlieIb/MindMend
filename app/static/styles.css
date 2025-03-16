@@ -1,1 +1,31 @@
-# CSS doc to create our own classes if needed
+* {
+    font-family: 'Lucida Console', 'Courier New', monospace;
+}
+
+.navbar_width {
+    width: 125px;
+}
+
+.medium_widget {
+    width: 315px;
+}
+
+.medium_widget_title {
+    width: 150px;
+}
+
+.heatmap_day {
+    height: 20px;
+    width: 20px;
+}
+
+.gap_year_display {
+    min-width: 1rem;
+}
+
+.steps_progress_bar {
+    height: 20px;
+    width: 1px;
+    padding: 1px;
+    margin: 1px;
+}
