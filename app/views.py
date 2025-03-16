@@ -6,7 +6,7 @@ import sqlalchemy as sa
 from app import db
 from app.models import User
 from urllib.parse import urlsplit
-from app.utils import HeatMap, TrackHealth, symptom_list,questions_database
+from app.utils import HeatMap, TrackHealth, symptom_list, questions_database
 from datetime import datetime
 
 
