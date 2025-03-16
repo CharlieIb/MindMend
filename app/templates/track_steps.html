@@ -23,7 +23,7 @@
         {% set progress_threshold = ((track_health_info.steps / track_health_info.steps_goal) * 100) / 2 %}
         {% set is_progress = i <= progress_threshold %}
         {% set base_class = 'bg-success border border-success' if is_progress else 'bg-primary
-        border border-primary opacity-75' %}
+        border border-primary opacity-50' %}
         {% set rounded_class = ' rounded-start' if i == 0 else ' rounded-end' if i == 49 else '' %}
         <div class="{{ base_class }}{{ rounded_class }}"
              style="height: 20px; width: 1px; padding: 1px; margin: 1px"></div>
