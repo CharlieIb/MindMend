@@ -14,7 +14,7 @@
 
 <body>
 <div class="d-flex">
-    <nav class="navbar bg-dark min-vh-100" style="width: 125px;" data-bs-theme="dark">
+    <nav class="navbar bg-dark min-vh-100 navbar_width" data-bs-theme="dark">
         <div class="container-fluid flex-column justify-content-start align-items-start h-100">
             {% if not current_user.is_anonymous %}
                 {% if current_user.role == 'Normal' %}
