@@ -61,21 +61,23 @@
                     {% if current_user.role == 'Normal' %}
                         <li class="nav-item border-top">
                             <a class="nav-link" aria-current="page" href="{{ url_for('emotion_log') }}">
-                                CheckIn
+                                Check In
                             </a>
                         </li>
                         <li class="nav-item border-top">
-                            <a class="nav-link" aria-current="page" href="{{ url_for('select_symptoms') }}">Screening Tool</a>
+                            <a class="nav-link" aria-current="page" href="{{ url_for('select_symptoms') }}">
+                                Screening Tool
+                            </a>
                         </li>
                         <li class="nav-item border-top">
                             <a class="nav-link" aria-current="page" href="">
-                                UpLift
+                                Up Lift
                             </a>
                         </li>
                     {% else %}
                         <li class="nav-item border-top">
                             <a class="nav-link" aria-current="page" href="">
-                                ReachOut
+                                Reach Out
                             </a>
                         </li>
                         <li class="nav-item border-top">
