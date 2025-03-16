@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+<h1>How are you feeling?</h1>
+<h3>Choose symptom(s) that are applicable to you:</h3>
+<hr class="border-5">
+
+<form method="POST" action="" novalidate>
+    {{ form.hidden_tag() }}
+    <ul class="options-list">
+       {% for symptom in form.symptoms %}
+           <div class="col-12 mb-2">
+          <label class="btn btn-outline-dark symptom-button">
+                 {{ symptom() }}  <!-- Hidden checkbox -->
+                 <span>{{ symptom.label.text }}</span>  <!-- Button text -->
+          </label>
+          </div>
+       {% endfor %}
+    </ul>
+
+    {% if form.symptoms.errors %}
+        <div class="error-message">
+            <span style="color: red;">[{{ form.symptoms.errors[0] }}]</span>
+        </div>
+    {% endif %}
+     {{ form.submit(class="btn btn-dark") }}
+</form>
+</div>>
+{% endblock %}
