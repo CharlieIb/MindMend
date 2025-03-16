@@ -1,13 +1,12 @@
 from flask import render_template, redirect, url_for, flash, request, send_file, send_from_directory,session
 from app import app
+from app import db
 from app.forms import ChooseForm, LoginForm, ChangePasswordForm, RegisterForm, FormRedirect,SelectSymptomsForm, generate_form
+from app.models import User
+from app.utils import HeatMap, TrackHealth, symptom_list, questions_database, ConditionManager, ResourceManager, TherapeuticRecManager, TestResultManager
 from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
-from app import db
-from app.utils.classes import ConditionManager, ResourceManager, TherapeuticRecManager, TestResultManager
-from app.models import User, Condition, ConditionQuestion, Resource, TherapeuticRec
 from urllib.parse import urlsplit
-from app.utils import HeatMap, TrackHealth, symptom_list, questions_database
 from datetime import datetime
 
 initialized = False
@@ -44,8 +43,8 @@ def initialize():
         recommendations = therapeutic_rec_manager.get_recommendations_for_condition(cond_id)
         resources = resource_manager.get_resources_for_condition(cond_id)
 
-        # Add a test result
-        test_result_manager.add_test_result(user_id=1, cond_id=cond_id, result="Positive")
+        # Add a test result --- Try not to use too much, now there are like 10 entries of the same result!
+        # test_result_manager.add_test_result(user_id=1, cond_id=cond_id, result="Positive")
 
         # Retrieve test results for a user
         user_test_results = test_result_manager.get_test_results_for_user(user_id=1)
