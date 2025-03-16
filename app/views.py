@@ -289,7 +289,7 @@ def answer_questionnaire():
 
             scores.append({'condition':questionnaire["id"], 'score':condition_score})
         session.clear()
-        return render_template('results.html', scores=scores, title="Questionnaire Result")
+        return render_template('results.html', scores=scores, title="Result")
     return render_template('questionnaire.html', questionnaires=session['questionnaires'], title='Questionnaire', form=form, enumerate=enumerate)
 
 
