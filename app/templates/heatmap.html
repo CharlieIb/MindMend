@@ -1,8 +1,8 @@
-<div class="d-flex flex-column align-items-center px-3">
+<div class="d-flex flex-column align-items-center {{ 'px-3' if display == 'month' }}">
     {% if display == 'month' %}
-        <div class="mt-3 border rounded-3 p-1">
-            <h3 class="bg-light text-center rounded-3 py-1">CheckIn Activity</h3>
-            <div class="bg-light p-3 rounded-3">
+        <div class="d-flex flex-column align-items-center mt-3 border rounded-3 p-1" style="width: 315px;">
+            <h3 class="bg-light text-center rounded-3 py-1 w-100">CheckIn Activity</h3>
+            <div class="bg-light p-3 rounded-3 d-flex flex-column align-items-center w-100">
                 {% for week in month[1] %}
                     <div class="d-flex">
                         {% for day in week %}
@@ -94,13 +94,13 @@
             </div>
         </div>
     {% endif %}
-    <form class="mt-2" action="" method="POST" novalidate enctype="multipart/form-data">
+    <form class="mt-2 w-100" action="" method="POST" novalidate enctype="multipart/form-data">
         {{ form_display.csrf_token() }}
         {{ form_display.change(value=display) }}
         {% if display == 'month' %}
-            <button class="btn btn-dark fw-bold" style="width: 225px;" type="submit">Year</button>
+            <button class="btn btn-dark fw-bold w-100" type="submit">Year</button>
         {% else %}
-            <button class="btn btn-dark fw-bold" style="width: 225px;" type="submit">Month</button>
+            <button class="btn btn-dark fw-bold w-100" type="submit">Month</button>
         {% endif %}
     </form>
 </div>
