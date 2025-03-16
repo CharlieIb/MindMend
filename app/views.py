@@ -1,12 +1,12 @@
-from flask import render_template, redirect, url_for, flash, request, send_file, send_from_directory
+from flask import render_template, redirect, url_for, flash, request, send_file, send_from_directory,session
 from app import app
-from app.forms import ChooseForm, LoginForm, ChangePasswordForm, RegisterForm, FormRedirect
+from app.forms import ChooseForm, LoginForm, ChangePasswordForm, RegisterForm, FormRedirect,SelectSymptomsForm, generate_form
 from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
 from app import db
 from app.models import User
 from urllib.parse import urlsplit
-from app.utils import HeatMap, TrackHealth
+from app.utils import HeatMap, TrackHealth, symptom_list,questions_database
 from datetime import datetime
 
 
@@ -253,6 +253,69 @@ def emotion_log():
          "border": "border-success"}
     ]
     return render_template('emotion-log.html', title='Check-In', emotions=emotions)
+
+# Screening Tool
+def generate_questionnaires(selected_symptoms):
+    questions = []
+    for id in selected_symptoms:
+        ### TO-DO: Load Database and get Questionnaires ###
+        for conditions in questions_database:
+            if conditions['id'] == int(id):
+                questions.append(conditions)
+    return questions
+
+# First Page: Select Symptoms
+@app.route('/select_symptoms', methods=['GET', 'POST'])
+def select_symptoms():
+    form = SelectSymptomsForm()
+    form.symptoms.choices = symptom_list ### TO-DO: Load symptoms from database ###
+    selected_symptoms = []
+
+    if form.validate_on_submit():
+        selected_symptoms = form.symptoms.data
+        session['selected_symptoms'] = selected_symptoms #Store selected_symptoms in flask session
+
+        ### TO-DO: Save selected symptoms into database ###
+
+        return redirect(url_for('answer_questionnaire'))
+    return render_template('select_symptoms.html', title="Choose Symptoms", form= form)
+
+
+# Second Page: Answer Questionnaire
+@app.route('/answer_questionnaire', methods=['GET', 'POST'])
+def answer_questionnaire():
+    selected_symptoms = session.get('selected_symptoms')
+
+    ### TO-DO: Function assess symptoms and select conditions ###
+
+    questionnaires = generate_questionnaires(selected_symptoms)
+    session['questionnaires'] = questionnaires #Store questionnaires in flask session
+
+    # Create Flask Forms
+    AnswerQuestionnaireForm = generate_form(session['questionnaires'])
+    form = AnswerQuestionnaireForm(obj=None)
+
+    if form.validate_on_submit():
+        scores = []
+        for questionnaire in questionnaires:
+            condition_score = 0
+
+            # Calculates score for each condition
+            for index, question in enumerate(questionnaire['questions']):
+                question_id = f'question_{questionnaire['id']}_{index}'
+                user_answer = getattr(form, question_id).data
+                if user_answer == 'True':
+                    condition_score += question['value']
+
+                    ### TO-DO: Save answers into database ###
+                    ### TO-DO: Generate respective actions ###
+
+            scores.append({'condition':questionnaire["id"], 'score':condition_score})
+        session.clear()
+        return render_template('results.html', scores=scores, title="Questionnaire Result")
+    return render_template('questionnaire.html', questionnaires=session['questionnaires'], title='Questionnaire', form=form, enumerate=enumerate)
+
+
 
 
 # Error handlers

@@ -1,8 +1,10 @@
 from flask_wtf import FlaskForm
 from wtforms import (SubmitField, HiddenField, StringField, PasswordField,
-                     BooleanField, IntegerField, ValidationError, EmailField)
+                     BooleanField, IntegerField, ValidationError, EmailField, RadioField)
 from wtforms.validators import DataRequired, NumberRange, Length, EqualTo
 from email_validator import validate_email, EmailNotValidError
+from wtforms.fields.choices import SelectMultipleField
+from wtforms.widgets.core import ListWidget, CheckboxInput
 import re
 
 
@@ -76,3 +78,30 @@ class FormRedirect(FlaskForm):
     register = SubmitField('Register')
     logout = SubmitField('Logout')
     change_password = SubmitField('Change Password')
+
+
+# Forms for screening tool
+class SelectSymptomsForm(FlaskForm):
+    symptoms = SelectMultipleField('Select Symptoms', choices=[], validators=[DataRequired(message='Please select at least 1 option')], widget=ListWidget(prefix_label=False), option_widget=CheckboxInput())
+    submit = SubmitField('Submit')
+
+
+def generate_form(questionnaires):
+    class AnswerQuestionnaireForm(FlaskForm):
+        pass  # Fields will be added dynamically
+
+    #New Radio Field created for each question in list
+    for questionnaire in questionnaires:
+        for index, question in enumerate(questionnaire['questions']):
+            question_id = f'question_{questionnaire['id']}_{index}'
+            setattr(
+                AnswerQuestionnaireForm,
+                question_id,
+                RadioField(
+                    question['qn'],
+                    choices=['True', 'False'],
+                    validators=[DataRequired(message="Please answer question")]
+                )
+            )
+    setattr(AnswerQuestionnaireForm, 'submit', SubmitField('Submit'))
+    return AnswerQuestionnaireForm
