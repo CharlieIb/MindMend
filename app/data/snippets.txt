@@ -1,4 +1,4 @@
-######################### Test data for model ##########################
+######################### Test data for Users/Notifications/SupportRequest ##########################
 # User table
 user1 = User(username="bob", email="bob@mail.com", role="Normal")
 user2 = User(username="mischa", email="mischa@mail.com", role="Admin")
@@ -16,99 +16,6 @@ db.session.add(user3)
 db.session.add(user4)
 db.session.commit()
 
-# Location table
-location1 = Location(name="Office")
-location2 = Location(name="Home")
-location3 = Location(name="Bar")
-location4 = Location(name="Gym")
-
-db.session.add(location1)
-db.session.add(location2)
-db.session.add(location3)
-db.session.add(location4)
-db.session.commit()
-
-# Activity Table
-activity1 = Activity(name="Working")
-activity2 = Activity(name="Commuting")
-activity3 = Activity(name="Socialising")
-activity4 = Activity(name="Exercising")
-
-
-db.session.add(activity1)
-db.session.add(activity2)
-db.session.add(activity3)
-db.session.add(activity4)
-db.session.commit()
-
-# People Table
-person1 = Person(name="Colleagues")
-person2 = Person(name="Friends")
-person3 = Person(name="Family")
-
-db.session.add(person1)
-db.session.add(person2)
-db.session.add(person3)
-db.session.commit()
-
-
-# EmotionLog Table
-emotion_log1 = EmotionLog(
-    user_id=user1.id,
-    emotion="Happy",
-    steps=10000,
-    activity_duration=30,
-    heart_rate=75,
-    blood_pressure="120/80",
-    free_notes="Felt great today!",
-    location_id=location1.location_id,
-    activity_id=activity1.activity_id,
-    person_id=person1.person_id,
-)
-
-emotion_log2 = EmotionLog(
-    user_id=user2.id,
-    emotion="Stressed",
-    steps=3000,
-    activity_duration=45,
-    heart_rate=85,
-    blood_pressure="130/85",
-    free_notes="Busy day at work.",
-    location_id=location3.location_id,
-    activity_id=activity3.activity_id,
-    person_id=person2.person_id,
-)
-
-db.session.add(emotion_log1)
-db.session.add(emotion_log2)
-db.session.commit()
-
-## Conditions table
-conditions = [
-    Condition(cond_id=1, name="Anxiety", threshold=10),
-    Condition(cond_id=2, name="Depression", threshold=15),
-    Condition(cond_id=3, name="Insomnia", threshold=8),
-]
-
-db.session.add_all(conditions)
-db.session.commit()
-
-## Test_results
-test_result1 = TestResult(
-    user_id=user1.id,
-    cond_id=conditions[0].cond_id,
-    result="Above threshold",
-)
-
-test_result2 = TestResult(
-    user_id=user2.id,
-    cond_id=conditions[1].cond_id,
-    result="Normal",
-)
-
-db.session.add(test_result1)
-db.session.add(test_result2)
-db.session.commit()
 
 
 # Notifications (not representative of actual messages
@@ -145,55 +52,6 @@ support_request2 = SupportRequest(
 # Adding support requests to the session
 db.session.add(support_request1)
 db.session.add(support_request2)
-db.session.commit()
-
-# Creating test therapeutic recommendations
-therapeutic_recs = [
-    TherapeuticRec(rec_id=1, description="Cognitive Behavioral Therapy", evidence_based=True, source="APA", treatments="CBT sessions"),
-    TherapeuticRec(rec_id=2, description="Mindfulness Meditation", evidence_based=True, source="NIH", treatments="Daily meditation"),
-    TherapeuticRec(rec_id=3, description="Exercise", evidence_based=True, source="CDC", treatments="30 mins daily"),
-]
-# Creating test resources
-resources = [
-    Resource(resource_id=1, label="Anxiety Workbook", link="https://example.com/anxiety-workbook"),
-    Resource(resource_id=2, label="Depression Guide", link="https://example.com/depression-guide"),
-    Resource(resource_id=3, label="Sleep Hygiene Tips", link="https://example.com/sleep-tips"),
-]
-
-
-# Link conditions to resources
-resource_condition_data = [
-    {"resource_id": 1, "condition_id": 1},  # Anxiety Workbook for Anxiety
-    {"resource_id": 2, "condition_id": 2},  # Depression Guide for Depression
-    {"resource_id": 3, "condition_id": 3},  # Sleep Hygiene Tips for Insomnia
-]
-
-# Link conditions to therapeutic recommendations
-therapeutic_rec_condition_data = [
-    {"therapeutic_id": 1, "condition_id": 1},  # CBT for Anxiety
-    {"therapeutic_id": 1, "condition_id": 2},  # CBT for Depression
-    {"therapeutic_id": 2, "condition_id": 1},  # Mindfulness for Anxiety
-    {"therapeutic_id": 3, "condition_id": 3},  # Exercise for Insomnia
-]
-
-# Adding resources and therapeutic recs to the session
-db.session.add_all(resources)
-db.session.add_all(therapeutic_recs)
-db.session.commit()
-
-# Add therapeutic_rec_condition associations
-import sqlalchemy as sa
-from app/models import therapeutic_rec_condition, resource_condition
-for data in therapeutic_rec_condition_data:
-    stmt = sa.insert(therapeutic_rec_condition).values(**data)
-    db.session.execute(stmt)
-
-# Add resource_condition associations
-for data in resource_condition_data:
-    stmt = sa.insert(resource_condition).values(**data)
-    db.session.execute(stmt)
-
-# Commit the associations
 db.session.commit()
 
 ############################ Checking the data is there ###############################

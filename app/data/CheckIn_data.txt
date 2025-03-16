@@ -1,0 +1,164 @@
+# Location table
+location1 = Location(name="Office")
+location2 = Location(name="Home")
+location3 = Location(name="Bar")
+location4 = Location(name="Gym")
+location5 = Location(name="Park")
+location6 = Location(name="Cafe")
+location7 = Location(name="Library")
+
+db.session.add_all([location1, location2, location3, location4, location5, location6, location7])
+db.session.add(location2)
+db.session.add(location3)
+db.session.add(location4)
+db.session.commit()
+
+# Activity Table
+activity1 = Activity(name="Working")
+activity2 = Activity(name="Commuting")
+activity3 = Activity(name="Socialising")
+activity4 = Activity(name="Exercising")
+activity5 = Activity(name="Studying")
+activity6 = Activity(name="Shopping")
+activity7 = Activity(name="Relaxing")
+
+
+db.session.add_all([activity1, activity2, activity3, activity4, activity5, activity6, activity7])
+db.session.commit()
+
+# People Table
+person1 = Person(name="Colleagues")
+person2 = Person(name="Friends")
+person3 = Person(name="Family")
+person4 = Person(name="Partner")
+person5 = Person(name="Neighbours")
+person6 = Person(name="Strangers")
+
+db.session.add_all([person1, person2, person3, person4, person5, person6])
+db.session.commit()
+
+from datetime import datetime, timedelta
+
+# Emotion Log 1: Bob at Home, Relaxing with Family
+emotion_log1 = EmotionLog(
+    user_id=1,  # Bob
+    emotion="Calm",
+    steps=2000,
+    activity_duration=60,  # 1 hour
+    heart_rate=70,
+    blood_pressure="110/75",
+    free_notes="Spent the evening watching a movie with family.",
+    location_id=1,  # Home
+    activity_id=7,  # Relaxing
+    person_id=3,  # Family
+    time=datetime.utcnow() - timedelta(days=2),
+)
+
+# Emotion Log 2: Mischa at the Gym, Exercising with Friends
+emotion_log2 = EmotionLog(
+    user_id=2,  # Mischa
+    emotion="Energetic",
+    steps=8000,
+    activity_duration=90,  # 1.5 hours
+    heart_rate=120,
+    blood_pressure="130/85",
+    free_notes="Had a great workout session with friends.",
+    location_id=3,  # Gym
+    activity_id=4,  # Exercising
+    person_id=2,  # Friends
+    time=datetime.utcnow() - timedelta(days=1),
+)
+
+# Emotion Log 3: Charlie at the Office, Working with Colleagues
+emotion_log3 = EmotionLog(
+    user_id=3,  # Charlie
+    emotion="Focused",
+    steps=1500,
+    activity_duration=480,  # 8 hours
+    heart_rate=80,
+    blood_pressure="120/80",
+    free_notes="Busy day at work, but productive.",
+    location_id=4,  # Office
+    activity_id=1,  # Working
+    person_id=1,  # Colleagues
+    time=datetime.utcnow() - timedelta(hours=5),
+)
+
+# Emotion Log 4: Aravind at the Park, Relaxing with Partner
+emotion_log4 = EmotionLog(
+    user_id=4,  # Aravind
+    emotion="Happy",
+    steps=3000,
+    activity_duration=120,  # 2 hours
+    heart_rate=75,
+    blood_pressure="115/70",
+    free_notes="Enjoyed a peaceful walk in the park with my partner.",
+    location_id=5,  # Park
+    activity_id=7,  # Relaxing
+    person_id=4,  # Partner
+    time=datetime.utcnow() - timedelta(hours=3),
+)
+
+# Emotion Log 5: Bob at the Cafe, Socialising with Friends
+emotion_log5 = EmotionLog(
+    user_id=1,  # Bob
+    emotion="Excited",
+    steps=1000,
+    activity_duration=60,  # 1 hour
+    heart_rate=85,
+    blood_pressure="125/80",
+    free_notes="Had a great time catching up with friends over coffee.",
+    location_id=6,  # Cafe
+    activity_id=3,  # Socialising
+    person_id=2,  # Friends
+    time=datetime.utcnow() - timedelta(hours=1),
+)
+
+# Emotion Log 6: Mischa at the Library, Studying Alone
+emotion_log6 = EmotionLog(
+    user_id=2,  # Mischa
+    emotion="Focused",
+    steps=500,
+    activity_duration=180,  # 3 hours
+    heart_rate=70,
+    blood_pressure="110/70",
+    free_notes="Spent the afternoon studying for an exam.",
+    location_id=7,  # Library
+    activity_id=5,  # Studying
+    person_id=None,  # Alone
+    time=datetime.utcnow() - timedelta(hours=2),
+)
+
+# Emotion Log 7: Charlie at the Bar, Socialising with Strangers
+emotion_log7 = EmotionLog(
+    user_id=3,  # Charlie
+    emotion="Relaxed",
+    steps=2000,
+    activity_duration=120,  # 2 hours
+    heart_rate=90,
+    blood_pressure="130/85",
+    free_notes="Had a fun evening meeting new people at the bar.",
+    location_id=2,  # Bar
+    activity_id=3,  # Socialising
+    person_id=6,  # Strangers
+    time=datetime.utcnow() - timedelta(hours=4),
+)
+
+# Emotion Log 8: Aravind at Home, Shopping Online with Neighbours
+emotion_log8 = EmotionLog(
+    user_id=4,  # Aravind
+    emotion="Content",
+    steps=500,
+    activity_duration=60,  # 1 hour
+    heart_rate=75,
+    blood_pressure="120/80",
+    free_notes="Ordered groceries online with neighbours.",
+    location_id=1,  # Home
+    activity_id=6,  # Shopping
+    person_id=5,  # Neighbours
+    time=datetime.utcnow() - timedelta(hours=6),
+)
+
+# Add all logs to the session
+db.session.add_all([emotion_log1, emotion_log2, emotion_log3, emotion_log4, emotion_log5, emotion_log6, emotion_log7, emotion_log8])
+db.session.commit()
