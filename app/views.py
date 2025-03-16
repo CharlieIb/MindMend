@@ -6,8 +6,7 @@ import sqlalchemy as sa
 from app import db
 from app.models import User
 from urllib.parse import urlsplit
-from app.utils import HeatMap
-from app.utils.screeningtool import symptom_list,questions_database
+from app.utils import HeatMap, TrackHealth, symptom_list,questions_database
 from datetime import datetime
 
 
@@ -34,7 +33,7 @@ def login():
         next_page = request.args.get('next')
         if not next_page or urlsplit(next_page).netloc != '':
             if current_user.role == 'Normal':
-                next_page = url_for('mind_mirror')
+                next_page = url_for('mindmirror')
             elif current_user.role == 'Admin':
                 next_page = url_for('home_admin', username=current_user.username)
         return redirect(next_page)
@@ -195,16 +194,38 @@ def settings():
 @app.route('/mindmirror', methods=['GET', 'POST'])
 @login_required
 def mindmirror():
-    curr_day, curr_month, curr_year = datetime.now().day, datetime.now().month, datetime.now().year
-    month = HeatMap(curr_day, curr_month, curr_year).month_display()
-    year = HeatMap(curr_day, curr_month, curr_year).year_display()
-    display = 'month'
-    form_display = ChooseForm()
+    now = datetime.now()
+    curr_day, curr_month, curr_year = now.day, now.month, now.year
+
+    # Data would normally get queries from db and passed to HeatMap
+    heatmap = HeatMap(curr_day, curr_month, curr_year)
+    month, year = heatmap.month_display(), heatmap.year_display()
+
+    # Data would normally get queries from db and passed to TrackHealth
+    steps, activity_duration, heart_rate, blood_pressure = 6908, 1.5, 64, '90/60'
+    track_health = TrackHealth(
+        steps=steps,
+        activity_duration=activity_duration,
+        heart_rate=heart_rate,
+        blood_pressure=blood_pressure
+    )
+    steps_goal = track_health.steps_goal
+    activity_duration_goal = track_health.activity_duration_goal
+    track_health_info = {
+        'steps': steps, 'steps_goal': steps_goal,
+        'activity_duration': activity_duration, 'activity_duration_goal': activity_duration_goal,
+        'heart_rate': heart_rate,
+        'blood_pressure': blood_pressure
+    }
+
+    form_display, display = ChooseForm(), 'month'
     if form_display.validate_on_submit():
         if form_display.change.data == 'year':
             display = 'month'
         elif form_display.change.data == 'month':
             display = 'year'
+
+    # Might be worth refactoring variables into sub feature Dictionary
     return render_template(
         'mindmirror.html',
         title='MindMirror',
@@ -214,10 +235,12 @@ def mindmirror():
         month=month,
         year=year,
         display=display,
-        form_display=form_display
+        form_display=form_display,
+        track_health_info=track_health_info
     )
 
 
+# CheckIn
 @app.route('/check-in')
 def emotion_log():
     emotions = [
