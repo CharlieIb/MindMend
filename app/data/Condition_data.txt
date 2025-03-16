@@ -1,0 +1,383 @@
+conditions_data = [
+    {
+        "name": "Generalized Anxiety Disorder (GAD)",
+        "threshold": 7,
+        "questions": [
+            {"q_number": 1, "question": "Do you frequently worry excessively about multiple areas of life for at least 6 months?", "value": 3},
+            {"q_number": 2, "question": "Do you find it hard to control your worries?", "value": 2},
+            {"q_number": 3, "question": "Do you often feel restless or on edge?", "value": 1},
+            {"q_number": 4, "question": "Do you get tired easily?", "value": 1},
+            {"q_number": 5, "question": "Do you have difficulty concentrating?", "value": 1},
+            {"q_number": 6, "question": "Do you feel irritable often?", "value": 1},
+            {"q_number": 7, "question": "Do you experience muscle tension?", "value": 1},
+            {"q_number": 8, "question": "Do you have trouble sleeping?", "value": 1},
+        ],
+        "therapeutic_recs": [
+            {"description": "Practice mindfulness meditation for 10 minutes daily.", "evidence_based": True, "source": "NIH", "treatments": "Mindfulness-Based Stress Reduction (MBSR)"},
+            {"description": "Engage in regular physical exercise, such as yoga or jogging.", "evidence_based": True, "source": "Mayo Clinic", "treatments": "Exercise Therapy"},
+        ],
+        "resources": [
+            {"label": "Anxiety and Depression Association of America", "link": "https://adaa.org"},
+            {"label": "Mindfulness Meditation Guide", "link": "https://www.mindful.org/meditation/mindfulness-getting-started/"},
+        ],
+    },
+    {
+        "name": "Panic Disorder",
+        "threshold": 7,
+        "questions": [
+            {"q_number": 1, "question": "Have you had sudden, unexpected panic attacks where you felt intense fear or discomfort?", "value": 3},
+            {"q_number": 2, "question": "Do you experience heart palpitations, sweating, shaking, shortness of breath, or dizziness during panic attacks?", "value": 2},
+            {"q_number": 3, "question": "Have you ever feared losing control, 'going crazy,' or dying during a panic attack?", "value": 2},
+            {"q_number": 4, "question": "Do you avoid certain situations due to fear of another attack?", "value": 1},
+            {"q_number": 5, "question": "Have you worried about having another panic attack for at least one month?", "value": 1},
+        ],
+        "therapeutic_recs": [
+            {"description": "Learn and practice deep breathing techniques to manage panic symptoms.", "evidence_based": True, "source": "APA", "treatments": "Cognitive Behavioral Therapy (CBT)"},
+            {"description": "Gradual exposure to feared situations with the help of a therapist.", "evidence_based": True, "source": "NIH", "treatments": "Exposure Therapy"},
+        ],
+        "resources": [
+            {"label": "National Institute of Mental Health - Panic Disorder", "link": "https://www.nimh.nih.gov/health/topics/panic-disorder"},
+            {"label": "Panic Disorder Self-Help Guide", "link": "https://www.helpguide.org/articles/anxiety/panic-attacks-and-panic-disorder.htm"},
+        ],
+    },
+    {
+        "name": "Social Anxiety Disorder",
+        "threshold": 7,
+        "questions": [
+            {"q_number": 1, "question": "Do you feel intense fear in social situations where you might be judged?", "value": 3},
+            {"q_number": 2, "question": "Do you avoid social situations due to fear of embarrassment or scrutiny?", "value": 2},
+            {"q_number": 3, "question": "Do you worry that people will judge you negatively?", "value": 1},
+            {"q_number": 4, "question": "Does the fear occur almost every time you're in a social situation?", "value": 1},
+            {"q_number": 5, "question": "Has this been happening for at least 6 months?", "value": 1},
+            {"q_number": 6, "question": "Does this fear interfere with your daily life or relationships?", "value": 1},
+        ],
+        "therapeutic_recs": [
+            {"description": "Practice gradual exposure to social situations with the help of a therapist.", "evidence_based": True, "source": "APA", "treatments": "Exposure Therapy"},
+            {"description": "Learn and practice social skills through role-playing exercises.", "evidence_based": True, "source": "NIH", "treatments": "Social Skills Training"},
+        ],
+        "resources": [
+            {"label": "Social Anxiety Association", "link": "https://socialphobia.org"},
+            {"label": "CBT for Social Anxiety", "link": "https://www.apa.org/ptsd-guideline/patients-and-families/cognitive-behavioral"},
+        ],
+    },
+    {
+        "name": "Major Depressive Disorder",
+        "threshold": 7,
+        "questions": [
+            {"q_number": 1, "question": "Have you felt consistently sad or lost interest in things for at least 2 weeks?", "value": 3},
+            {"q_number": 2, "question": "Have you experienced changes in weight or appetite?", "value": 1},
+            {"q_number": 3, "question": "Do you have trouble sleeping or sleep too much?", "value": 1},
+            {"q_number": 4, "question": "Do you feel fatigued or lacking in energy?", "value": 1},
+            {"q_number": 5, "question": "Do you feel worthless or guilty excessively?", "value": 1},
+            {"q_number": 6, "question": "Do you struggle to concentrate or make decisions?", "value": 1},
+            {"q_number": 7, "question": "Have you had thoughts of death, self-harm, or suicide?", "value": 3},
+        ],
+        "therapeutic_recs": [
+            {"description": "Engage in regular physical activity, such as walking or jogging.", "evidence_based": True, "source": "Mayo Clinic", "treatments": "Exercise Therapy"},
+            {"description": "Consider cognitive behavioral therapy (CBT) to address negative thought patterns.", "evidence_based": True, "source": "APA", "treatments": "CBT"},
+        ],
+        "resources": [
+            {"label": "National Institute of Mental Health - Depression", "link": "https://www.nimh.nih.gov/health/topics/depression"},
+            {"label": "Depression and Bipolar Support Alliance", "link": "https://www.dbsalliance.org"},
+        ],
+    },
+    {
+        "name": "Anorexia Nervosa",
+        "threshold": 7,
+        "questions": [
+            {"q_number": 1, "question": "Do you intentionally restrict food intake leading to significant weight loss?", "value": 3},
+            {"q_number": 2, "question": "Are you intensely afraid of gaining weight?", "value": 2},
+            {"q_number": 3, "question": "Do you see yourself as overweight even when others say you're underweight?", "value": 2},
+            {"q_number": 4, "question": "Do you weigh yourself or check your body obsessively?", "value": 1},
+        ],
+        "therapeutic_recs": [
+            {"description": "Work with a dietitian to develop a healthy meal plan.", "evidence_based": True, "source": "NIH", "treatments": "Nutritional Counseling"},
+            {"description": "Engage in family-based therapy (FBT) to address underlying issues.", "evidence_based": True, "source": "APA", "treatments": "Family-Based Therapy"},
+        ],
+        "resources": [
+            {"label": "National Eating Disorders Association", "link": "https://www.nationaleatingdisorders.org"},
+            {"label": "Anorexia Nervosa Treatment Guide", "link": "https://www.helpguide.org/articles/eating-disorders/anorexia-nervosa.htm"},
+        ],
+    },
+    {
+        "name": "Bulimia Nervosa",
+        "threshold": 7,
+        "questions": [
+            {"q_number": 1, "question": "Have you had episodes of eating large amounts of food uncontrollably?", "value": 3},
+            {"q_number": 2, "question": "Do you make yourself vomit, use laxatives, or exercise excessively to control weight?", "value": 3},
+            {"q_number": 3, "question": "Do you feel out of control during these eating episodes?", "value": 1},
+            {"q_number": 4, "question": "Have these behaviors occurred at least once a week for the past 3 months?", "value": 1},
+        ],
+        "therapeutic_recs": [
+            {"description": "Consider cognitive behavioral therapy (CBT) to address binge-purge cycles.", "evidence_based": True, "source": "APA", "treatments": "CBT"},
+            {"description": "Practice mindfulness to reduce emotional triggers for bingeing.", "evidence_based": True, "source": "NIH", "treatments": "Mindfulness-Based Therapy"},
+        ],
+        "resources": [
+            {"label": "Bulimia Nervosa Resource Center", "link": "https://www.bulimia.com"},
+            {"label": "Overcoming Bulimia Guide", "link": "https://www.helpguide.org/articles/eating-disorders/bulimia-nervosa.htm"},
+        ],
+    },
+    {
+        "name": "Binge-Eating Disorder",
+        "threshold": 7,
+        "questions": [
+            {"q_number": 1, "question": "Do you frequently eat large amounts of food in a short period?", "value": 3},
+            {"q_number": 2, "question": "Do you feel like you can't stop eating once you start?", "value": 2},
+            {"q_number": 3, "question": "Do you eat even when you're not physically hungry?", "value": 1},
+            {"q_number": 4, "question": "Do you feel embarrassed, guilty, or disgusted after eating?", "value": 1},
+            {"q_number": 5, "question": "Has this happened at least once a week for 3 months?", "value": 1},
+        ],
+        "therapeutic_recs": [
+            {"description": "Engage in dialectical behavior therapy (DBT) to manage emotional eating.", "evidence_based": True, "source": "APA", "treatments": "DBT"},
+            {"description": "Keep a food diary to identify triggers for binge episodes.", "evidence_based": True, "source": "NIH", "treatments": "Self-Monitoring"},
+        ],
+        "resources": [
+            {"label": "Binge Eating Disorder Association", "link": "https://www.bedaonline.com"},
+            {"label": "Binge Eating Disorder Self-Help Guide", "link": "https://www.helpguide.org/articles/eating-disorders/binge-eating-disorder.htm"},
+        ],
+    },
+    {
+        "name": "Substance Use Disorder",
+        "threshold": 7,
+        "questions": [
+            {"q_number": 1, "question": "Do you use substances more than intended?", "value": 2},
+            {"q_number": 2, "question": "Have you tried unsuccessfully to cut down?", "value": 2},
+            {"q_number": 3, "question": "Do you spend a lot of time obtaining, using, or recovering from substances?", "value": 2},
+            {"q_number": 4, "question": "Have you continued using despite negative consequences?", "value": 1},
+            {"q_number": 5, "question": "Do you experience cravings?", "value": 1},
+            {"q_number": 6, "question": "Do you have withdrawal symptoms?", "value": 3},
+        ],
+        "therapeutic_recs": [
+            {"description": "Consider joining a support group like Alcoholics Anonymous (AA) or Narcotics Anonymous (NA).", "evidence_based": True, "source": "NIH", "treatments": "Support Groups"},
+            {"description": "Work with a therapist to address underlying causes of substance use.", "evidence_based": True, "source": "APA", "treatments": "CBT"},
+        ],
+        "resources": [
+            {"label": "Substance Abuse and Mental Health Services Administration", "link": "https://www.samhsa.gov"},
+            {"label": "Alcoholics Anonymous", "link": "https://www.aa.org"},
+        ],
+    },
+    {
+        "name": "Attention Deficit Hyperactivity Disorder (ADHD)",
+        "threshold": 7,
+        "questions": [
+            {"q_number": 1, "question": "Do you frequently have trouble paying attention or finishing tasks?", "value": 2},
+            {"q_number": 2, "question": "Do you make careless mistakes at school or work?", "value": 1},
+            {"q_number": 3, "question": "Do you struggle to stay organized?", "value": 1},
+            {"q_number": 4, "question": "Do you feel restless or fidget often?", "value": 1},
+            {"q_number": 5, "question": "Do you talk excessively or interrupt others?", "value": 1},
+            {"q_number": 6, "question": "Do you act impulsively without thinking?", "value": 1},
+            {"q_number": 7, "question": "Did these symptoms start before age 12?", "value": 3},
+        ],
+        "therapeutic_recs": [
+            {"description": "Use organizational tools like planners or apps to manage tasks.", "evidence_based": True, "source": "APA", "treatments": "Behavioral Therapy"},
+            {"description": "Consider medication management under the guidance of a psychiatrist.", "evidence_based": True, "source": "NIH", "treatments": "Medication"},
+        ],
+        "resources": [
+            {"label": "CHADD - ADHD Support", "link": "https://chadd.org"},
+            {"label": "ADHD Management Tips", "link": "https://www.helpguide.org/articles/add-adhd/adult-adhd-attention-deficit-disorder.htm"},
+        ],
+    },
+    {
+        "name": "Paranoid Schizophrenia",
+        "threshold": 8,
+        "questions": [
+            {"q_number": 1, "question": "Do you have persistent delusions (false beliefs despite evidence to the contrary)?", "value": 3},
+            {"q_number": 2, "question": "Have you experienced hallucinations (seeing/hearing things that aren't there)?", "value": 3},
+            {"q_number": 3, "question": "Do you have disorganized speech (frequent derailment or incoherence)?", "value": 2},
+            {"q_number": 4, "question": "Have you displayed disorganized or unusual behavior?", "value": 1},
+            {"q_number": 5, "question": "Have you had symptoms continuously for at least 6 months?", "value": 1},
+        ],
+        "therapeutic_recs": [
+            {"description": "Work with a psychiatrist to manage symptoms with antipsychotic medications.", "evidence_based": True, "source": "NIH", "treatments": "Medication Management"},
+            {"description": "Engage in cognitive behavioral therapy (CBT) to address delusions and hallucinations.", "evidence_based": True, "source": "APA", "treatments": "CBT"},
+        ],
+        "resources": [
+            {"label": "National Alliance on Mental Illness - Schizophrenia", "link": "https://www.nami.org/About-Mental-Illness/Mental-Health-Conditions/Schizophrenia"},
+            {"label": "Schizophrenia Support Guide", "link": "https://www.helpguide.org/articles/mental-disorders/schizophrenia.htm"},
+        ],
+    },
+    {
+        "name": "Type 1 Bipolar Disorder",
+        "threshold": 7,
+        "questions": [
+            {"q_number": 1, "question": "Have you had periods of extremely high energy or activity lasting at least one week?", "value": 3},
+            {"q_number": 2, "question": "Did you feel unusually confident or grandiose during these periods?", "value": 2},
+            {"q_number": 3, "question": "Did you sleep much less but still feel energetic?", "value": 1},
+            {"q_number": 4, "question": "Did you engage in impulsive or risky behaviors (e.g., spending sprees, reckless driving)?", "value": 1},
+            {"q_number": 5, "question": "Have you had at least one major depressive episode?", "value": 1},
+        ],
+        "therapeutic_recs": [
+            {"description": "Work with a psychiatrist to stabilize mood with medications like lithium.", "evidence_based": True, "source": "NIH", "treatments": "Medication Management"},
+            {"description": "Engage in psychoeducation to understand and manage mood episodes.", "evidence_based": True, "source": "APA", "treatments": "Psychoeducation"},
+        ],
+        "resources": [
+            {"label": "International Bipolar Foundation", "link": "https://ibpf.org"},
+            {"label": "Bipolar Disorder Management Guide", "link": "https://www.helpguide.org/articles/bipolar-disorder/bipolar-disorder-symptoms-and-causes.htm"},
+        ],
+    },
+    {
+        "name": "Type 2 Bipolar Disorder",
+        "threshold": 7,
+        "questions": [
+            {"q_number": 1, "question": "Have you had episodes of increased energy and activity lasting at least 4 days?", "value": 3},
+            {"q_number": 2, "question": "Did you feel unusually confident or talkative during these episodes?", "value": 2},
+            {"q_number": 3, "question": "Have you had a major depressive episode lasting at least 2 weeks?", "value": 3},
+        ],
+        "therapeutic_recs": [
+            {"description": "Consider mood stabilizers or anticonvulsants under the guidance of a psychiatrist.", "evidence_based": True, "source": "NIH", "treatments": "Medication Management"},
+            {"description": "Engage in interpersonal and social rhythm therapy (IPSRT) to stabilize daily routines.", "evidence_based": True, "source": "APA", "treatments": "IPSRT"},
+        ],
+        "resources": [
+            {"label": "Depression and Bipolar Support Alliance", "link": "https://www.dbsalliance.org"},
+            {"label": "Bipolar Disorder Self-Help Guide", "link": "https://www.helpguide.org/articles/bipolar-disorder/bipolar-disorder-symptoms-and-causes.htm"},
+        ],
+    },
+    {
+        "name": "Deliberate Self-Harm (NSSI)",
+        "threshold": 6,
+        "questions": [
+            {"q_number": 1, "question": "Have you deliberately hurt yourself without the intent to die (e.g., cutting, burning)?", "value": 3},
+            {"q_number": 2, "question": "Do you engage in self-harm to relieve emotional distress?", "value": 2},
+            {"q_number": 3, "question": "Do you feel guilt, shame, or regret afterward?", "value": 1},
+            {"q_number": 4, "question": "Have you self-harmed multiple times in the past year?", "value": 1},
+        ],
+        "therapeutic_recs": [
+            {"description": "Engage in dialectical behavior therapy (DBT) to learn healthier coping mechanisms.", "evidence_based": True, "source": "APA", "treatments": "DBT"},
+            {"description": "Practice mindfulness to manage emotional distress without self-harm.", "evidence_based": True, "source": "NIH", "treatments": "Mindfulness-Based Therapy"},
+        ],
+        "resources": [
+            {"label": "Self-Injury Outreach and Support", "link": "https://sioutreach.org"},
+            {"label": "Self-Harm Recovery Guide", "link": "https://www.helpguide.org/articles/anxiety/cutting-and-self-harm.htm"},
+        ],
+    }
+
+]
+# Define duplicate data checks to make sure there is no duplicate entries
+def condition_exists(name):
+    return db.session.query(Condition).filter_by(name=name).first() is not None
+
+def question_exists(cond_id, q_number):
+    return db.session.query(ConditionQuestion).filter_by(cond_id=cond_id, q_number=q_number).first() is not None
+
+def therapeutic_rec_exists(description):
+    return db.session.query(TherapeuticRec).filter_by(description=description).first() is not None
+
+def resource_exists(label):
+    return db.session.query(Resource).filter_by(label=label).first() is not None
+
+# Input the data with checks to make sure each data entries are not repeated
+for condition_data in conditions_data:
+    if not condition_exists(condition_data["name"]):
+        condition = Condition(name=condition_data["name"], threshold=condition_data["threshold"])
+        db.session.add(condition)
+        db.session.commit()
+        for question_data in condition_data["questions"]:
+            if not question_exists(condition.cond_id, question_data["q_number"]):
+                question = ConditionQuestion(
+                    cond_id=condition.cond_id,
+                    q_number=question_data["q_number"],
+                    question=question_data["question"],
+                    value=question_data["value"],
+                )
+                db.session.add(question)
+        for rec_data in condition_data["therapeutic_recs"]:
+            if not therapeutic_rec_exists(rec_data["description"]):
+                therapeutic_rec = TherapeuticRec(
+                    description=rec_data["description"],
+                    evidence_based=rec_data["evidence_based"],
+                    source=rec_data["source"],
+                    treatments=rec_data["treatments"],
+                )
+                condition.therapeutic_recs.append(therapeutic_rec)
+        for resource_data in condition_data["resources"]:
+            if not resource_exists(resource_data["label"]):
+                resource = Resource(
+                    label=resource_data["label"],
+                    link=resource_data["link"],
+                )
+                condition.resources.append(resource)
+        db.session.commit()
+
+
+
+####### Querying the data ########
+
+# Query all conditions
+conditions = Condition.query.all()
+for condition in conditions:
+    print(f"Condition ID: {condition.cond_id}, Name: {condition.name}, Threshold: {condition.threshold}")
+
+# Query all questions
+questions = ConditionQuestion.query.all()
+for question in questions:
+    print(f"Condition ID: {question.cond_id}, Question Number: {question.q_number}, Question: {question.question}, Value:{question.value}")
+
+# Query all therapeutic recommendations
+therapeutic_recs = TherapeuticRec.query.all()
+for rec in therapeutic_recs:
+    print(f"Rec ID: {rec.rec_id}, Description: {rec.description}, Evidence Based: {rec.evidence_based}, Source: {rec.source}, Treatments: {rec.treatments}")
+
+# Query all resources
+resources = Resource.query.all()
+for resource in resources:
+    print(f"Resource ID: {resource.resource_id}, Label: {resource.label}, Link: {resource.link}")
+
+
+############### Querying association between Conditions and Resources/Therapeutic Recommendations ##########
+### Way1: examining all data and their connected conditions
+for condition in conditions:
+    if condition:
+            therapeutic_recs = condition.therapeutic_recs
+            resources = condition.resources
+            for rec in therapeutic_recs:
+                    print(f"Condition: {condition.name}, Rec ID: {rec.rec_id}, Description: {rec.description}, Source: {rec.source}")
+            for res in resources:
+                    print(f"Condition: {condition.name}, Res ID: {res.resource_id}, Label: {res.label}, Link: {res.link}")
+    else:
+            print("Condition not found")
+
+### Way 2: examining the association tables data
+# Query all therapeutic_rec_condition associations
+associations = db.session.execute(sa.select(therapeutic_rec_condition)).fetchall()
+for association in associations:
+    print(f"Therapeutic ID: {association.therapeutic_id}, Condition ID: {association.condition_id}")
+
+# Query all resource_condition associations
+associations = db.session.execute(sa.select(resource_condition)).fetchall()
+for association in associations:
+    print(f"Resource ID: {association.resource_id}, Condition ID: {association.condition_id}")
+
+
+### Way 3: testing joins work
+import sqlalchemy.orm as so
+# Query conditions and their therapeutic recommendations (make sure to import orm as so)
+conditions_with_recs = (
+    db.session.query(Condition)
+    .options(so.joinedload(Condition.therapeutic_recs))
+    .all()
+)
+
+# Print the results
+for condition in conditions_with_recs:
+    print(f"Condition: {condition.name}")
+    for rec in condition.therapeutic_recs:
+        print(f"  - Therapeutic Recommendation: {rec.description}")
+    print()  # Add a blank line for readability
+
+
+# Query conditions and their resources (make sure to import orm as so)
+conditions_with_resources = (
+    db.session.query(Condition)
+    .options(so.joinedload(Condition.resources))
+    .all()
+)
+
+# Print the results
+for condition in conditions_with_resources:
+    print(f"Condition: {condition.name}")
+    for resource in condition.resources:
+        print(f"  - Resource: {resource.label} ({resource.link})")
+    print()  # Add a blank line for readability
+
+
+

@@ -91,7 +91,7 @@ class Condition(db.Model):
     __tablename__ = "condition"
 
     cond_id: so.Mapped[int] = so.mapped_column(primary_key=True)
-    name: so.Mapped[str] = so.mapped_column(sa.String(255), nullable=False)
+    name: so.Mapped[str] = so.mapped_column(sa.String(255), nullable=False, unique=True)
     threshold: so.Mapped[int] = so.mapped_column(sa.Integer, nullable=False)
 
     # Relationships through secondary tables
@@ -140,7 +140,7 @@ class TherapeuticRec(db.Model):
     __tablename__ = "therapeutic_rec"
 
     rec_id: so.Mapped[int] = so.mapped_column(primary_key=True)
-    description: so.Mapped[str] = so.mapped_column(sa.Text, nullable=False)
+    description: so.Mapped[str] = so.mapped_column(sa.Text, nullable=False, unique=True)
     evidence_based: so.Mapped[bool] = so.mapped_column(sa.Boolean, default=False)
     source: so.Mapped[str] = so.mapped_column(sa.String(256))
     treatments: so.Mapped[str] = so.mapped_column(sa.Text)
@@ -151,7 +151,7 @@ class Resource(db.Model):
     __tablename__ = "resource"
 
     resource_id: so.Mapped[int] = so.mapped_column(primary_key=True)
-    label: so.Mapped[str] = so.mapped_column(sa.String(255), nullable=False)
+    label: so.Mapped[str] = so.mapped_column(sa.String(255), nullable=False, unique=True)
     link: so.Mapped[str] = so.mapped_column(sa.Text, nullable=False)
 
 

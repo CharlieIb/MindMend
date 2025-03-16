@@ -4,10 +4,61 @@ from app.forms import ChooseForm, LoginForm, ChangePasswordForm, RegisterForm, F
 from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
 from app import db
-from app.models import User
+from app.utils.classes import ConditionManager, ResourceManager, TherapeuticRecManager, TestResultManager
+from app.models import User, Condition, ConditionQuestion, Resource, TherapeuticRec
 from urllib.parse import urlsplit
 from app.utils import HeatMap, TrackHealth, symptom_list, questions_database
 from datetime import datetime
+
+initialized = False
+
+# Load data into classes on first load
+@app.before_request
+def initialize():
+    global initialized
+    if not initialized:
+        print("this only happens when the app initializes!")
+        # Screening Tool queries
+        session = db.session
+        try:
+            condition_manager = ConditionManager(session)
+            therapeutic_rec_manager = TherapeuticRecManager(session)
+            resource_manager = ResourceManager(session)
+            test_result_manager = TestResultManager(session)
+            initialized = True
+            flash("Data loaded into memory", "success")
+        except Exception as e:
+            flash(f"Exception: {e}, please restart", "danger")
+
+
+
+
+        # EXAMPLE USAGE OF NEW CLASSES--- DELETE WHEN NOT NEEDED
+        cond_id = 1
+
+        # Get a condition and its questions
+        condition = condition_manager.get_condition(cond_id)
+        questions = condition_manager.get_questions_for_condition(cond_id)
+
+        # Get therapeutic recommendations and resources for the condition
+        recommendations = therapeutic_rec_manager.get_recommendations_for_condition(cond_id)
+        resources = resource_manager.get_resources_for_condition(cond_id)
+
+        # Add a test result
+        test_result_manager.add_test_result(user_id=1, cond_id=cond_id, result="Positive")
+
+        # Retrieve test results for a user
+        user_test_results = test_result_manager.get_test_results_for_user(user_id=1)
+
+        # The output is from the model classes, use the attribute there to access the data
+        # Example
+        print(condition.name, condition.threshold)
+        for question in questions:
+            print(f"{question.q_number}, {question.question}")
+        # Try these to get familiar
+        print(recommendations)
+        print(resources)
+        print(user_test_results)
 
 
 # Not logged In Access

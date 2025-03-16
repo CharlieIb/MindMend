@@ -1,0 +1,72 @@
+from datetime import datetime, timedelta
+import random
+
+# Example false data for TestResult
+test_results_data = [
+    {
+        "user_id": 1,
+        "cond_id": 1,  # Generalized Anxiety Disorder (GAD)
+        "result": "Score: 8/10 - Moderate anxiety symptoms detected.",
+        "timedate": datetime.utcnow() - timedelta(days=10),
+    },
+    {
+        "user_id": 1,
+        "cond_id": 2,  # Panic Disorder
+        "result": "Score: 6/10 - Mild panic symptoms detected.",
+        "timedate": datetime.utcnow() - timedelta(days=5),
+    },
+    {
+        "user_id": 2,
+        "cond_id": 3,  # Social Anxiety Disorder
+        "result": "Score: 9/10 - Severe social anxiety symptoms detected.",
+        "timedate": datetime.utcnow() - timedelta(days=15),
+    },
+    {
+        "user_id": 2,
+        "cond_id": 4,  # Major Depressive Disorder
+        "result": "Score: 7/10 - Moderate depressive symptoms detected.",
+        "timedate": datetime.utcnow() - timedelta(days=20),
+    },
+    {
+        "user_id": 3,
+        "cond_id": 1,  # Generalized Anxiety Disorder (GAD)
+        "result": "Score: 5/10 - Mild anxiety symptoms detected.",
+        "timedate": datetime.utcnow() - timedelta(days=3),
+    },
+    {
+        "user_id": 3,
+        "cond_id": 2,  # Panic Disorder
+        "result": "Score: 4/10 - Minimal panic symptoms detected.",
+        "timedate": datetime.utcnow() - timedelta(days=1),
+    },
+]
+
+
+##### insert the data into the table ####
+for result_data in test_results_data:
+    test_result = TestResult(
+        user_id=result_data["user_id"],
+        cond_id=result_data["cond_id"],
+        result=result_data["result"],
+        timedate=result_data["timedate"],
+    )
+    db.session.add(test_result)
+
+db.session.commit()
+print("False data inserted into TestResult table!")
+
+
+### Querying the test data in different ways ####
+## By User
+user_id = 1  # Alter this id for different users
+user_results = db.session.query(TestResult).filter_by(user_id=user_id).all()
+
+for result in user_results:
+    print(f"Test ID: {result.test_id}, Condition ID: {result.cond_id}, Result: {result.result}, Date: {result.timedate}")
+## By Condition
+cond_id = 1  # Generalized Anxiety Disorder (GAD) # Alter this cond_id for different conditions
+condition_results = db.session.query(TestResult).filter_by(cond_id=cond_id).all()
+
+for result in condition_results:
+    print(f"Test ID: {result.test_id}, User ID: {result.user_id}, Result: {result.result}, Date: {result.timedate}")
+
