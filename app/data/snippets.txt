@@ -1,12 +1,19 @@
 ######################### Test data for model ##########################
 # User table
-user1 = User(username="john_doe", email="john.doe@example.com", role="Normal")
-user2 = User(username="jane_smith", email="jane.smith@example.com", role="Admin")
-user1.set_password("password123")
-user2.set_password("password123")
+user1 = User(username="bob", email="bob@mail.com", role="Normal")
+user2 = User(username="mischa", email="mischa@mail.com", role="Admin")
+user3 = User(username="charlie", email="charlie@mail.com", role="Admin")
+user4 = User(username="Aravind", email="aravind@mail.com", role="Admin")
+user1.set_password("bob.pw")
+user2.set_password("mischa.pw")
+user3.set_password("mischa.pw")
+user4.set_password("mischa.pw")
+
 
 db.session.add(user1)
 db.session.add(user2)
+db.session.add(user3)
+db.session.add(user4)
 db.session.commit()
 
 # Location table
@@ -217,12 +224,6 @@ for log in emotion_logs:
     print(f"Log ID: {log.log_id}, User ID: {log.user_id}, Emotion: {log.emotion}, Steps: {log.steps}, Activity Duration: {log.activity_duration}, Heart Rate: {log.heart_rate}, Blood Pressure: {log.blood_pressure}, Free Notes: {log.free_notes}, Location ID: {log.location_id}, Activity ID: {log.activity_id}, Person ID: {log.person_id}")
 
 
-# Query all conditions
-conditions = Condition.query.all()
-for condition in conditions:
-    print(f"Condition ID: {condition.cond_id}, Name: {condition.name}, Threshold: {condition.threshold}")
-
-
 # Query all test results
 test_results = TestResult.query.all()
 for result in test_results:
@@ -240,57 +241,9 @@ support_requests = SupportRequest.query.all()
 for request in support_requests:
     print(f"Request ID: {request.request_id}, User ID: {request.user_id}, Description: {request.description}, Time: {request.time}")
 
-# Query all therapeutic recommendations
-therapeutic_recs = TherapeuticRec.query.all()
-for rec in therapeutic_recs:
-    print(f"Rec ID: {rec.rec_id}, Description: {rec.description}, Evidence Based: {rec.evidence_based}, Source: {rec.source}, Treatments: {rec.treatments}")
-
-# Query all resources
-resources = Resource.query.all()
-for resource in resources:
-    print(f"Resource ID: {resource.resource_id}, Label: {resource.label}, Link: {resource.link}")
-
-# Query all therapeutic_rec_condition associations
-associations = db.session.execute(sa.select(therapeutic_rec_condition)).fetchall()
-for association in associations:
-    print(f"Therapeutic ID: {association.therapeutic_id}, Condition ID: {association.condition_id}")
-
-# Query all resource_condition associations
-associations = db.session.execute(sa.select(resource_condition)).fetchall()
-for association in associations:
-    print(f"Resource ID: {association.resource_id}, Condition ID: {association.condition_id}")
 
 
 
 
-############### Joining the Conditions and Therapeutic Recommendations ##########
-import sqlalchemy.orm as so
-
-# Query conditions and their therapeutic recommendations (make sure to import orm as so)
-conditions_with_recs = (
-    db.session.query(Condition)
-    .options(so.joinedload(Condition.therapeutic_recs))
-    .all()
-)
-
-# Print the results
-for condition in conditions_with_recs:
-    print(f"Condition: {condition.name}")
-    for rec in condition.therapeutic_recs:
-        print(f"  - Therapeutic Recommendation: {rec.description}")
-    print()  # Add a blank line for readability
 
 
-# Query conditions and their resources (make sure to import orm as so)
-conditions_with_resources = (
-    db.session.query(Condition)
-    .options(so.joinedload(Condition.resources))
-    .all()
-)
-
-# Print the results
-for condition in conditions_with_resources:
-    print(f"Condition: {condition.name}")
-    for resource in condition.resources:
-        print(f"  - Resource: {resource.label} ({resource.link})")
-    print()  # Add a blank line for readability

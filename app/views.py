@@ -4,10 +4,29 @@ from app.forms import ChooseForm, LoginForm, ChangePasswordForm, RegisterForm, F
 from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
 from app import db
+from app.utils.classes.ScreeningTool import Condition, DiagnosticQuestionnaire
 from app.models import User
 from urllib.parse import urlsplit
 from app.utils import HeatMap
 from datetime import datetime
+
+initialized = False
+
+# Load data into classes on first load
+@app.before_request
+def initialize():
+    global initialized
+    if not initialized:
+        print("this only happens when the app initializes!")
+        # Queries to retrieve data for Screenting Tool
+        q_cond =
+        q_diag_quest =
+        q_res =
+        q_therap_rec =
+        db.session.execute()
+
+        initialized = True
+
 
 
 # Not logged In Access
