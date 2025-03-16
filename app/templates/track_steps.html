@@ -1,0 +1,32 @@
+<div class="mt-3 border rounded-3 d-flex flex-column align-items-center p-1" style="width: 315px;">
+    <h3 class="bg-light text-center rounded-3 py-1 w-100">Track Steps</h3>
+    <div class="d-flex">
+        <div class="me-2">
+            <h4 class="bg-light text-body-secondary text-center rounded-3 py-1" style="width: 150px">Steps</h4>
+            <h4 class="bg-light fw-bold text-center rounded-3 p-3 mb-0">{{ track_health_info.steps }}</h4>
+            <h4 class="bg-light text-body-secondary text-center rounded-3 py-1 mt-2" style="width: 150px">Goal</h4>
+            <h4 class="bg-light fw-bold text-center rounded-3 p-3 mb-0">{{ track_health_info.steps_goal }}</h4>
+        </div>
+        <div>
+            <h4 class="bg-light text-body-secondary text-center rounded-3 py-1" style="width: 150px">Complete</h4>
+            <h4 class="bg-light fw-bold text-center rounded-3 p-3 mb-0">
+                {{ (track_health_info.steps / track_health_info.steps_goal) * 100 }}%
+            </h4>
+            <h4 class="bg-light text-body-secondary text-center rounded-3 py-1 mt-2" style="width: 150px">Left</h4>
+            <h4 class="bg-light fw-bold text-center rounded-3 p-3 mb-0">
+                {{ track_health_info.steps_goal - track_health_info.steps }}
+            </h4>
+        </div>
+    </div>
+    <div class="bg-light border rounded d-flex justify-content-center align-items-center mt-2 mb-0 w-100">
+        {% for i in range(0, 50) %}
+        {% set progress_threshold = ((track_health_info.steps / track_health_info.steps_goal) * 100) / 2 %}
+        {% set is_progress = i <= progress_threshold %}
+        {% set base_class = 'bg-success border border-success border-opacity-75' if is_progress else 'bg-primary
+        border border-primary border-opacity-75' %}
+        {% set rounded_class = ' rounded-start' if i == 0 else ' rounded-end' if i == 49 else '' %}
+        <div class="{{ base_class }}{{ rounded_class }}"
+             style="height: 20px; width: 1px; padding: 1px; margin: 1px"></div>
+        {% endfor %}
+    </div>
+</div>

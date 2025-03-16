@@ -4,41 +4,8 @@
 {% block content %}
 <h1>Welcome {{ current_user.username }}</h1>
 <h2>Here is your personalised Insight</h2>
-{% if display == 'month' %}
-<div class="d-flex flex-wrap justify-content-center w-100">
-{% else %}
-<div class="w-100">
-{% endif %}
+<div class="{{ 'd-flex flex-wrap justify-content-center w-100' if display == 'month' else 'w-100' }}">
     {% include 'heatmap.html' %}
-    <div class="mt-3 border rounded-3 p-1">
-        <h3 class="bg-light text-center rounded-3 py-1">Track Steps</h3>
-        <div class="d-flex">
-        <div class="me-2">
-            <h4 class="bg-light text-body-secondary text-center rounded-3 py-1" style="width: 150px">Steps</h4>
-            <h4 class="bg-light fw-bold text-center rounded-3 p-3 mb-0">{{ track_health_info.steps }}</h4>
-            <h4 class="bg-light text-body-secondary text-center rounded-3 py-1 mt-2" style="width: 150px">Goal</h4>
-            <h4 class="bg-light fw-bold text-center rounded-3 p-3 mb-0">{{ track_health_info.steps_goal }}</h4>
-        </div>
-        <div>
-            <h4 class="bg-light text-body-secondary text-center rounded-3 py-1" style="width: 150px">Complete</h4>
-            <h4 class="bg-light fw-bold text-center rounded-3 p-3 mb-0">
-                {{ (track_health_info.steps / track_health_info.steps_goal) * 100 }}%
-            </h4>
-            <h4 class="bg-light text-body-secondary text-center rounded-3 py-1 mt-2" style="width: 150px">Left</h4>
-            <h4 class="bg-light fw-bold text-center rounded-3 p-3 mb-0">
-                {{ track_health_info.steps_goal - track_health_info.steps }}
-            </h4>
-        </div>
-        </div>
-        <div class="bg-light d-flex border rounded w-100 mt-1 justify-content-center mb-0" style="padding: 1px;">
-        {% for i in range(50) %}
-            {% if i <= ((track_health_info.steps / track_health_info.steps_goal) * 100) / 2 %}
-                <div class="border border-success border-opacity-75" style="height: 20px; width: 1px; margin: 2px;"></div>
-            {% else %}
-                <div class="border border-primary border-opacity-75" style="height: 20px; width: 1px; margin: 2px;"></div>
-            {% endif %}
-        {% endfor %}
-        </div>
-    </div>
+    {% include 'track_steps.html' %}
 </div>
 {% endblock %}
