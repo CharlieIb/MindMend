@@ -16,3 +16,9 @@ class TrackHealth:
 
     def steps_percentage_complete(self):
         return (self.steps / self.steps_goal) * 100
+
+    def max_heart_rate(self):
+        return max(self.heart_rate)
+
+    def min_heart_rate(self):
+        return min(self.heart_rate)
