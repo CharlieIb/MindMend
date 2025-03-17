@@ -1,7 +1,8 @@
-from flask import render_template, redirect, url_for, flash, request, send_file, send_from_directory,session
+from flask import render_template, redirect, url_for, flash, request, send_file, send_from_directory, session
 from app import app
 from app import db
-from app.forms import ChooseForm, LoginForm, ChangePasswordForm, RegisterForm, FormRedirect,SelectSymptomsForm, generate_form
+from app.forms import ChooseForm, LoginForm, ChangePasswordForm, RegisterForm, FormRedirect, SelectSymptomsForm, \
+    generate_form, FormMindMirrorLayout
 from app.models import User, EmotionLog
 from app.utils import (HeatMap, TrackHealth, symptom_list, questions_database,
                        ConditionManager, ResourceManager, TherapeuticRecManager, TestResultManager,
@@ -12,6 +13,7 @@ from urllib.parse import urlsplit
 from datetime import datetime
 
 initialized = False
+
 
 # Load data into classes on first load
 @app.before_request
@@ -30,10 +32,6 @@ def initialize():
             flash("Data loaded into memory", "success")
         except Exception as e:
             flash(f"Exception: {e}, please restart", "danger")
-
-
-
-
 
         # EXAMPLE USAGE OF NEW CLASSES--- DELETE WHEN NOT NEEDED
         cond_id = 1
@@ -87,8 +85,6 @@ def initialize():
                     )
 
 
-
-
 # Not logged In Access
 @app.route('/')
 def home():
@@ -130,7 +126,6 @@ def login():
                     f"Steps: {log.steps}, "
                     f"Notes: {log.free_notes}"
                 )
-
 
         if not next_page or urlsplit(next_page).netloc != '':
             if current_user.role == 'Normal':
@@ -315,19 +310,24 @@ def mindmirror():
     activity_duration_goal = track_health.activity_duration_goal
     max_heart_rate = track_health.max_heart_rate()
     min_heart_rate = track_health.min_heart_rate()
+    avg_heart_rate = track_health.avg_heart_rate()
     track_health_info = {
         'steps': steps, 'steps_goal': steps_goal, 'steps_percentage_complete': steps_percentage_complete,
         'activity_duration': activity_duration, 'activity_duration_goal': activity_duration_goal,
-        'heart_rate': heart_rate, 'max_heart_rate': max_heart_rate, 'min_heart_rate': min_heart_rate,
+        'heart_rate': heart_rate,
+        'max_heart_rate': max_heart_rate, 'min_heart_rate': min_heart_rate, 'avg_heart_rate': avg_heart_rate,
         'blood_pressure': blood_pressure
     }
 
-    form_display, display = ChooseForm(), 'month'
+    form_display = ChooseForm()
+    display_year_month = session.get('display_year_month', 'month')
     if form_display.validate_on_submit():
         if form_display.change.data == 'year':
-            display = 'month'
+            display_year_month = 'month'
         elif form_display.change.data == 'month':
-            display = 'year'
+            display_year_month = 'year'
+        session['display_year_month'] = display_year_month
+        return redirect(url_for('mindmirror'))
 
     # Might be worth refactoring variables into sub feature Dictionary
     return render_template(
@@ -338,9 +338,35 @@ def mindmirror():
         curr_year=curr_year,
         month=month,
         year=year,
-        display=display,
+        display_year_month=display_year_month,
         form_display=form_display,
+        mindmirror_display=session.get('mindmirror_display', {}),
         track_health_info=track_health_info
+    )
+
+
+# MindMirror - edit page
+@app.route('/mindmirror_edit', methods=['GET', 'POST'])
+def mindmirror_edit():
+    if 'mindmirror_display' not in session:
+        session['mindmirror_display'] = {
+            'heatmap': True,
+            'track_steps': True,
+            'track_heart_rate': True
+        }
+    form = FormMindMirrorLayout(data=session['mindmirror_display'])
+    if form.validate_on_submit():
+        session['mindmirror_display'] = {
+            'heatmap': form.heatmap.data,
+            'track_steps': form.track_steps.data,
+            'track_heart_rate': form.track_heart_rate.data
+        }
+        return redirect(url_for('mindmirror'))
+
+    return render_template(
+        'mindmirror_edit.html',
+        title='Edit MindMirror',
+        form=form
     )
 
 
@@ -358,6 +384,7 @@ def emotion_log():
     ]
     return render_template('emotion-log.html', title='Check-In', emotions=emotions)
 
+
 # Screening Tool
 def generate_questionnaires(selected_symptoms):
     questions = []
@@ -368,21 +395,22 @@ def generate_questionnaires(selected_symptoms):
                 questions.append(conditions)
     return questions
 
+
 # First Page: Select Symptoms
 @app.route('/select_symptoms', methods=['GET', 'POST'])
 def select_symptoms():
     form = SelectSymptomsForm()
-    form.symptoms.choices = symptom_list ### TO-DO: Load symptoms from database ###
+    form.symptoms.choices = symptom_list  ### TO-DO: Load symptoms from database ###
     selected_symptoms = []
 
     if form.validate_on_submit():
         selected_symptoms = form.symptoms.data
-        session['selected_symptoms'] = selected_symptoms #Store selected_symptoms in flask session
+        session['selected_symptoms'] = selected_symptoms  # Store selected_symptoms in flask session
 
         ### TO-DO: Save selected symptoms into database ###
 
         return redirect(url_for('answer_questionnaire'))
-    return render_template('select_symptoms.html', title="Choose Symptoms", form= form)
+    return render_template('select_symptoms.html', title="Choose Symptoms", form=form)
 
 
 # Second Page: Answer Questionnaire
@@ -393,7 +421,7 @@ def answer_questionnaire():
     ### TO-DO: Function assess symptoms and select conditions ###
 
     questionnaires = generate_questionnaires(selected_symptoms)
-    session['questionnaires'] = questionnaires #Store questionnaires in flask session
+    session['questionnaires'] = questionnaires  # Store questionnaires in flask session
 
     # Create Flask Forms
     AnswerQuestionnaireForm = generate_form(session['questionnaires'])
@@ -414,12 +442,11 @@ def answer_questionnaire():
                     ### TO-DO: Save answers into database ###
                     ### TO-DO: Generate respective actions ###
 
-            scores.append({'condition':questionnaire["id"], 'score':condition_score})
+            scores.append({'condition': questionnaire["id"], 'score': condition_score})
         session.clear()
         return render_template('results.html', scores=scores, title="Questionnaire Result")
-    return render_template('questionnaire.html', questionnaires=session['questionnaires'], title='Questionnaire', form=form, enumerate=enumerate)
-
-
+    return render_template('questionnaire.html', questionnaires=session['questionnaires'], title='Questionnaire',
+                           form=form, enumerate=enumerate)
 
 
 # Error handlers

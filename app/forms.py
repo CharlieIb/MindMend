@@ -80,9 +80,18 @@ class FormRedirect(FlaskForm):
     change_password = SubmitField('Change Password')
 
 
+class FormMindMirrorLayout(FlaskForm):
+    heatmap = BooleanField('Check In Activity Heatmap', default=True)
+    track_steps = BooleanField('Track Steps', default=True)
+    track_heart_rate = BooleanField('Track Heart Rate', default=True)
+    submit = SubmitField('Submit')
+
+
 # Forms for screening tool
 class SelectSymptomsForm(FlaskForm):
-    symptoms = SelectMultipleField('Select Symptoms', choices=[], validators=[DataRequired(message='Please select at least 1 option')], widget=ListWidget(prefix_label=False), option_widget=CheckboxInput())
+    symptoms = SelectMultipleField('Select Symptoms', choices=[],
+                                   validators=[DataRequired(message='Please select at least 1 option')],
+                                   widget=ListWidget(prefix_label=False), option_widget=CheckboxInput())
     submit = SubmitField('Submit')
 
 
@@ -90,7 +99,7 @@ def generate_form(questionnaires):
     class AnswerQuestionnaireForm(FlaskForm):
         pass  # Fields will be added dynamically
 
-    #New Radio Field created for each question in list
+    # New Radio Field created for each question in list
     for questionnaire in questionnaires:
         for index, question in enumerate(questionnaire['questions']):
             question_id = f'question_{questionnaire['id']}_{index}'

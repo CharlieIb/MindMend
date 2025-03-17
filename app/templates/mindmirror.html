@@ -2,19 +2,29 @@
 {% import "bootstrap_wtf.html" as wtf %}
 
 {% block content %}
-<h1>Welcome {{ current_user.username }}</h1>
+<div class="d-flex justify-content-between align-items-center p-1 w-100">
+    <div class="btn btn-dark invisible">Edit</div>
+    <h1 class="mb-0 text-center">Welcome {{ current_user.username }}</h1>
+    <a href="{{ url_for('mindmirror_edit') }}" class="btn btn-dark opacity-75">Edit</a>
+</div>
 <h2 class="text-center">Here is your personalised Insight</h2>
-<div class="container-fluid">
-    <div class="responsive-grid">
-        <div class="w-100 {% if display == 'year' %} full-row {% endif %}">
+<div class="container w-100">
+    <div class="responsive-grid mx-auto w-100">
+        {% if 'heatmap' in mindmirror_display and mindmirror_display.heatmap == True %}
+        <div class="w-100 {% if display_year_month == 'year' %} full-row {% endif %}">
             {% include 'heatmap.html' %}
         </div>
+        {% endif %}
+        {% if 'track_steps' in mindmirror_display and mindmirror_display.track_steps == True %}
         <div>
             {% include 'track_steps.html' %}
         </div>
+        {% endif %}
+        {% if 'track_heart_rate' in mindmirror_display and mindmirror_display.track_heart_rate == True %}
         <div>
             {% include 'track_heart.html' %}
         </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
