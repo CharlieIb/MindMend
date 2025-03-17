@@ -1,5 +1,5 @@
-<div class="d-flex flex-column align-items-center justify-content-between {{ 'w-100' if display == 'year' else 'medium_widget' }}">
-    {% if display == 'month' %}
+<div class="d-flex flex-column align-items-center justify-content-between {{ 'w-100' if display_year_month == 'year' else 'medium_widget' }}">
+    {% if display_year_month == 'month' %}
         <div class="d-flex flex-column align-items-center justify-content-between border rounded-3 p-1 medium_widget">
             <h3 class="bg-light text-center rounded-3 py-1 w-100">Check In Activity</h3>
             <div class="bg-light p-3 rounded-3 d-flex flex-column align-items-center w-100">
@@ -76,7 +76,7 @@
     {% endif %}
     <form class="mt-2 w-100" action="" method="POST" novalidate enctype="multipart/form-data">
         {{ form_display.csrf_token() }}
-        {{ form_display.change(value=display) }}
-        <button class="btn btn-dark fw-bold w-100" type="submit">{{ display|title }}</button>
+        {{ form_display.change(value=display_year_month) }}
+        <button class="btn btn-dark fw-bold w-100" type="submit">{{ display_year_month|title }}</button>
     </form>
 </div>
