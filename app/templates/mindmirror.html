@@ -4,8 +4,49 @@
 {% block content %}
 <h1>Welcome {{ current_user.username }}</h1>
 <h2>Here is your personalised Insight</h2>
-<div class="{{ 'd-flex flex-wrap justify-content-center w-100' if display == 'month' else 'w-100' }}">
-    {% include 'heatmap.html' %}
-    {% include 'track_steps.html' %}
+<div class="container-fluid">
+    <div class="responsive-grid">
+        <div class="p-2 w-100 {% if display == 'year' %} full-row {% endif %}">
+            {% include 'heatmap.html' %}
+        </div>
+        <div class="p-2">
+            {% include 'track_steps.html' %}
+        </div>
+        <div class="p-2">
+            <div class="border rounded-3 d-flex flex-column p-1 w-100">
+                <h3 class="bg-light text-center rounded-3 py-1 w-100">Heart Rate</h3>
+                <div class="d-flex">
+                    <div class="me-2">
+                        <h4 class="bg-light text-body-secondary text-center rounded-3 py-1 medium_widget_title">
+                            Current
+                        </h4>
+                        <h4 class="bg-light fw-bold text-center rounded-3 p-3 mb-0">
+                            {{ track_health_info.heart_rate }}
+                        </h4>
+                        <h4 class="bg-light text-body-secondary text-center rounded-3 py-1 mt-2 medium_widget_title">
+                            Resting
+                        </h4>
+                        <h4 class="bg-light fw-bold text-center rounded-3 p-3 mb-0">
+                            {{ track_health_info.heart_rate }}
+                        </h4>
+                    </div>
+                    <div>
+                        <h4 class="bg-light text-body-secondary text-center rounded-3 py-1 medium_widget_title">
+                            Maximum
+                        </h4>
+                        <h4 class="bg-light fw-bold text-center rounded-3 p-3 mb-0">
+                            {{ track_health_info.heart_rate }}
+                        </h4>
+                        <h4 class="bg-light text-body-secondary text-center rounded-3 py-1 mt-2 medium_widget_title">
+                            Minimum
+                        </h4>
+                        <h4 class="bg-light fw-bold text-center rounded-3 p-3 mb-0">
+                            {{ track_health_info.heart_rate }}
+                        </h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

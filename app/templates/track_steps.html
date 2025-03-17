@@ -1,4 +1,4 @@
-<div class="mt-3 border rounded-3 d-flex flex-column align-items-center p-1 medium_widget">
+<div class="border rounded-3 d-flex flex-column p-1 w-100">
     <h3 class="bg-light text-center rounded-3 py-1 w-100">Track Steps</h3>
     <div class="d-flex">
         <div class="me-2">
@@ -10,7 +10,7 @@
         <div>
             <h4 class="bg-light text-body-secondary text-center rounded-3 py-1 medium_widget_title">Complete</h4>
             <h4 class="bg-light fw-bold text-center rounded-3 p-3 mb-0">
-                {{ (track_health_info.steps / track_health_info.steps_goal) * 100 }}%
+                {{ track_health_info.steps_percentage_complete }}%
             </h4>
             <h4 class="bg-light text-body-secondary text-center rounded-3 py-1 mt-2 medium_widget_title">Left</h4>
             <h4 class="bg-light fw-bold text-center rounded-3 p-3 mb-0">
@@ -20,8 +20,7 @@
     </div>
     <div class="bg-light border rounded d-flex justify-content-center align-items-center mt-2 mb-0 w-100">
         {% for i in range(0, 50) %}
-        {% set progress_threshold = ((track_health_info.steps / track_health_info.steps_goal) * 100) / 2 %}
-        {% set is_progress = i <= progress_threshold %}
+        {% set is_progress = i <= track_health_info.steps_percentage_complete / 2 %}
         {% set base_class = 'bg-success border border-success' if is_progress else 'bg-primary
         border border-primary opacity-50' %}
         {% set rounded_class = ' rounded-start' if i == 0 else ' rounded-end' if i == 49 else '' %}
