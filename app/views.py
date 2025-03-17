@@ -329,6 +329,13 @@ def mindmirror():
         session['display_year_month'] = display_year_month
         return redirect(url_for('mindmirror'))
 
+    if 'mindmirror_display' not in session:
+        session['mindmirror_display'] = {
+            'heatmap': True,
+            'track_steps': True,
+            'track_heart_rate': True
+        }
+
     # Might be worth refactoring variables into sub feature Dictionary
     return render_template(
         'mindmirror.html',
@@ -348,12 +355,6 @@ def mindmirror():
 # MindMirror - edit page
 @app.route('/mindmirror_edit', methods=['GET', 'POST'])
 def mindmirror_edit():
-    if 'mindmirror_display' not in session:
-        session['mindmirror_display'] = {
-            'heatmap': True,
-            'track_steps': True,
-            'track_heart_rate': True
-        }
     form = FormMindMirrorLayout(data=session['mindmirror_display'])
     if form.validate_on_submit():
         session['mindmirror_display'] = {
