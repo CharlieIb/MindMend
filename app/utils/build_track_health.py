@@ -5,7 +5,8 @@ class TrackHealth:
                  activity_duration=None,
                  activity_duration_goal=2,
                  heart_rate=None,
-                 blood_pressure=None
+                 blood_pressure=None,
+                 age=800
                  ):
         self.steps = steps
         self.steps_goal = steps_goal
@@ -13,6 +14,15 @@ class TrackHealth:
         self.activity_duration_goal = activity_duration_goal
         self.heart_rate = heart_rate
         self.blood_pressure = blood_pressure
+        self.age = age
+        self.max_heart_age = {
+            20: 200, 25: 195,
+            30: 190, 35: 185,
+            40: 180, 45: 175,
+            50: 170, 55: 165,
+            60: 160, 65: 155,
+            70: 150
+        }
 
     def steps_percentage_complete(self):
         return (self.steps / self.steps_goal) * 100
@@ -22,6 +32,40 @@ class TrackHealth:
 
     def min_heart_rate(self):
         return min(self.heart_rate)
+
+    def heart_rate_zones(self):
+        age = 5 * round(self.age / 5) if self.age < 70 else 70
+        max_heart_rate = self.max_heart_age[age]
+
+        zone_one = {'minimum': max_heart_rate * 0.5, 'maximum': max_heart_rate * 0.6}
+        zone_two = {'minimum': max_heart_rate * 0.6, 'maximum': max_heart_rate * 0.7}
+        zone_three = {'minimum': max_heart_rate * 0.7, 'maximum': max_heart_rate * 0.8}
+        zone_four = {'minimum': max_heart_rate * 0.8, 'maximum': max_heart_rate * 0.9}
+        zone_five = {'minimum': max_heart_rate * 0.9, 'maximum': max_heart_rate * 1}
+
+        zones = {
+            'zone_one': zone_one,
+            'zone_two': zone_two,
+            'zone_three': zone_three,
+            'zone_four': zone_four,
+            'zone_five': zone_five
+        }
+        return zones
+
+    def heart_rate_zone_progress_bar(self):
+        zones = self.heart_rate_zones()
+
+        max_heart_rate = 220
+        scale = 50
+        factor = scale / max_heart_rate
+
+        scaled_zones = {}
+        for zone, limits in zones.items():
+            scaled_min = limits['minimum'] * factor
+            scaled_max = limits['maximum'] * factor
+            scaled_zones[zone] = {'min': scaled_min, 'max': scaled_max}
+
+        return scaled_zones
 
     def avg_heart_rate(self):
         return int(sum(self.heart_rate) / len(self.heart_rate))

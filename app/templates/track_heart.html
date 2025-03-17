@@ -1,10 +1,33 @@
 {% import 'widget_macro.html' as macro %}
 {% call macro.track_steps_widget(
 track_health_info,
-title="Track Heart",
+title="Heart Rate",
 label_one="Current", content_one=track_health_info.heart_rate[1],
 label_two="Average", content_two=track_health_info.avg_heart_rate,
 label_three="Maximum", content_three=track_health_info.max_heart_rate,
 label_four="Minimum", content_four=track_health_info.min_heart_rate
 ) %}
+    {% set zone_one = track_health_info.heart_zones.zone_one %}
+    {% set zone_two = track_health_info.heart_zones.zone_two %}
+    {% set zone_three = track_health_info.heart_zones.zone_three %}
+    {% set zone_four = track_health_info.heart_zones.zone_four %}
+    {% set zone_five = track_health_info.heart_zones.zone_five %}
+    {% for i in range(0, 50) %}
+        {% set rounded_class = ' rounded-start' if i == 0 else ' rounded-end' if i == 49 else '' %}
+        {% if i < zone_one.min %}
+            <div class="bg-secondary-subtle border border-secondary-subtle {{ rounded_class }} steps_progress_bar"></div>
+        {% elif i > zone_one.min and i <= zone_one.max %}
+            <div class="bg-warning-subtle border border-warning-subtle {{ rounded_class }} steps_progress_bar"></div>
+        {% elif i > zone_two.min and i <= zone_two.max %}
+            <div class="bg-success border border-success {{ rounded_class }} steps_progress_bar"></div>
+        {% elif i > zone_three.min and i <= zone_three.max %}
+            <div class="bg-info border border-info {{ rounded_class }} steps_progress_bar"></div>
+        {% elif i > zone_four.min and i <= zone_four.max %}
+            <div class="bg-primary border border-primary {{ rounded_class }} steps_progress_bar"></div>
+        {% elif i > zone_five.min and i <= zone_five.max %}
+            <div class="bg-warning border border-warning {{ rounded_class }} steps_progress_bar"></div>
+        {% else %}
+            <div class="bg-danger border border-danger {{ rounded_class }} steps_progress_bar"></div>
+        {% endif %}
+    {% endfor %}
 {% endcall %}
