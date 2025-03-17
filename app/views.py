@@ -303,7 +303,7 @@ def mindmirror():
     month, year = heatmap.month_display(), heatmap.year_display()
 
     # Data would normally get queries from db and passed to TrackHealth
-    steps, activity_duration, heart_rate, blood_pressure = 6908, 1.5, 64, '90/60'
+    steps, activity_duration, heart_rate, blood_pressure = 6908, 1.5, [50, 64, 153], '90/60'
     track_health = TrackHealth(
         steps=steps,
         activity_duration=activity_duration,
@@ -313,10 +313,12 @@ def mindmirror():
     steps_goal = track_health.steps_goal
     steps_percentage_complete = track_health.steps_percentage_complete()
     activity_duration_goal = track_health.activity_duration_goal
+    max_heart_rate = track_health.max_heart_rate()
+    min_heart_rate = track_health.min_heart_rate()
     track_health_info = {
         'steps': steps, 'steps_goal': steps_goal, 'steps_percentage_complete': steps_percentage_complete,
         'activity_duration': activity_duration, 'activity_duration_goal': activity_duration_goal,
-        'heart_rate': heart_rate,
+        'heart_rate': heart_rate, 'max_heart_rate': max_heart_rate, 'min_heart_rate': min_heart_rate,
         'blood_pressure': blood_pressure
     }
 
