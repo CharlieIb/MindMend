@@ -1,30 +1,16 @@
-<div class="border rounded-3 d-flex align-items-center justify-content-between flex-column p-1 medium_widget">
-    <h3 class="bg-light text-center rounded-3 py-1 w-100">Track Steps</h3>
-    <div class="d-flex">
-        <div class="me-2">
-            <h4 class="bg-light text-body-secondary text-center rounded-3 py-1 medium_widget_title">Steps</h4>
-            <h4 class="bg-light fw-bold text-center rounded-3 p-3 mb-0">{{ track_health_info.steps }}</h4>
-            <h4 class="bg-light text-body-secondary text-center rounded-3 py-1 mt-2 medium_widget_title">Goal</h4>
-            <h4 class="bg-light fw-bold text-center rounded-3 p-3 mb-0">{{ track_health_info.steps_goal }}</h4>
-        </div>
-        <div>
-            <h4 class="bg-light text-body-secondary text-center rounded-3 py-1 medium_widget_title">Complete</h4>
-            <h4 class="bg-light fw-bold text-center rounded-3 p-3 mb-0">
-                {{ track_health_info.steps_percentage_complete }}%
-            </h4>
-            <h4 class="bg-light text-body-secondary text-center rounded-3 py-1 mt-2 medium_widget_title">Left</h4>
-            <h4 class="bg-light fw-bold text-center rounded-3 p-3 mb-0">
-                {{ track_health_info.steps_goal - track_health_info.steps }}
-            </h4>
-        </div>
-    </div>
-    <div class="bg-light border rounded d-flex justify-content-center align-items-center mt-1 mb-0 w-100">
-        {% for i in range(0, 50) %}
+{% import 'widget_macro.html' as macro %}
+{% call macro.track_steps_widget(
+track_health_info,
+title="Track Steps",
+label_one="Steps", content_one=track_health_info.steps,
+label_two="Goal", content_two=track_health_info.steps_goal,
+label_three="Complete", content_three=track_health_info.steps_percentage_complete ~ '%',
+label_four="Left", content_four=track_health_info.steps_goal - track_health_info.steps
+) %}
+    {% for i in range(0, 50) %}
         {% set is_progress = i <= track_health_info.steps_percentage_complete / 2 %}
-        {% set base_class = 'bg-success border border-success' if is_progress else 'bg-primary
-        border border-primary opacity-50' %}
+        {% set base_class = 'bg-success border border-success' if is_progress else 'bg-primary border border-primary opacity-50' %}
         {% set rounded_class = ' rounded-start' if i == 0 else ' rounded-end' if i == 49 else '' %}
         <div class="{{ base_class }}{{ rounded_class }} steps_progress_bar"></div>
-        {% endfor %}
-    </div>
-</div>
+    {% endfor %}
+{% endcall %}
