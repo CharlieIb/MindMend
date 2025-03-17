@@ -2,8 +2,10 @@ from flask import render_template, redirect, url_for, flash, request, send_file,
 from app import app
 from app import db
 from app.forms import ChooseForm, LoginForm, ChangePasswordForm, RegisterForm, FormRedirect,SelectSymptomsForm, generate_form
-from app.models import User
-from app.utils import HeatMap, TrackHealth, symptom_list, questions_database, ConditionManager, ResourceManager, TherapeuticRecManager, TestResultManager
+from app.models import User, EmotionLog
+from app.utils import (HeatMap, TrackHealth, symptom_list, questions_database,
+                       ConditionManager, ResourceManager, TherapeuticRecManager, TestResultManager,
+                       EmotionLogManager, ActivityManager, LocationManager, PersonManager)
 from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
 from urllib.parse import urlsplit
@@ -28,6 +30,7 @@ def initialize():
             flash("Data loaded into memory", "success")
         except Exception as e:
             flash(f"Exception: {e}, please restart", "danger")
+
 
 
 
@@ -59,6 +62,32 @@ def initialize():
         print(resources)
         print(user_test_results)
 
+        # DO NOT DELETE! - between the two comments
+        if current_user:
+            # Load user log data, if already logged in
+            emotion_log_manager = EmotionLogManager(db.session, current_user.id)
+            # DO NOT DELETE!
+
+            #### EXAMPLE  USAGE OF EMOTIONLOG CLASS --- CAN DELETE
+            logs = emotion_log_manager.emotional_logs
+            if not logs:
+                print(f"No emotion logs found for user ID {current_user.id}.")
+            else:
+                print(f"Emotion logs for user ID {current_user.id}:")
+                for log in logs.values():
+                    print(
+                        f"Log ID: {log.log_id}, "
+                        f"Emotion: {log.emotion}, "
+                        f"Location: {log.location.name if log.location else 'N/A'}, "
+                        f"Activity: {log.activity.name if log.activity else 'N/A'}, "
+                        f"Person: {log.people.name if log.people else 'N/A'}, "
+                        f"Time: {log.time}, "
+                        f"Steps: {log.steps}, "
+                        f"Notes: {log.free_notes}"
+                    )
+
+
+
 
 # Not logged In Access
 @app.route('/')
@@ -81,6 +110,28 @@ def login():
             return redirect(url_for('login'))
         login_user(user, remember=form_login.remember_me.data)
         next_page = request.args.get('next')
+
+        # Load user relevant data
+        emotion_log_manager = EmotionLogManager(db.session, current_user.id)
+        #### EXAMPLE  USAGE OF EMOTIONLOG CLASS
+        logs = emotion_log_manager.emotional_logs
+        if not logs:
+            print(f"No emotion logs found for user ID {current_user.id}.")
+        else:
+            print(f"Emotion logs for user ID {current_user.id}:")
+            for log in logs.values():
+                print(
+                    f"Log ID: {log.log_id}, "
+                    f"Emotion: {log.emotion}, "
+                    f"Location: {log.location.name if log.location else 'N/A'}, "
+                    f"Activity: {log.activity.name if log.activity else 'N/A'}, "
+                    f"Person: {log.people.name if log.people else 'N/A'}, "
+                    f"Time: {log.time}, "
+                    f"Steps: {log.steps}, "
+                    f"Notes: {log.free_notes}"
+                )
+
+
         if not next_page or urlsplit(next_page).netloc != '':
             if current_user.role == 'Normal':
                 next_page = url_for('mindmirror')
