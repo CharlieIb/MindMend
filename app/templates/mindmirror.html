@@ -6,14 +6,14 @@
 <h2>Here is your personalised Insight</h2>
 <div class="container-fluid">
     <div class="responsive-grid">
-        <div class="p-2 w-100 {% if display == 'year' %} full-row {% endif %}">
+        <div class="w-100 {% if display == 'year' %} full-row {% endif %}">
             {% include 'heatmap.html' %}
         </div>
-        <div class="p-2">
+        <div>
             {% include 'track_steps.html' %}
         </div>
-        <div class="p-2">
-            <div class="border rounded-3 d-flex flex-column p-1 w-100">
+        <div>
+            <div class="border rounded-3 d-flex align-items-center justify-content-between flex-column p-1 w-100">
                 <h3 class="bg-light text-center rounded-3 py-1 w-100">Heart Rate</h3>
                 <div class="d-flex">
                     <div class="me-2">

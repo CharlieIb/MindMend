@@ -1,4 +1,4 @@
-<div class="border rounded-3 d-flex flex-column p-1 w-100">
+<div class="border rounded-3 d-flex align-items-center justify-content-between flex-column p-1 medium_widget">
     <h3 class="bg-light text-center rounded-3 py-1 w-100">Track Steps</h3>
     <div class="d-flex">
         <div class="me-2">
@@ -18,7 +18,7 @@
             </h4>
         </div>
     </div>
-    <div class="bg-light border rounded d-flex justify-content-center align-items-center mt-2 mb-0 w-100">
+    <div class="bg-light border rounded d-flex justify-content-center align-items-center mt-1 mb-0 w-100">
         {% for i in range(0, 50) %}
         {% set is_progress = i <= track_health_info.steps_percentage_complete / 2 %}
         {% set base_class = 'bg-success border border-success' if is_progress else 'bg-primary
