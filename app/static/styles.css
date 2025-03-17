@@ -2,6 +2,13 @@
     font-family: 'Lucida Console', 'Courier New', monospace;
 }
 
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
 .navbar_width {
     width: 125px;
 }
@@ -36,7 +43,7 @@
     grid-template-columns: repeat(auto-fill, 315px);
     gap: 1rem;
     justify-content: center;
-    justify-items: space-between;
+    justify-items: center;
 }
 
 .full-row {

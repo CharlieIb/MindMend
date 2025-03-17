@@ -22,3 +22,6 @@ class TrackHealth:
 
     def min_heart_rate(self):
         return min(self.heart_rate)
+
+    def avg_heart_rate(self):
+        return int(sum(self.heart_rate) / len(self.heart_rate))

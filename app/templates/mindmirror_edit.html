@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% import "bootstrap_wtf.html" as wtf %}
+
+{% block content %}
+<div>
+    <h1 class="text-center p-1">Edit MindMirror Layout</h1>
+    <h2 class="text-center">Select options you want</h2>
+    <form action="" method="POST" novalidate>
+        {{ form.hidden_tag() }}
+        {{ wtf.form_field(form.heatmap, False) }}
+        {{ wtf.form_field(form.track_steps, False) }}
+        {{ wtf.form_field(form.track_heart_rate, False) }}
+        {{ form.submit(class="btn btn-dark") }}
+    </form>
+</div>
+{% endblock %}
