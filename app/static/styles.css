@@ -29,3 +29,16 @@
     padding: 1px;
     margin: 1px;
 }
+
+.responsive-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 315px);
+    gap: 2rem;
+    justify-content: center;
+    justify-items: center;
+}
+
+.full-row {
+    grid-column: 1 / -1;
+    justify-self: stretch;
+}
