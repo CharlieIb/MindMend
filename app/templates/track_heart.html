@@ -1,0 +1,10 @@
+{% import 'widget_macro.html' as macro %}
+{% call macro.track_steps_widget(
+track_health_info,
+title="Track Steps",
+label_one="Current", content_one=track_health_info.heart_rate[1],
+label_two="Resting", content_two=track_health_info.heart_rate[1],
+label_three="Maximum", content_three=track_health_info.max_heart_rate,
+label_four="Minimum", content_four=track_health_info.min_heart_rate
+) %}
+{% endcall %}

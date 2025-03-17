@@ -13,39 +13,7 @@
             {% include 'track_steps.html' %}
         </div>
         <div>
-            <div class="border rounded-3 d-flex align-items-center justify-content-between flex-column p-1 w-100">
-                <h3 class="bg-light text-center rounded-3 py-1 w-100">Heart Rate</h3>
-                <div class="d-flex">
-                    <div class="me-2">
-                        <h4 class="bg-light text-body-secondary text-center rounded-3 py-1 medium_widget_title">
-                            Current
-                        </h4>
-                        <h4 class="bg-light fw-bold text-center rounded-3 p-3 mb-0">
-                            {{ track_health_info.heart_rate }}
-                        </h4>
-                        <h4 class="bg-light text-body-secondary text-center rounded-3 py-1 mt-2 medium_widget_title">
-                            Resting
-                        </h4>
-                        <h4 class="bg-light fw-bold text-center rounded-3 p-3 mb-0">
-                            {{ track_health_info.heart_rate }}
-                        </h4>
-                    </div>
-                    <div>
-                        <h4 class="bg-light text-body-secondary text-center rounded-3 py-1 medium_widget_title">
-                            Maximum
-                        </h4>
-                        <h4 class="bg-light fw-bold text-center rounded-3 p-3 mb-0">
-                            {{ track_health_info.heart_rate }}
-                        </h4>
-                        <h4 class="bg-light text-body-secondary text-center rounded-3 py-1 mt-2 medium_widget_title">
-                            Minimum
-                        </h4>
-                        <h4 class="bg-light fw-bold text-center rounded-3 p-3 mb-0">
-                            {{ track_health_info.heart_rate }}
-                        </h4>
-                    </div>
-                </div>
-            </div>
+            {% include 'track_heart.html' %}
         </div>
     </div>
 </div>
