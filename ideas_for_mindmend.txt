@@ -1,3 +1,7 @@
+Users general info
+|-> height, weight info?
+|-> input when register and ability to change later
+
 MindMirror
 |-> make freenote pop up if logged when user clicks on certain day in heatmap, if no freenote flash msg eg: 'no free notes'
 |-> info about past diagnoses
