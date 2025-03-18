@@ -1,5 +1,5 @@
-{% macro medium_widget(
-track_health_info,
+{% macro medium_widget_four(
+medium_widget_four,
 title="Title",
 label_one="Label", content_one=None,
 label_two="Left", content_two=None,
@@ -24,6 +24,41 @@ label_four="Left", content_four=None
     </div>
     <div class="bg-light border rounded d-flex justify-content-center align-items-center mt-1 mb-0 w-100">
         {{ caller() }}
+    </div>
+</div>
+{% endmacro %}
+
+{% macro medium_widget_five(
+medium_widget_five,
+title="Title",
+label_one="Label", content_one=None, bg_colour_one='bg-light',
+label_two="Left", content_two=None, bg_colour_two='bg-light',
+label_three="Complete", content_three=None, bg_colour_three='bg-light',
+label_four="Left", content_four=None, bg_colour_four='bg-light',
+label_five="Left", content_five=None, bg_colour_five='bg-light'
+) %}
+<div class="border rounded-3 d-flex align-items-center justify-content-between flex-column p-1 medium_widget">
+    <h3 class="bg-light text-center rounded-3 py-1 w-100">{{ title }}</h3>
+    <div class="d-flex align-items-center">
+        <div class="me-2">
+            <h4 class="{{ bg_colour_one }} text-body-secondary text-center rounded-3 py-1 medium_widget_title">{{ label_one }}</h4>
+            <h4 class="bg-light fw-bold text-center rounded-3 p-3 mb-0">{{ content_one }}</h4>
+
+            <h4 class="{{ bg_colour_two }} text-body-secondary text-center rounded-3 py-1 mt-2 medium_widget_title">{{ label_two }}</h4>
+            <h4 class="bg-light fw-bold text-center rounded-3 p-3 mb-0">{{ content_two }}</h4>
+
+            <h4 class="{{ bg_colour_three }} text-body-secondary text-center rounded-3 py-1 mt-2 medium_widget_title">{{ label_three }}</h4>
+            <h4 class="bg-light fw-bold text-center rounded-3 p-3 mb-0">{{ content_three }}</h4>
+
+            <h4 class="{{ bg_colour_four }} text-body-secondary text-center rounded-3 py-1 mt-2 medium_widget_title">{{ label_four }}</h4>
+            <h4 class="bg-light fw-bold text-center rounded-3 p-3 mb-0">{{ content_four }}</h4>
+
+            <h4 class="{{ bg_colour_five }} text-body-secondary text-center rounded-3 py-1 mt-2 medium_widget_title">{{ label_five }}</h4>
+            <h4 class="bg-light fw-bold text-center rounded-3 p-3 mb-0">{{ content_five }}</h4>
+        </div>
+        <div class="bg-light border rounded d-flex justify-content-center align-items-center mb-0 w-100 mh-100">
+            {{ caller() }}
+        </div>
     </div>
 </div>
 {% endmacro %}
