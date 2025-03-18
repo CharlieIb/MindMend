@@ -9,7 +9,7 @@
 </div>
 <h2 class="text-center">Here is your personalised Insight</h2>
 <div class="container w-100">
-    <div class="responsive-grid mx-auto w-100">
+    <div class="responsive-grid m-auto w-100">
         {% if 'heatmap' in mindmirror_display and mindmirror_display.heatmap == True %}
             <div class="w-100 {% if display_year_month == 'year' %} full-row {% endif %}">
                 {% include 'heatmap.html' %}
@@ -33,6 +33,11 @@
         {% if 'track_blood_pressure' in mindmirror_display and mindmirror_display.track_blood_pressure == True %}
         <div>
             {% include 'track_blood_pressure.html' %}
+        </div>
+        {% endif %}
+        {% if 'heart_zones' in mindmirror_display and mindmirror_display.heart_zones == True %}
+        <div>
+            {% include 'track_heart_zones.html' %}
         </div>
         {% endif %}
     </div>

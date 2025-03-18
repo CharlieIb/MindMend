@@ -51,6 +51,12 @@ body {
     margin: 1px;
 }
 
+.progress_bar_y {
+    height: 9px;
+    width: 145px;
+    margin: 1px;
+}
+
 .responsive-grid {
     display: grid;
     height: 300px;

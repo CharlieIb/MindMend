@@ -315,6 +315,7 @@ def mindmirror():
     min_heart_rate = track_health.min_heart_rate()
     avg_heart_rate = track_health.avg_heart_rate()
     heart_rate_range = track_health.heart_rate_range()
+    heart_rate_zones = track_health.heart_rate_zones()
     heart_zones_progress_bar = track_health.heart_rate_zone_progress_bar()
 
     track_health_info = {
@@ -324,7 +325,8 @@ def mindmirror():
         'activity_duration_goal': activity_duration_goal, 'activity_percentage_complete': activity_percentage_complete,
         'heart_rate': heart_rate,
         'max_heart_rate': max_heart_rate, 'min_heart_rate': min_heart_rate, 'avg_heart_rate': avg_heart_rate,
-        'heart_rate_range': heart_rate_range, 'heart_zones': heart_zones_progress_bar,
+        'heart_rate_range': heart_rate_range,
+        'heart_zones_scaled': heart_zones_progress_bar, 'heart_zones': heart_rate_zones,
         'blood_pressure': blood_pressure
     }
 
@@ -344,7 +346,8 @@ def mindmirror():
             'track_activity': True,
             'track_steps': True,
             'track_heart_rate': True,
-            'track_blood_pressure': True
+            'track_blood_pressure': True,
+            'heart_zones': True
         }
 
     # Might be worth refactoring variables into sub feature Dictionary
@@ -373,7 +376,8 @@ def mindmirror_edit():
             'track_activity': form.track_activity.data,
             'track_steps': form.track_steps.data,
             'track_heart_rate': form.track_heart_rate.data,
-            'track_blood_pressure': form.track_blood_pressure.data
+            'track_blood_pressure': form.track_blood_pressure.data,
+            'heart_zones': form.heart_zones.data
         }
         return redirect(url_for('mindmirror'))
 
