@@ -15,6 +15,11 @@
                 {% include 'heatmap.html' %}
             </div>
         {% endif %}
+        {% if 'track_activity' in mindmirror_display and mindmirror_display.track_activity == True %}
+            <div>
+                {% include 'track_activity.html' %}
+            </div>
+        {% endif %}
         {% if 'track_steps' in mindmirror_display and mindmirror_display.track_steps == True %}
             <div>
                 {% include 'track_steps.html' %}
