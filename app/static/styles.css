@@ -21,6 +21,10 @@ body {
     width: 150px;
 }
 
+.large_widget {
+    width: 435px;
+}
+
 .heatmap_day {
     height: 20px;
     width: 20px;
@@ -57,12 +61,22 @@ body {
     margin: 1px;
 }
 
+.graph {
+    height: 20px;
+    width: 100%;
+}
+
+.graph_title {
+    width: 100px;
+}
+
 .responsive-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, 315px);
+    grid-template-columns: repeat(auto-fill, minmax(315px, 1fr));
     gap: 1rem;
     justify-content: center;
-    justify-items: center;
+    justify-items: start;
+    max-width: 80%;
 }
 
 .full-row {
