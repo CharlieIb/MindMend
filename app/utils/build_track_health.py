@@ -54,11 +54,11 @@ class TrackHealth:
         age = 5 * round(self.age / 5) if self.age < 70 else 70
         max_heart_rate = self.max_heart_age[age]
 
-        zone_one = {'minimum': max_heart_rate * 0.5, 'maximum': max_heart_rate * 0.6}
-        zone_two = {'minimum': max_heart_rate * 0.6, 'maximum': max_heart_rate * 0.7}
-        zone_three = {'minimum': max_heart_rate * 0.7, 'maximum': max_heart_rate * 0.8}
-        zone_four = {'minimum': max_heart_rate * 0.8, 'maximum': max_heart_rate * 0.9}
-        zone_five = {'minimum': max_heart_rate * 0.9, 'maximum': max_heart_rate * 1}
+        zone_one = {'minimum': round(max_heart_rate * 0.5), 'maximum': round(max_heart_rate * 0.6)}
+        zone_two = {'minimum': round(max_heart_rate * 0.6), 'maximum': round(max_heart_rate * 0.7)}
+        zone_three = {'minimum': round(max_heart_rate * 0.7), 'maximum': round(max_heart_rate * 0.8)}
+        zone_four = {'minimum': round(max_heart_rate * 0.8), 'maximum': round(max_heart_rate * 0.9)}
+        zone_five = {'minimum': round(max_heart_rate * 0.9), 'maximum': round(max_heart_rate * 1)}
 
         zones = {
             'zone_one': zone_one,
@@ -78,8 +78,8 @@ class TrackHealth:
 
         scaled_zones = {}
         for zone, limits in zones.items():
-            scaled_min = limits['minimum'] * factor
-            scaled_max = limits['maximum'] * factor
+            scaled_min = round(limits['minimum'] * factor)
+            scaled_max = round(limits['maximum'] * factor)
             scaled_zones[zone] = {'min': scaled_min, 'max': scaled_max}
 
         return scaled_zones
