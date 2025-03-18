@@ -1,8 +1,8 @@
 {% import 'widget_macro.html' as macro %}
-{% call macro.track_steps_widget(
+{% call macro.medium_widget(
 track_health_info,
 title="Blood Pressure",
-label_one="Pressure", content_one=track_health_info.steps,
+label_one="Pressure", content_one=track_health_info.blood_pressure,
 label_two="Average", content_two=track_health_info.steps_goal,
 label_three="Maximum", content_three=track_health_info.steps_percentage_complete ~ '%',
 label_four="Ideal", content_four=track_health_info.steps_goal - track_health_info.steps
