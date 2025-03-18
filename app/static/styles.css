@@ -59,7 +59,6 @@ body {
 
 .responsive-grid {
     display: grid;
-    height: 300px;
     grid-template-columns: repeat(auto-fill, 315px);
     gap: 1rem;
     justify-content: center;
@@ -68,6 +67,5 @@ body {
 
 .full-row {
     grid-column: 1 / -1;
-    height: 300px;
     justify-items: space-between;
 }
