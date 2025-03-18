@@ -3,7 +3,7 @@ class TrackHealth:
                  steps=None,
                  steps_goal=10000,
                  activity_duration=None,
-                 activity_duration_goal=2,
+                 activity_duration_goal=120,
                  heart_rate=None,
                  blood_pressure=None,
                  age=800
@@ -12,7 +12,7 @@ class TrackHealth:
         self.steps_goal = steps_goal
         self.activity_duration = activity_duration
         self.activity_duration_goal = activity_duration_goal
-        self.heart_rate = heart_rate
+        self.heart_rate = heart_rate or [50, 64, 153]
         self.blood_pressure = blood_pressure
         self.age = age
         self.max_heart_age = {
@@ -25,13 +25,30 @@ class TrackHealth:
         }
 
     def steps_percentage_complete(self):
-        return (self.steps / self.steps_goal) * 100
+        return round((self.steps / self.steps_goal) * 100)
+
+    def activity_percentage_complete(self):
+        return round((self.activity_duration / self.activity_duration_goal) * 100)
 
     def max_heart_rate(self):
         return max(self.heart_rate)
 
     def min_heart_rate(self):
         return min(self.heart_rate)
+
+    def avg_heart_rate(self):
+        return int(sum(self.heart_rate) / len(self.heart_rate))
+
+    def heart_rate_range(self):
+        minimum_user = self.min_heart_rate()
+        average_user = self.avg_heart_rate()
+        maximum_user = self.max_heart_rate()
+        minimum, maximum = 0, 200
+
+        heart_info = [minimum_user, average_user, maximum_user]
+        for i in range(len(heart_info)):
+            heart_info[i] = round((heart_info[i] - minimum) / (maximum - minimum) * (50 - minimum) + minimum)
+        return heart_info
 
     def heart_rate_zones(self):
         age = 5 * round(self.age / 5) if self.age < 70 else 70
@@ -67,5 +84,4 @@ class TrackHealth:
 
         return scaled_zones
 
-    def avg_heart_rate(self):
-        return int(sum(self.heart_rate) / len(self.heart_rate))
+TrackHealth().heart_rate_range()

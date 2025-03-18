@@ -30,8 +30,22 @@ body {
     min-width: 1rem;
 }
 
-.steps_progress_bar {
+.progress_bar {
     height: 25px;
+    width: 1px;
+    padding: 1px;
+    margin: 1px;
+}
+
+.progress_bar_small {
+    height: 5px;
+    width: 1px;
+    padding: 1px;
+    margin: 1px;
+}
+
+.progress_bar_medium {
+    height: 15px;
     width: 1px;
     padding: 1px;
     margin: 1px;
