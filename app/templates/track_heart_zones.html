@@ -1,0 +1,43 @@
+{% import 'widget_macro.html' as macro %}
+
+{% set zone_one = track_health_info.heart_zones.zone_one %}
+{% set zone_two = track_health_info.heart_zones.zone_two %}
+{% set zone_three = track_health_info.heart_zones.zone_three %}
+{% set zone_four = track_health_info.heart_zones.zone_four %}
+{% set zone_five = track_health_info.heart_zones.zone_five %}
+
+{% call macro.medium_widget_five(
+medium_widget_five,
+title="Heart Zones",
+label_one="Zone 5", content_one=(zone_five.minimum)|string ~'-'~ (zone_five.maximum)|string, bg_colour_one='bg-warning',
+label_two="Zone 4", content_two=(zone_four.minimum)|string ~'-'~ (zone_four.maximum)|string, bg_colour_two='bg-primary',
+label_three="Zone 3", content_three=(zone_three.minimum)|string ~'-'~ (zone_three.maximum)|string, bg_colour_three='bg-info',
+label_four="Zone 2", content_four=(zone_two.minimum)|string ~'-'~ (zone_two.maximum)|string, bg_colour_four='bg-success',
+label_five="Zone 1", content_five=(zone_one.minimum)|string ~'-'~ (zone_one.maximum)|string, bg_colour_five='bg-warning-subtle'
+) %}
+<div class="d-flex flex-column">
+    {% set zone_one_scaled = track_health_info.heart_zones_scaled.zone_one %}
+    {% set zone_two_scaled = track_health_info.heart_zones_scaled.zone_two %}
+    {% set zone_three_scaled = track_health_info.heart_zones_scaled.zone_three %}
+    {% set zone_four_scaled = track_health_info.heart_zones_scaled.zone_four %}
+    {% set zone_five_scaled = track_health_info.heart_zones_scaled.zone_five %}
+    {% for i in range(50, 0, -1) %}
+        {% set rounded_class = ' rounded-bottom' if i == 1 else ' rounded-top' if i == 50 else '' %}
+        {% if i < zone_one_scaled.min %}
+            <div class="bg-secondary-subtle border border-secondary-subtle {{ rounded_class }} progress_bar_y"></div>
+        {% elif i >= zone_one_scaled.min and i <= zone_one_scaled.max %}
+            <div class="bg-warning-subtle border border-warning-subtle {{ rounded_class }} progress_bar_y"></div>
+        {% elif i > zone_two_scaled.min and i <= zone_two_scaled.max %}
+            <div class="bg-success border border-success {{ rounded_class }} progress_bar_y"></div>
+        {% elif i > zone_three_scaled.min and i <= zone_three_scaled.max %}
+            <div class="bg-info border border-info {{ rounded_class }} progress_bar_y"></div>
+        {% elif i > zone_four_scaled.min and i <= zone_four_scaled.max %}
+            <div class="bg-primary border border-primary {{ rounded_class }} progress_bar_y"></div>
+        {% elif i > zone_five_scaled.min and i <= zone_five_scaled.max %}
+            <div class="bg-warning border border-warning {{ rounded_class }} progress_bar_y"></div>
+        {% else %}
+            <div class="bg-danger border border-danger {{ rounded_class }} progress_bar_y"></div>
+        {% endif %}
+    {% endfor %}
+</div>
+{% endcall %}

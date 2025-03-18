@@ -1,6 +1,6 @@
 {% import 'widget_macro.html' as macro %}
-{% call macro.track_steps_widget(
-track_health_info,
+{% call macro.medium_widget_four(
+medium_widget_four,
 title="Track Steps",
 label_one="Steps", content_one=track_health_info.steps,
 label_two="Goal", content_two=track_health_info.steps_goal,
@@ -11,6 +11,6 @@ label_four="Left", content_four=track_health_info.steps_goal - track_health_info
         {% set is_progress = i <= track_health_info.steps_percentage_complete / 2 %}
         {% set base_class = 'bg-success border border-success' if is_progress else 'bg-primary border border-primary opacity-50' %}
         {% set rounded_class = ' rounded-start' if i == 0 else ' rounded-end' if i == 49 else '' %}
-        <div class="{{ base_class }}{{ rounded_class }} steps_progress_bar"></div>
+        <div class="{{ base_class }}{{ rounded_class }} progress_bar"></div>
     {% endfor %}
 {% endcall %}

@@ -298,7 +298,7 @@ def mindmirror():
     month, year = heatmap.month_display(), heatmap.year_display()
 
     # Data would normally get queries from db and passed to TrackHealth
-    steps, activity_duration, heart_rate, blood_pressure = 6908, 1.5, [50, 64, 153], '90/60'
+    steps, activity_duration, heart_rate, blood_pressure = 6908, 110, [50, 64, 153], '90/60'
     track_health = TrackHealth(
         steps=steps,
         activity_duration=activity_duration,
@@ -307,15 +307,26 @@ def mindmirror():
     )
     steps_goal = track_health.steps_goal
     steps_percentage_complete = track_health.steps_percentage_complete()
+
     activity_duration_goal = track_health.activity_duration_goal
+    activity_percentage_complete = track_health.activity_percentage_complete()
+
     max_heart_rate = track_health.max_heart_rate()
     min_heart_rate = track_health.min_heart_rate()
     avg_heart_rate = track_health.avg_heart_rate()
+    heart_rate_range = track_health.heart_rate_range()
+    heart_rate_zones = track_health.heart_rate_zones()
+    heart_zones_progress_bar = track_health.heart_rate_zone_progress_bar()
+
     track_health_info = {
-        'steps': steps, 'steps_goal': steps_goal, 'steps_percentage_complete': steps_percentage_complete,
-        'activity_duration': activity_duration, 'activity_duration_goal': activity_duration_goal,
+        'steps': steps,
+        'steps_goal': steps_goal, 'steps_percentage_complete': steps_percentage_complete,
+        'activity_duration': activity_duration,
+        'activity_duration_goal': activity_duration_goal, 'activity_percentage_complete': activity_percentage_complete,
         'heart_rate': heart_rate,
         'max_heart_rate': max_heart_rate, 'min_heart_rate': min_heart_rate, 'avg_heart_rate': avg_heart_rate,
+        'heart_rate_range': heart_rate_range,
+        'heart_zones_scaled': heart_zones_progress_bar, 'heart_zones': heart_rate_zones,
         'blood_pressure': blood_pressure
     }
 
@@ -332,8 +343,11 @@ def mindmirror():
     if 'mindmirror_display' not in session:
         session['mindmirror_display'] = {
             'heatmap': True,
+            'track_activity': True,
             'track_steps': True,
-            'track_heart_rate': True
+            'track_heart_rate': True,
+            'track_blood_pressure': True,
+            'heart_zones': True
         }
 
     # Might be worth refactoring variables into sub feature Dictionary
@@ -359,8 +373,11 @@ def mindmirror_edit():
     if form.validate_on_submit():
         session['mindmirror_display'] = {
             'heatmap': form.heatmap.data,
+            'track_activity': form.track_activity.data,
             'track_steps': form.track_steps.data,
-            'track_heart_rate': form.track_heart_rate.data
+            'track_heart_rate': form.track_heart_rate.data,
+            'track_blood_pressure': form.track_blood_pressure.data,
+            'heart_zones': form.heart_zones.data
         }
         return redirect(url_for('mindmirror'))
 

@@ -82,8 +82,11 @@ class FormRedirect(FlaskForm):
 
 class FormMindMirrorLayout(FlaskForm):
     heatmap = BooleanField('Check In Activity Heatmap', default=True)
+    track_activity = BooleanField('Track Activity', default=True)
     track_steps = BooleanField('Track Steps', default=True)
     track_heart_rate = BooleanField('Track Heart Rate', default=True)
+    track_blood_pressure = BooleanField('Blood Pressure', default=True)
+    heart_zones = BooleanField('Heart Zones', default=True)
     submit = SubmitField('Submit')
 
 
