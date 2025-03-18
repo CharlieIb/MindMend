@@ -1,7 +1,10 @@
 Users general info
-|-> height, weight info?
+|-> height, weight and age (birthday, then work out age) info?
 |-> input when register and ability to change later
 
 MindMirror
-|-> make freenote pop up if logged when user clicks on certain day in heatmap, if no freenote flash msg eg: 'no free notes'
+|-> view freenote pop up if logged when user clicks on certain day in heatmap, if no freenote flash msg eg: 'no free notes'
 |-> info about past diagnoses
+
+Create Fake Data:
+|-> scripts to create fake data straight into SQLite

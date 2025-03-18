@@ -1,0 +1,17 @@
+<div class="border rounded-3 d-flex flex-column align-items-center justify-content-between p-1 large_widget">
+    <h3 class="bg-light text-center rounded-3 py-1 w-100">Emotion Graph</h3>
+    <div class="d-flex align-items-end">
+        {% for emotion, details in track_emotions_info.emotion_count.items() %}
+            <div class="mx-1">
+                {% for i in range(details['length']) %}
+                    {% if i == 0 %}
+                        <div class="bg-{{ details['colour'] }} rounded-top-3 graph"></div>
+                    {% else %}
+                        <div class="bg-{{ details['colour'] }} graph"></div>
+                    {% endif %}
+                {% endfor %}
+                <h4 class="bg-light text-body-secondary text-center rounded-bottom-3 py-1 mb-0 graph_title">{{ emotion }}</h4>
+            </div>
+        {% endfor %}
+    </div>
+</div>

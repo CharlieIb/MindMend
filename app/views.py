@@ -6,7 +6,7 @@ from app.forms import ChooseForm, LoginForm, ChangePasswordForm, RegisterForm, F
 from app.models import User, EmotionLog
 from app.utils import (HeatMap, TrackHealth, symptom_list, questions_database,
                        ConditionManager, ResourceManager, TherapeuticRecManager, TestResultManager,
-                       EmotionLogManager, ActivityManager, LocationManager, PersonManager)
+                       EmotionLogManager, ActivityManager, LocationManager, PersonManager, TrackEmotions)
 from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
 from urllib.parse import urlsplit
@@ -330,6 +330,13 @@ def mindmirror():
         'blood_pressure': blood_pressure
     }
 
+    # Data would normally get queries from db and passed to TrackEmotions
+    track_emotions = TrackEmotions()
+    emotion_count = track_emotions.count_emotions()
+    track_emotions_info = {
+        'emotion_count': emotion_count
+    }
+
     form_display = ChooseForm()
     display_year_month = session.get('display_year_month', 'month')
     if form_display.validate_on_submit():
@@ -343,6 +350,7 @@ def mindmirror():
     if 'mindmirror_display' not in session:
         session['mindmirror_display'] = {
             'heatmap': True,
+            'emotion_graph': True,
             'track_activity': True,
             'track_steps': True,
             'track_heart_rate': True,
@@ -362,7 +370,8 @@ def mindmirror():
         display_year_month=display_year_month,
         form_display=form_display,
         mindmirror_display=session.get('mindmirror_display', {}),
-        track_health_info=track_health_info
+        track_health_info=track_health_info,
+        track_emotions_info=track_emotions_info
     )
 
 
@@ -373,6 +382,7 @@ def mindmirror_edit():
     if form.validate_on_submit():
         session['mindmirror_display'] = {
             'heatmap': form.heatmap.data,
+            'emotion_graph': form.emotion_graph.data,
             'track_activity': form.track_activity.data,
             'track_steps': form.track_steps.data,
             'track_heart_rate': form.track_heart_rate.data,
