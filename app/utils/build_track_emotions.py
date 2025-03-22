@@ -4,8 +4,12 @@ class TrackEmotions:
 
     def count_emotions(self):
         logs_mapping = self._create_logs_mapping(self.data_log)
-        counts = {title: {'length': len(details['logs']), 'colour': details['colour']} for title, details in
-                  logs_mapping.items()}
+        max_length = max((len(details['logs']) for details in logs_mapping.values()), default=0)
+        counts = {}
+        for title, details in logs_mapping.items():
+            current_length = len(details['logs'])
+            scaled_length = 50 if max_length == 0 else int((current_length / max_length) * 50)
+            counts[title] = {'length': current_length, 'length_scaled': scaled_length, 'colour': details['colour']}
         return counts
 
     def fake_data_log_raw(self):

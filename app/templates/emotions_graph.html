@@ -1,16 +1,18 @@
-<div class="border rounded-3 d-flex flex-column align-items-center justify-content-between p-1 large_widget">
+<div class="border rounded-3 d-flex flex-column align-items-center justify-content-between p-1 medium_widget">
     <h3 class="bg-light text-center rounded-3 py-1 w-100">Emotion Graph</h3>
-    <div class="d-flex align-items-end">
+    <div class="d-flex flex-column">
         {% for emotion, details in track_emotions_info.emotion_count.items() %}
-            <div class="mx-1">
-                {% for i in range(details['length']) %}
-                    {% if i == 0 %}
-                        <div class="bg-{{ details['colour'] }} rounded-top-3 graph"></div>
-                    {% else %}
-                        <div class="bg-{{ details['colour'] }} graph"></div>
-                    {% endif %}
-                {% endfor %}
-                <h4 class="bg-light text-body-secondary text-center rounded-bottom-3 py-1 mb-0 graph_title">{{ emotion }}</h4>
+            <div class="d-flex align-items-center mt-1">
+                <h4 class="d-flex align-items-center justify-content-center bg-light text-body-secondary text-center rounded-start-3 m-0 small_widget_title">
+                    {{ emotion }}
+                </h4>
+                <div class="d-flex flex-grow-1 align-items-center">
+                    {% for i in range(details['length_scaled']) %}
+                        <div
+                            class="bg-{{ details['colour'] }} graph_bar {% if i == details['length_scaled'] - 1 %} rounded-end-3 {% endif %}">
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
         {% endfor %}
     </div>
