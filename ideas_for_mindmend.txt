@@ -5,6 +5,7 @@ Users general info
 MindMirror
 |-> view freenote pop up if logged when user clicks on certain day in heatmap, if no freenote flash msg eg: 'no free notes'
 |-> info about past diagnoses
+|-> emotion bar graph could go along the x-axis
 
 Create Fake Data:
 |-> scripts to create fake data straight into SQLite

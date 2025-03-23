@@ -9,8 +9,19 @@ body {
     padding: 0;
 }
 
+.navbar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+}
+
 .navbar_width {
     width: 125px;
+}
+
+.small_widget_title {
+    width: 105px;
+    height: 58px;
 }
 
 .medium_widget {
@@ -41,6 +52,12 @@ body {
     margin: 1px;
 }
 
+.progress_bar_y {
+    height: 9px;
+    width: 145px;
+    margin: 1px;
+}
+
 .progress_bar_small {
     height: 5px;
     width: 1px;
@@ -55,28 +72,19 @@ body {
     margin: 1px;
 }
 
-.progress_bar_y {
-    height: 9px;
-    width: 145px;
+.graph_bar {
+    height: 45px;
+    width: 1px;
+    padding: 1px;
     margin: 1px;
-}
-
-.graph {
-    height: 20px;
-    width: 100%;
-}
-
-.graph_title {
-    width: 100px;
 }
 
 .responsive-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(315px, 1fr));
+    grid-template-columns: repeat(auto-fill, 315px);
     gap: 1rem;
     justify-content: center;
-    justify-items: start;
-    max-width: 80%;
+    justify-items: center;
 }
 
 .full-row {
