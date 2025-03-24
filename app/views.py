@@ -169,6 +169,19 @@ def register():
     return render_template('register.html', title='Register', form=form)
 
 
+# Both logged in and not logged in
+@app.route('/contact')
+def contacts():
+    contacts_info = {
+        1: {'name': 'Mischa', 'email': 'mischa.mcla@gmail.com', 'phone': '07501878275'},
+        2: {'name': 'Charlie', 'email': '', 'phone': ''},
+        3: {'name': 'Feyi', 'email': '', 'phone': ''},
+        4: {'name': 'Aravind', 'email': '', 'phone': ''},
+        5: {'name': 'Romas', 'email': '', 'phone': ''}
+    }
+    return render_template('contacts.html', title='Contacts', contacts_info=contacts_info)
+
+
 # Only Admin Access
 @app.route('/admin/<username>')
 @login_required
