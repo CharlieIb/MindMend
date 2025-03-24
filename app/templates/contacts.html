@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% import "bootstrap_wtf.html" as wtf %}
+
+{% block content %}
+<div class="p-1">
+    <h1>Contacts</h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for id, info in contacts_info.items() %}
+                <tr>
+                    <td>{{ info.name or '' }}</td>
+                    <td>{{ info.email or '' }}</td>
+                    <td>{{ info.phone or '' }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
