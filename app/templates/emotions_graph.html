@@ -6,10 +6,16 @@
             <h4 class="d-flex align-items-center justify-content-center bg-light text-body-secondary text-center rounded-start-3 m-0 small_widget_title">
                 {{ emotion|title }}
             </h4>
+            {% if track_emotions_info.max_num <= 12 %}
+               {% set graph_style = 'graph_bar_big' %}
+            {% elif 12 < track_emotions_info.max_num < 30 %}
+               {% set graph_style = 'graph_bar_med' %}
+            {% elif 30 <= track_emotions_info.max_num <= 50 %}
+               {% set graph_style = 'graph_bar_small' %}
+            {% endif %}
             <div class="d-flex flex-grow-1 align-items-center ms-1">
                 {% for i in range(info['percentage']) %}
-                <div
-                        class="bg-{{ info['colour'] }} graph_bar {% if i == info['percentage'] - 1 %} rounded-end-3 {% endif %}">
+                <div class="bg-{{ info['colour'] }} {{ graph_style }} {{ 'rounded-end-3' if i == info['percentage'] - 1 else '' }}">
                 </div>
                 {% endfor %}
             </div>

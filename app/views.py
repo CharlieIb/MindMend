@@ -346,7 +346,8 @@ def mindmirror():
         'emotion_count': emotion_count,
         'total_emotion_logs': total_emotion_logs,
         'emotions_percentage_unsorted': emotions_percentage,
-        'emotions_percentage': sorted_emotions_percentage
+        'emotions_percentage': sorted_emotions_percentage,
+        'max_num': max(info['length'] for info in emotion_count.values())
     }
 
     form_display = ChooseForm()
