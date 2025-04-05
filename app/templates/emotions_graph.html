@@ -6,7 +6,7 @@
             <h4 class="d-flex align-items-center justify-content-center bg-light text-body-secondary text-center rounded-start-3 m-0 small_widget_title">
                 {{ emotion|title }}
             </h4>
-            <div class="d-flex flex-grow-1 align-items-center">
+            <div class="d-flex flex-grow-1 align-items-center ms-1">
                 {% for i in range(info['percentage']) %}
                 <div
                         class="bg-{{ info['colour'] }} graph_bar {% if i == info['percentage'] - 1 %} rounded-end-3 {% endif %}">

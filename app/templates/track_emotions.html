@@ -16,11 +16,11 @@ label_four="Sad", content_four=track_emotions_info.emotion_count.sad.length
         {% set base_class =
             'bg-' ~ percentages[0]['colour'] ~ ' border border-' ~ percentages[0]['colour']
             if i < cum0
-            else 'bg-' ~ percentages[1]['colour'] ~ ' border border-' ~ percentages[1]['colour'] ~ ' opacity-50'
+            else 'bg-' ~ percentages[1]['colour'] ~ ' border border-' ~ percentages[1]['colour']
                 if i < cum1
-            else 'bg-' ~ percentages[2]['colour'] ~ ' border border-' ~ percentages[2]['colour'] ~ ' opacity-50'
+            else 'bg-' ~ percentages[2]['colour'] ~ ' border border-' ~ percentages[2]['colour']
                 if i < cum2
-            else 'bg-' ~ percentages[3]['colour'] ~ ' border border-' ~ percentages[3]['colour'] ~ ' opacity-50'
+            else 'bg-' ~ percentages[3]['colour'] ~ ' border border-' ~ percentages[3]['colour']
         %}
         {% set rounded_class = ' rounded-start' if i == 0 else ' rounded-end' if i == 49 else '' %}
         <div class="{{ base_class }}{{ rounded_class }} progress_bar"></div>
