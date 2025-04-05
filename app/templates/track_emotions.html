@@ -7,12 +7,19 @@ label_two="Calm", content_two=track_emotions_info.emotion_count.calm.length,
 label_three="Happy", content_three=track_emotions_info.emotion_count.happy.length,
 label_four="Sad", content_four=track_emotions_info.emotion_count.sad.length
 ) %}
+    {% set percentages = track_emotions_info.emotions_percentage.values() | list %}
+    {% set cum0 = percentages[0]['percentage'] %}
+    {% set cum1 = cum0 + percentages[1]['percentage'] %}
+    {% set cum2 = cum1 + percentages[2]['percentage'] %}
+    {% set cum3 = cum2 + percentages[3]['percentage'] %}
     {% for i in range(0, 50) %}
-        {% set percentages = track_emotions_info.emotions_percentage.values() | list %}
         {% set base_class =
-            'bg-' ~ percentages[0]['colour'] ~ ' border border-' ~ percentages[0]['colour'] if i < percentages[0]['percentage']
-            else 'bg-' ~ percentages[1]['colour'] ~ ' border border-' ~ percentages[1]['colour'] ~ ' opacity-50' if i < percentages[1]['percentage']
-            else 'bg-' ~ percentages[2]['colour'] ~ ' border border-' ~ percentages[2]['colour'] ~ ' opacity-50' if i < percentages[2]['percentage']
+            'bg-' ~ percentages[0]['colour'] ~ ' border border-' ~ percentages[0]['colour']
+            if i < cum0
+            else 'bg-' ~ percentages[1]['colour'] ~ ' border border-' ~ percentages[1]['colour'] ~ ' opacity-50'
+                if i < cum1
+            else 'bg-' ~ percentages[2]['colour'] ~ ' border border-' ~ percentages[2]['colour'] ~ ' opacity-50'
+                if i < cum2
             else 'bg-' ~ percentages[3]['colour'] ~ ' border border-' ~ percentages[3]['colour'] ~ ' opacity-50'
         %}
         {% set rounded_class = ' rounded-start' if i == 0 else ' rounded-end' if i == 49 else '' %}
