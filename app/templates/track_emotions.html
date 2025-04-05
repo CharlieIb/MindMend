@@ -1,25 +1,21 @@
 {% import 'widget_macro.html' as macro %}
 {% call macro.medium_widget_four(
 medium_widget_four,
-title="Heart Rate",
-label_one="Latest", content_one=track_health_info.heart_rate[1],
-label_two="Average", content_two=track_health_info.avg_heart_rate,
-label_three="Maximum", content_three=track_health_info.max_heart_rate,
-label_four="Minimum", content_four=track_health_info.min_heart_rate
+title="Emotion Info",
+label_one="Anxious", content_one=track_emotions_info.emotion_count.anxious.length,
+label_two="Calm", content_two=track_emotions_info.emotion_count.calm.length,
+label_three="Happy", content_three=track_emotions_info.emotion_count.happy.length,
+label_four="Sad", content_four=track_emotions_info.emotion_count.sad.length
 ) %}
-    {% set hr_min = track_health_info.heart_rate_range[0] %}
-    {% set hr_av = track_health_info.heart_rate_range[1] %}
-    {% set hr_max = track_health_info.heart_rate_range[2] %}
     {% for i in range(0, 50) %}
+        {% set percentages = track_emotions_info.emotions_percentage.values() | list %}
+        {% set base_class =
+            'bg-' ~ percentages[0]['colour'] ~ ' border border-' ~ percentages[0]['colour'] if i < percentages[0]['percentage']
+            else 'bg-' ~ percentages[1]['colour'] ~ ' border border-' ~ percentages[1]['colour'] ~ ' opacity-50' if i < percentages[1]['percentage']
+            else 'bg-' ~ percentages[2]['colour'] ~ ' border border-' ~ percentages[2]['colour'] ~ ' opacity-50' if i < percentages[2]['percentage']
+            else 'bg-' ~ percentages[3]['colour'] ~ ' border border-' ~ percentages[3]['colour'] ~ ' opacity-50'
+        %}
         {% set rounded_class = ' rounded-start' if i == 0 else ' rounded-end' if i == 49 else '' %}
-        {% if i < hr_min or i > hr_max %}
-            <div class="bg-secondary-subtle border border-secondary-subtle {{ rounded_class }} progress_bar_small"></div>
-        {% elif i >= hr_min and i < hr_av %}
-            <div class="bg-primary border border-primary {{ rounded_class }} progress_bar_medium"></div>
-        {% elif i == hr_av %}
-            <div class="bg-success border border-success {{ rounded_class }} progress_bar"></div>
-        {% elif i > hr_av and i <= hr_max %}
-            <div class="bg-warning-subtle border border-warning-subtle {{ rounded_class }} progress_bar_medium"></div>
-        {% endif %}
+        <div class="{{ base_class }}{{ rounded_class }} progress_bar"></div>
     {% endfor %}
 {% endcall %}
