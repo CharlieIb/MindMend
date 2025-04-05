@@ -1,6 +1,6 @@
 class TrackEmotions:
     def __init__(self, data_log=None):
-        self.data_log = data_log or self.fake_data_log_raw()
+        self.data_log = data_log or self._fake_data_log_raw()
 
     def count_emotions(self):
         logs_mapping = self._create_logs_mapping(self.data_log)
@@ -9,10 +9,12 @@ class TrackEmotions:
         for title, details in logs_mapping.items():
             current_length = len(details['logs'])
             scaled_length = 50 if max_length == 0 else int((current_length / max_length) * 50)
-            counts[title] = {'length': current_length, 'length_scaled': scaled_length, 'colour': details['colour']}
+            counts[title.lower()] = {'length': current_length, 'length_scaled': scaled_length,
+                                     'colour': details['colour']}
         return counts
 
-    def fake_data_log_raw(self):
+    @staticmethod
+    def _fake_data_log_raw():
         return [
             "Grateful", "Disheartened", "Grateful", "Down", "Optimistic",
             "Irritable", "Worried", "Excited", "Heartbroken", "Restless",
@@ -23,7 +25,7 @@ class TrackEmotions:
 
     @staticmethod
     def _create_logs_mapping(logs: list) -> dict:
-        emotions = [
+        emotions_map = [
             {
                 "title": "Anxious",
                 "feelings": ["Nervous", "Overwhelmed", "Irritable", "Restless", "Worried"],
@@ -51,6 +53,6 @@ class TrackEmotions:
                 "colour": emotion['colour'],
                 "logs": [log for log in logs if log in emotion['feelings']]
             }
-            for emotion in emotions
+            for emotion in emotions_map
         }
         return logs_mapping
