@@ -8,6 +8,7 @@
     <form action="" method="POST" novalidate>
         {{ form.hidden_tag() }}
         {{ wtf.form_field(form.heatmap, False) }}
+        {{ wtf.form_field(form.emotion_info, False) }}
         {{ wtf.form_field(form.emotion_graph, False) }}
         <h3 class="pt-2">Movement</h3>
         {{ wtf.form_field(form.track_activity, False) }}
