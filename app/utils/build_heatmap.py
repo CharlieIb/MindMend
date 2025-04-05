@@ -56,7 +56,13 @@ class HeatMap:
             {'date': datetime.strptime('08/03/2025', '%d/%m/%Y'), 'emotion': 'Sad', 'colour': 'success'},
             {'date': datetime.strptime('09/03/2025', '%d/%m/%Y'), 'emotion': 'Sad', 'colour': 'success'},
             {'date': datetime.strptime('13/03/2025', '%d/%m/%Y'), 'emotion': 'Calm', 'colour': 'info'},
-            {'date': datetime.strptime('15/03/2025', '%d/%m/%Y'), 'emotion': 'Sad', 'colour': 'success'}
+            {'date': datetime.strptime('15/03/2025', '%d/%m/%Y'), 'emotion': 'Sad', 'colour': 'success'},
+            {'date': datetime.strptime('01/04/2025', '%d/%m/%Y'), 'emotion': 'Sad', 'colour': 'success'},
+            {'date': datetime.strptime('04/04/2025', '%d/%m/%Y'), 'emotion': 'Calm', 'colour': 'info'},
+            {'date': datetime.strptime('05/04/2025', '%d/%m/%Y'), 'emotion': 'Happy', 'colour': 'warning'},
+            {'date': datetime.strptime('06/04/2025', '%d/%m/%Y'), 'emotion': 'Calm', 'colour': 'info'},
+            {'date': datetime.strptime('07/04/2025', '%d/%m/%Y'), 'emotion': 'Calm', 'colour': 'info'},
+            {'date': datetime.strptime('20/04/2025', '%d/%m/%Y'), 'emotion': 'Calm', 'colour': 'info'}
         ]
 
     @staticmethod
@@ -64,5 +70,5 @@ class HeatMap:
         return {
             (log['date'].day, log['date'].month, log['date'].year):
                 {'emotion': log['emotion'], 'colour': log['colour']}
-            for log in logs
+            for log in logs if log['date'] <= datetime.now()
         }
