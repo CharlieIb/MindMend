@@ -8,21 +8,44 @@
                         {% for day in week %}
                             {% if day == heatmap_info.curr_day or day is not number and day[0] == heatmap_info.curr_day %}
                                 {% if day is not number %}
-                                    <div class="border border-danger rounded-1 m-1 bg-{{ day[1]['colour'] }}
-                                    bg-opacity-50 heatmap_day"></div>
+                                    <div class="border border-danger rounded-1 m-1 bg-{{ day[1]['colour'] }} bg-opacity-50 heatmap_day"
+                                         data-bs-toggle="tooltip"
+                                         data-bs-placement="top"
+                                         data-bs-custom-class="center-tooltip"
+                                         title="{{ day[0] }}"
+                                    >
+                                    </div>
                                 {% else %}
-                                    <div class="border border-danger rounded-1 m-1 heatmap_day"></div>
+                                    <div class="border border-danger rounded-1 m-1 heatmap_day">
+                                    </div>
                                 {% endif %}
                             {% elif day == 0 %}
                                 <div class="m-1 heatmap_day"></div>
                             {% elif day is number and day > heatmap_info.curr_day %}
-                                <div class="border border-dark rounded-1 m-1 heatmap_day"></div>
+                                <div class="border border-dark rounded-1 m-1 heatmap_day"
+                                     data-bs-toggle="tooltip"
+                                     data-bs-placement="top"
+                                     data-bs-custom-class="center-tooltip"
+                                     title="{{ day }}"
+                                >
+                                </div>
                             {% else %}
                                 {% if day is not number %}
-                                    <div class="border border-success rounded-1 m-1 bg-{{ day[1]['colour'] }}
-                                    bg-opacity-50 heatmap_day"></div>
+                                    <div class="border border-success rounded-1 m-1 bg-{{ day[1]['colour'] }} bg-opacity-50 heatmap_day"
+                                         data-bs-toggle="tooltip"
+                                         data-bs-placement="top"
+                                         data-bs-custom-class="center-tooltip"
+                                         title="{{ day[0] }}"
+                                    >
+                                    </div>
                                 {% else %}
-                                    <div class="border border-success rounded-1 m-1 heatmap_day"></div>
+                                    <div class="border border-success rounded-1 m-1 heatmap_day"
+                                         data-bs-toggle="tooltip"
+                                         data-bs-placement="top"
+                                         data-bs-custom-class="center-tooltip"
+                                         title="{{ day }}"
+                                    >
+                                    </div>
                                 {% endif %}
                             {% endif %}
                         {% endfor %}
@@ -52,8 +75,13 @@
                                                     or
                                                     day is not number and day[0] == heatmap_info.curr_day  and month_index == heatmap_info.curr_month %}
                                                     {% if day is not number %}
-                                                        <div class="border border-danger rounded-1 m-1 bg-{{ day[1]['colour'] }}
-                                                        bg-opacity-50 heatmap_day"></div>
+                                                        <div class="border border-danger rounded-1 m-1 bg-{{ day[1]['colour'] }} bg-opacity-50 heatmap_day"
+                                                             data-bs-toggle="tooltip"
+                                                             data-bs-placement="top"
+                                                             data-bs-custom-class="center-tooltip"
+                                                             title="{{ day[0] }}"
+                                                        >
+                                                        </div>
                                                     {% else %}
                                                         <div class="border border-danger rounded-1 m-1 heatmap_day"></div>
                                                     {% endif %}
@@ -62,13 +90,30 @@
                                                 {% elif day is number and day > heatmap_info.curr_day and month_index >= heatmap_info.curr_month
                                                     or
                                                     month_index > heatmap_info.curr_month %}
-                                                    <div class="border border-dark rounded-1 m-1 heatmap_day"></div>
+                                                    <div class="border border-dark rounded-1 m-1 heatmap_day"
+                                                         data-bs-toggle="tooltip"
+                                                         data-bs-placement="top"
+                                                         data-bs-custom-class="center-tooltip"
+                                                         title="{{ day }}"
+                                                    >
+                                                    </div>
                                                 {% else %}
                                                     {% if day is not number %}
-                                                        <div class="border border-success rounded-1 m-1 bg-{{ day[1]['colour'] }}
-                                                        bg-opacity-50 heatmap_day"></div>
+                                                        <div class="border border-success rounded-1 m-1 bg-{{ day[1]['colour'] }} bg-opacity-50 heatmap_day"
+                                                             data-bs-toggle="tooltip"
+                                                             data-bs-placement="top"
+                                                             data-bs-custom-class="center-tooltip"
+                                                             title="{{ day[0] }}"
+                                                        >
+                                                        </div>
                                                     {% else %}
-                                                        <div class="border border-success rounded-1 m-1 heatmap_day"></div>
+                                                        <div class="border border-success rounded-1 m-1 heatmap_day"
+                                                             data-bs-toggle="tooltip"
+                                                             data-bs-placement="top"
+                                                             data-bs-custom-class="center-tooltip"
+                                                             title="{{ day }}"
+                                                        >
+                                                        </div>
                                                     {% endif %}
                                                 {% endif %}
                                             {% endfor %}
@@ -89,3 +134,11 @@
         <button class="btn btn-dark fw-bold w-100" type="submit">{{ heatmap_info.display_year_month|title }}</button>
     </form>
 </div>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    tooltipTriggerList.forEach(tooltipTriggerEl => {
+      new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+  });
+</script>

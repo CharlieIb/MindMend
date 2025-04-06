@@ -105,3 +105,15 @@ body {
     grid-column: 1 / -1;
     justify-items: space-between;
 }
+
+.center-tooltip.bs-tooltip-top,
+.center-tooltip.bs-tooltip-bottom,
+.center-tooltip.bs-tooltip-start,
+.center-tooltip.bs-tooltip-end {
+top: 50% !important;
+left: 50% !important;
+transform: translate(-50%, -50%) !important;
+}
+.center-tooltip .tooltip-arrow {
+display: none;
+}
