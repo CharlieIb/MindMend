@@ -320,13 +320,21 @@ def mindmirror():
         session['display_year_month'] = display_year_month
         return redirect(url_for('mindmirror'))
 
+    months = [
+        'January', 'February', 'March',
+        'April', 'May', 'June',
+        'July', 'August', 'September',
+        'October', 'November', 'December'
+    ]
+
     heatmap_info = {
         'curr_day': curr_day,
         'curr_month': curr_month,
         'curr_year': curr_year,
         'month': month,
         'year': year,
-        'display_year_month': display_year_month
+        'display_year_month': display_year_month,
+        'months': months
     }
 
     # Data would normally get queries from db and passed to TrackHealth
