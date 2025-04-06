@@ -40,11 +40,6 @@
             {% include 'track_heart.html' %}
         </div>
         {% endif %}
-        {% if 'track_blood_pressure' in mindmirror_display and mindmirror_display.track_blood_pressure == True %}
-        <div>
-            {% include 'track_blood_pressure.html' %}
-        </div>
-        {% endif %}
         {% if 'heart_zones' in mindmirror_display and mindmirror_display.heart_zones == True %}
         <div>
             {% include 'track_heart_zones.html' %}

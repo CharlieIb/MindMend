@@ -381,7 +381,6 @@ def mindmirror():
             'track_activity': True,
             'track_steps': True,
             'track_heart_rate': True,
-            'track_blood_pressure': True,
             'heart_zones': True
         }
 
@@ -414,7 +413,6 @@ def mindmirror_edit():
             'track_activity': form.track_activity.data,
             'track_steps': form.track_steps.data,
             'track_heart_rate': form.track_heart_rate.data,
-            'track_blood_pressure': form.track_blood_pressure.data,
             'heart_zones': form.heart_zones.data
         }
         return redirect(url_for('mindmirror'))
