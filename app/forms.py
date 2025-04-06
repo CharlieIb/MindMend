@@ -98,20 +98,19 @@ class SelectSymptomsForm(FlaskForm):
                                    widget=ListWidget(prefix_label=False), option_widget=CheckboxInput())
     submit = SubmitField('Submit')
 
-
 def generate_form(questionnaires):
     class AnswerQuestionnaireForm(FlaskForm):
         pass  # Fields will be added dynamically
 
-    # New Radio Field created for each question in list
-    for questionnaire in questionnaires:
-        for index, question in enumerate(questionnaire['questions']):
-            question_id = f'question_{questionnaire['id']}_{index}'
+    for cond_id, condition_info in questionnaires.items():
+        # Create new radio field for each question in this condition
+        for index, question in enumerate(condition_info['questions']):
+            question_id = f"question_{cond_id}_{index}"
             setattr(
                 AnswerQuestionnaireForm,
                 question_id,
                 RadioField(
-                    question['qn'],
+                    question['question'],
                     choices=['True', 'False'],
                     validators=[DataRequired(message="Please answer question")]
                 )

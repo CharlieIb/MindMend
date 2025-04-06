@@ -6,7 +6,7 @@
     <h1>Your Results</h1>
     <hr class="border-5">
         {% for score in scores  %}
-            <h5>Condition {{ score.condition }} : {{ score.score }}</h5>
+            <h5>{{ score.condition }} : {{ score.score }}</h5>
         {% endfor %}
 
     <hr class="border-5">

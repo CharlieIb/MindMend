@@ -17,12 +17,12 @@
             </ul>
         </div>
         {% endif %}
-        {% for questionnaire in questionnaires %}
-            <h5>Condition {{ questionnaire.id }}</h5>
-            {% for index, question in enumerate(questionnaire.questions) %}
+        {% for cond_id, condition_info in questionnaires.items() %}
+            <h5>Condition {{ cond_id }}: {{ condition_info.name }}</h5>
+            {% for index, question in enumerate(condition_info.questions) %}
                 <div>
-                    <h8>{{ question.qn }} (Score: {{ question.value }})</h8>
-                    {{ form['question_' ~ questionnaire['id'] ~ '_'  ~ index]() }}
+                    <h8>{{ question.question }} (Score: {{ question.value }})</h8>
+                    {{ form['question_' ~ cond_id ~ '_'  ~ index]() }}
                     <hr>
 
                 </div>

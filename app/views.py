@@ -24,7 +24,7 @@ def initialize():
         # Screening Tool queries
         session = db.session
         try:
-            condition_manager = ConditionManager(session)
+            app.condition_manager = ConditionManager(session)
             therapeutic_rec_manager = TherapeuticRecManager(session)
             resource_manager = ResourceManager(session)
             test_result_manager = TestResultManager(session)
@@ -37,8 +37,8 @@ def initialize():
         cond_id = 1
 
         # Get a condition and its questions
-        condition = condition_manager.get_condition(cond_id)
-        questions = condition_manager.get_questions_for_condition(cond_id)
+        condition = app.condition_manager.get_condition(cond_id)
+        questions = app.condition_manager.get_questions_for_condition(cond_id)
 
         # Get therapeutic recommendations and resources for the condition
         recommendations = therapeutic_rec_manager.get_recommendations_for_condition(cond_id)
@@ -61,7 +61,7 @@ def initialize():
         print(user_test_results)
 
         # DO NOT DELETE! - between the two comments
-        if current_user:
+        if current_user.is_authenticated:
             # Load user log data, if already logged in
             emotion_log_manager = EmotionLogManager(db.session, current_user.id)
             # DO NOT DELETE!
@@ -414,31 +414,50 @@ def emotion_log():
 
 
 # Screening Tool
-def generate_questionnaires(selected_symptoms):
-    questions = []
-    for id in selected_symptoms:
-        ### TO-DO: Load Database and get Questionnaires ###
-        for conditions in questions_database:
-            if conditions['id'] == int(id):
-                questions.append(conditions)
-    return questions
 
+# Function to get condition ids from symptoms selected
+def selectConditions(selected_symptoms):
+    ### TO-DO: Replace function with actual logic of selecting condition
+    conditions = [int(id) for id in selected_symptoms]
+    return conditions
+
+def generate_questionnaires(conditions):
+    questionnaires = {}  # Dictionary to store the results
+
+    for cond_id in conditions:
+        condition = app.condition_manager.get_condition(cond_id)
+        questions = app.condition_manager.get_questions_for_condition(cond_id)
+
+        # Store condition info and questions in the dictionary
+        questionnaires[cond_id] = {
+            'name': condition.name,
+            'threshold': condition.threshold,
+            'questions': [
+                {
+                    'q_number': question.q_number,
+                    'question': question.question,
+                    'value': question.value
+                }
+                for question in questions
+            ]
+        }
+    return questionnaires
 
 # First Page: Select Symptoms
 @app.route('/select_symptoms', methods=['GET', 'POST'])
 def select_symptoms():
     form = SelectSymptomsForm()
-    form.symptoms.choices = symptom_list  ### TO-DO: Load symptoms from database ###
+    form.symptoms.choices = symptom_list
     selected_symptoms = []
 
     if form.validate_on_submit():
         selected_symptoms = form.symptoms.data
         session['selected_symptoms'] = selected_symptoms  # Store selected_symptoms in flask session
 
-        ### TO-DO: Save selected symptoms into database ###
-
         return redirect(url_for('answer_questionnaire'))
     return render_template('select_symptoms.html', title="Choose Symptoms", form=form)
+
+
 
 
 # Second Page: Answer Questionnaire
@@ -446,34 +465,28 @@ def select_symptoms():
 def answer_questionnaire():
     selected_symptoms = session.get('selected_symptoms')
 
-    ### TO-DO: Function assess symptoms and select conditions ###
-
-    questionnaires = generate_questionnaires(selected_symptoms)
-    session['questionnaires'] = questionnaires  # Store questionnaires in flask session
+    conditions = selectConditions(selected_symptoms) # Selects appropriate condition_ids from selects symptoms
+    questionnaires = generate_questionnaires(conditions) # Retrieves all questionnaires of corresponding conditions
 
     # Create Flask Forms
-    AnswerQuestionnaireForm = generate_form(session['questionnaires'])
+    AnswerQuestionnaireForm = generate_form(questionnaires)
     form = AnswerQuestionnaireForm(obj=None)
 
     if form.validate_on_submit():
         scores = []
-        for questionnaire in questionnaires:
-            condition_score = 0
 
-            # Calculates score for each condition
-            for index, question in enumerate(questionnaire['questions']):
-                question_id = f'question_{questionnaire['id']}_{index}'
+        for cond_id, condition_info in questionnaires.items():
+            condition_score = 0
+            for index, question in enumerate(condition_info['questions']):
+                question_id = f"question_{cond_id}_{index}"
                 user_answer = getattr(form, question_id).data
                 if user_answer == 'True':
                     condition_score += question['value']
 
-                    ### TO-DO: Save answers into database ###
-                    ### TO-DO: Generate respective actions ###
-
-            scores.append({'condition': questionnaire["id"], 'score': condition_score})
-        session.clear()
+                ### TO-DO: Check Threshold and get necessary actions ###
+            scores.append({'condition': condition_info['name'], 'score': condition_score})
         return render_template('results.html', scores=scores, title="Questionnaire Result")
-    return render_template('questionnaire.html', questionnaires=session['questionnaires'], title='Questionnaire',
+    return render_template('questionnaire.html', questionnaires=questionnaires, title='Questionnaire',
                            form=form, enumerate=enumerate)
 
 
