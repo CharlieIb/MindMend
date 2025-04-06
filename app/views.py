@@ -299,27 +299,14 @@ def settings():
 
 
 # Features
-# MindMirror - landing page
-@app.route('/mindmirror', methods=['GET', 'POST'])
-@login_required
-def mindmirror():
+# MindMirror - helper functions
+def get_heatmap_info():
     now = datetime.now()
     curr_day, curr_month, curr_year = now.day, now.month, now.year
 
     # Data would normally get queries from db and passed to HeatMap
     heatmap = HeatMap(curr_day, curr_month, curr_year)
     month, year = heatmap.month_display(), heatmap.year_display()
-
-    form_display = ChooseForm()
-    display_year_month = session.get('display_year_month', 'month')
-    if form_display.validate_on_submit():
-        if form_display.change.data == 'year':
-            display_year_month = 'month'
-        elif form_display.change.data == 'month':
-            display_year_month = 'year'
-        session['display_year_month'] = display_year_month
-        return redirect(url_for('mindmirror'))
-
     months = [
         'January', 'February', 'March',
         'April', 'May', 'June',
@@ -333,10 +320,12 @@ def mindmirror():
         'curr_year': curr_year,
         'month': month,
         'year': year,
-        'display_year_month': display_year_month,
         'months': months
     }
+    return heatmap_info
 
+
+def get_health_info():
     # Data would normally get queries from db and passed to TrackHealth
     steps, activity_duration, heart_rate = 6908, 110, [50, 64, 153]
     track_health = TrackHealth(
@@ -367,7 +356,10 @@ def mindmirror():
         'heart_rate_range': heart_rate_range,
         'heart_zones_scaled': heart_zones_progress_bar, 'heart_zones': heart_rate_zones
     }
+    return track_health_info
 
+
+def get_emotions_info():
     # Data would normally get queries from db and passed to TrackEmotions
     track_emotions = TrackEmotions()
     emotion_count = track_emotions.count_emotions()
@@ -387,6 +379,27 @@ def mindmirror():
         'emotions_percentage': sorted_emotions_percentage,
         'max_num': max(info['length'] for info in emotion_count.values())
     }
+    return track_emotions_info
+
+
+# MindMirror - landing page
+@app.route('/mindmirror', methods=['GET', 'POST'])
+@login_required
+def mindmirror():
+    form_display = ChooseForm()
+    display_year_month = session.get('display_year_month', 'month')
+    if form_display.validate_on_submit():
+        if form_display.change.data == 'year':
+            display_year_month = 'month'
+        elif form_display.change.data == 'month':
+            display_year_month = 'year'
+        session['display_year_month'] = display_year_month
+        return redirect(url_for('mindmirror'))
+
+    heatmap_info = get_heatmap_info()
+    heatmap_info['display_year_month'] = display_year_month
+    track_health_info = get_health_info()
+    track_emotions_info = get_emotions_info()
 
     if 'mindmirror_display' not in session:
         session['mindmirror_display'] = {
@@ -399,7 +412,6 @@ def mindmirror():
             'heart_zones': True
         }
 
-    # Might be worth refactoring variables into sub feature Dictionary
     return render_template(
         'mindmirror.html',
         title='MindMirror',
@@ -411,7 +423,7 @@ def mindmirror():
     )
 
 
-# MindMirror - edit page
+# MindMirror - edit what widgets are shown page
 @app.route('/mindmirror_edit', methods=['GET', 'POST'])
 def mindmirror_edit():
     form = FormMindMirrorLayout(data=session['mindmirror_display'])
