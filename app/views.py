@@ -333,8 +333,21 @@ def mindmirror():
     # Data would normally get queries from db and passed to TrackEmotions
     track_emotions = TrackEmotions()
     emotion_count = track_emotions.count_emotions()
+    total_emotion_logs = sum(info['length'] for info in emotion_count.values())
+    emotions_percentage = {
+        emotion: {
+            'percentage': round(((info['length'] / total_emotion_logs) * 100) / 2),
+            'colour': info['colour']
+        }
+        for emotion, info in emotion_count.items()
+    }
+    sorted_emotions_percentage = dict(sorted(emotions_percentage.items(), key=lambda item: item[1]['percentage']))
     track_emotions_info = {
-        'emotion_count': emotion_count
+        'emotion_count': emotion_count,
+        'total_emotion_logs': total_emotion_logs,
+        'emotions_percentage_unsorted': emotions_percentage,
+        'emotions_percentage': sorted_emotions_percentage,
+        'max_num': max(info['length'] for info in emotion_count.values())
     }
 
     form_display = ChooseForm()
@@ -351,6 +364,7 @@ def mindmirror():
         session['mindmirror_display'] = {
             'heatmap': True,
             'emotion_graph': True,
+            'emotion_info': True,
             'track_activity': True,
             'track_steps': True,
             'track_heart_rate': True,
@@ -383,6 +397,7 @@ def mindmirror_edit():
         session['mindmirror_display'] = {
             'heatmap': form.heatmap.data,
             'emotion_graph': form.emotion_graph.data,
+            'emotion_info': form.emotion_info.data,
             'track_activity': form.track_activity.data,
             'track_steps': form.track_steps.data,
             'track_heart_rate': form.track_heart_rate.data,

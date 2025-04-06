@@ -72,10 +72,24 @@ body {
     margin: 1px;
 }
 
-.graph_bar {
+.graph_bar_small {
     height: 45px;
     width: 1px;
     padding: 1px;
+    margin: 1px;
+}
+
+.graph_bar_med {
+    height: 45px;
+    width: 1px;
+    padding: 2px;
+    margin: 1px;
+}
+
+.graph_bar_big {
+    height: 45px;
+    width: 1px;
+    padding: 3.5px;
     margin: 1px;
 }
 

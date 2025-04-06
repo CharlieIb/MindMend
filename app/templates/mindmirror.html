@@ -15,6 +15,16 @@
             {% include 'heatmap.html' %}
         </div>
         {% endif %}
+        {% if 'emotion_info' in mindmirror_display and mindmirror_display.emotion_info == True %}
+        <div>
+            {% include 'track_emotions.html' %}
+        </div>
+        {% endif %}
+        {% if 'emotion_graph' in mindmirror_display and mindmirror_display.emotion_graph == True %}
+        <div>
+            {% include 'emotions_graph.html' %}
+        </div>
+        {% endif %}
         {% if 'track_activity' in mindmirror_display and mindmirror_display.track_activity == True %}
         <div>
             {% include 'track_activity.html' %}
@@ -33,11 +43,6 @@
         {% if 'track_blood_pressure' in mindmirror_display and mindmirror_display.track_blood_pressure == True %}
         <div>
             {% include 'track_blood_pressure.html' %}
-        </div>
-        {% endif %}
-        {% if 'emotion_graph' in mindmirror_display and mindmirror_display.emotion_graph == True %}
-        <div>
-            {% include 'emotions_graph.html' %}
         </div>
         {% endif %}
         {% if 'heart_zones' in mindmirror_display and mindmirror_display.heart_zones == True %}
