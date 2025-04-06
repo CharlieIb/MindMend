@@ -11,7 +11,7 @@
 <div class="container">
     <div class="responsive-grid m-5">
         {% if 'heatmap' in mindmirror_display and mindmirror_display.heatmap == True %}
-        <div class="w-100 {% if display_year_month == 'year' %} full-row {% endif %}">
+        <div class="w-100 {% if heatmap_info.display_year_month == 'year' %} full-row {% endif %}">
             {% include 'heatmap.html' %}
         </div>
         {% endif %}

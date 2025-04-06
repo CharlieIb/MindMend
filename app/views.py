@@ -310,13 +310,31 @@ def mindmirror():
     heatmap = HeatMap(curr_day, curr_month, curr_year)
     month, year = heatmap.month_display(), heatmap.year_display()
 
+    form_display = ChooseForm()
+    display_year_month = session.get('display_year_month', 'month')
+    if form_display.validate_on_submit():
+        if form_display.change.data == 'year':
+            display_year_month = 'month'
+        elif form_display.change.data == 'month':
+            display_year_month = 'year'
+        session['display_year_month'] = display_year_month
+        return redirect(url_for('mindmirror'))
+
+    heatmap_info = {
+        'curr_day': curr_day,
+        'curr_month': curr_month,
+        'curr_year': curr_year,
+        'month': month,
+        'year': year,
+        'display_year_month': display_year_month
+    }
+
     # Data would normally get queries from db and passed to TrackHealth
-    steps, activity_duration, heart_rate, blood_pressure = 6908, 110, [50, 64, 153], '90/60'
+    steps, activity_duration, heart_rate = 6908, 110, [50, 64, 153]
     track_health = TrackHealth(
         steps=steps,
         activity_duration=activity_duration,
-        heart_rate=heart_rate,
-        blood_pressure=blood_pressure
+        heart_rate=heart_rate
     )
     steps_goal = track_health.steps_goal
     steps_percentage_complete = track_health.steps_percentage_complete()
@@ -339,8 +357,7 @@ def mindmirror():
         'heart_rate': heart_rate,
         'max_heart_rate': max_heart_rate, 'min_heart_rate': min_heart_rate, 'avg_heart_rate': avg_heart_rate,
         'heart_rate_range': heart_rate_range,
-        'heart_zones_scaled': heart_zones_progress_bar, 'heart_zones': heart_rate_zones,
-        'blood_pressure': blood_pressure
+        'heart_zones_scaled': heart_zones_progress_bar, 'heart_zones': heart_rate_zones
     }
 
     # Data would normally get queries from db and passed to TrackEmotions
@@ -363,16 +380,6 @@ def mindmirror():
         'max_num': max(info['length'] for info in emotion_count.values())
     }
 
-    form_display = ChooseForm()
-    display_year_month = session.get('display_year_month', 'month')
-    if form_display.validate_on_submit():
-        if form_display.change.data == 'year':
-            display_year_month = 'month'
-        elif form_display.change.data == 'month':
-            display_year_month = 'year'
-        session['display_year_month'] = display_year_month
-        return redirect(url_for('mindmirror'))
-
     if 'mindmirror_display' not in session:
         session['mindmirror_display'] = {
             'heatmap': True,
@@ -388,13 +395,8 @@ def mindmirror():
     return render_template(
         'mindmirror.html',
         title='MindMirror',
-        curr_day=curr_day,
-        curr_month=curr_month,
-        curr_year=curr_year,
-        month=month,
-        year=year,
-        display_year_month=display_year_month,
         form_display=form_display,
+        heatmap_info=heatmap_info,
         mindmirror_display=session.get('mindmirror_display', {}),
         track_health_info=track_health_info,
         track_emotions_info=track_emotions_info

@@ -1,12 +1,12 @@
-<div class="d-flex flex-column align-items-center justify-content-between {{ 'w-100' if display_year_month == 'year' else 'medium_widget' }}">
-    {% if display_year_month == 'month' %}
+<div class="d-flex flex-column align-items-center justify-content-between {{ 'w-100' if heatmap_info.display_year_month == 'year' else 'medium_widget' }}">
+    {% if heatmap_info.display_year_month == 'month' %}
         <div class="d-flex flex-column align-items-center justify-content-between border rounded-3 p-1 medium_widget">
             <h3 class="bg-light text-center rounded-3 py-1 w-100">Check In Activity</h3>
             <div class="bg-light p-3 rounded-3 d-flex flex-column align-items-center w-100">
-                {% for week in month[1] %}
+                {% for week in heatmap_info.month[1] %}
                     <div class="d-flex">
                         {% for day in week %}
-                            {% if day == curr_day or day is not number and day[0] == curr_day %}
+                            {% if day == heatmap_info.curr_day or day is not number and day[0] == heatmap_info.curr_day %}
                                 {% if day is not number %}
                                     <div class="border border-danger rounded-1 m-1 bg-{{ day[1]['colour'] }}
                                     bg-opacity-50 heatmap_day"></div>
@@ -15,7 +15,7 @@
                                 {% endif %}
                             {% elif day == 0 %}
                                 <div class="m-1 heatmap_day"></div>
-                            {% elif day is number and day > curr_day %}
+                            {% elif day is number and day > heatmap_info.curr_day %}
                                 <div class="border border-dark rounded-1 m-1 heatmap_day"></div>
                             {% else %}
                                 {% if day is not number %}
@@ -35,15 +35,15 @@
             <h3 class="bg-light text-center rounded-3 py-1">Check In Activity</h3>
             <div class="overflow-auto bg-light p-3 rounded-3 w-100">
                 <div class="d-flex flex-nowrap">
-                    {% for month in year %}
+                    {% for month in heatmap_info.year %}
                         {% set month_index = loop.index %}
                         <div class="flex-shrink-0 px-2">
                             {% for week in month[1] %}
                                 <div class="d-flex flex-nowrap">
                                     {% for day in week %}
-                                        {% if day == curr_day and month_index == curr_month
+                                        {% if day == heatmap_info.curr_day and month_index == heatmap_info.curr_month
                                             or
-                                            day is not number and day[0] == curr_day  and month_index == curr_month %}
+                                            day is not number and day[0] == heatmap_info.curr_day  and month_index == heatmap_info.curr_month %}
                                             {% if day is not number %}
                                                 <div class="border border-danger rounded-1 m-1 bg-{{ day[1]['colour'] }}
                                                 bg-opacity-50 heatmap_day"></div>
@@ -52,9 +52,9 @@
                                             {% endif %}
                                         {% elif day == 0 %}
                                             <div class="m-1 heatmap_day"></div>
-                                        {% elif day is number and day > curr_day and month_index >= curr_month
+                                        {% elif day is number and day > heatmap_info.curr_day and month_index >= heatmap_info.curr_month
                                             or
-                                            month_index > curr_month %}
+                                            month_index > heatmap_info.curr_month %}
                                             <div class="border border-dark rounded-1 m-1 heatmap_day"></div>
                                         {% else %}
                                             {% if day is not number %}
@@ -76,7 +76,7 @@
     {% endif %}
     <form class="mt-2 w-100" action="" method="POST" novalidate enctype="multipart/form-data">
         {{ form_display.csrf_token() }}
-        {{ form_display.change(value=display_year_month) }}
-        <button class="btn btn-dark fw-bold w-100" type="submit">{{ display_year_month|title }}</button>
+        {{ form_display.change(value=heatmap_info.display_year_month) }}
+        <button class="btn btn-dark fw-bold w-100" type="submit">{{ heatmap_info.display_year_month|title }}</button>
     </form>
 </div>
