@@ -1,6 +1,6 @@
 
 # Sample list of symptoms
-symptom_list = [('1','Symptom 1'),('2','Symptom 2'),('3','Symptom 3'),('4','Symptom 4')]
+symptom_list = [('1','Symptom 1'),('2','Symptom 2'),('3','Symptom 3'),('4','Symptom 4'),('5','Symptom 5'),('6','Symptom 6'),('7','Symptom 7'),('8','Symptom 8'),('9','Symptom 9'),('10','Symptom 10')]
 
 # Sample questionnaires
 condition1 = [{"qn": "Question1a", "value": 5},{"qn": "Question1b", "value": 3},{"qn": "Question1c", "value": 2}]
@@ -13,3 +13,4 @@ questions_database = [{'id':1, 'questions':condition1},
                       {'id':3, 'questions':condition3},
                       {'id':4, 'questions':condition4}
                       ]
+
