@@ -44,7 +44,7 @@ def load_user(id):
 ## CheckIn Tables
 # People Table - could be removed
 class Person(db.Model):
-    __tablename__ = "person"
+    __tablename__ = "people"
 
     person_id: so.Mapped[int] = so.mapped_column(sa.Integer, primary_key=True)
     name: so.Mapped[str] = so.mapped_column(sa.String(255), unique=True, nullable=False)
@@ -83,7 +83,7 @@ class EmotionLog(db.Model):
     __tablename__ = "emotion_logs"
 
     log_id: so.Mapped[int] = so.mapped_column(primary_key=True)
-    user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey("user.id"), nullable=False)
+    user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey("users.id"), nullable=False)
     time: so.Mapped[sa.DateTime] = so.mapped_column(sa.DateTime, default=datetime.utcnow)
     emotion: so.Mapped[str] = so.mapped_column(sa.String(50))
     steps: so.Mapped[int] = so.mapped_column(sa.Integer) # Maybe update this to be nullable
@@ -93,15 +93,15 @@ class EmotionLog(db.Model):
     free_notes: so.Mapped[sa.Text] = so.mapped_column(sa.Text, nullable=True)
 
     # Foreign Keys
-    location_id: so.Mapped[int] = so.mapped_column(sa.Integer, sa.ForeignKey("location.location_id"), nullable=True)
-    activity_id: so.Mapped[int] = so.mapped_column(sa.Integer, sa.ForeignKey("activity.activity_id"), nullable=True)
-    person_id: so.Mapped[int] = so.mapped_column(sa.Integer, sa.ForeignKey("person.person_id"), nullable=True)
+    location_id: so.Mapped[int] = so.mapped_column(sa.Integer, sa.ForeignKey("locations.location_id"), nullable=True)
+    activity_id: so.Mapped[int] = so.mapped_column(sa.Integer, sa.ForeignKey("activities.activity_id"), nullable=True)
+    person_id: so.Mapped[int] = so.mapped_column(sa.Integer, sa.ForeignKey("people.person_id"), nullable=True)
 
     # Relationships
     user: so.Mapped['User'] = so.relationship(back_populates="emotion_logs")
     location: so.Mapped['Location'] = so.relationship(back_populates="emotion_logs")
     activity: so.Mapped['Activity'] = so.relationship(back_populates="emotion_logs")
-    people: so.Mapped['Person'] = so.relationship(back_populates="emotion_logs")
+    person: so.Mapped['Person'] = so.relationship(back_populates="emotion_logs")
 
     # user = so.relationship("User", backref="emotion_logs")
     # location = so.relationship("Location", backref="emotion_logs")
@@ -126,11 +126,11 @@ class Condition(db.Model):
 
     # Relationships through secondary tables
     therapeutic_recs: so.Mapped[list['TherapeuticRec']] = so.relationship(
-        secondary="therapeutic_rec_condition",
+        secondary="therapeutic_rec_conditions",
         back_populates="conditions"
     )
     resources: so.Mapped[list['Resource']] = so.relationship(
-        secondary="resource_condition",
+        secondary="resource_conditions",
         back_populates="conditions"
     )
 
@@ -139,7 +139,7 @@ class Condition(db.Model):
 class ConditionQuestion(db.Model):
     __tablename__ = "condition_questions"
 
-    cond_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey("condition.cond_id"), primary_key=True)
+    cond_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey("conditions.cond_id"), primary_key=True)
     q_number: so.Mapped[int] = so.mapped_column(primary_key=True)
     question: so.Mapped[str] = so.mapped_column(sa.Text, nullable=False)
     value: so.Mapped[int] = so.mapped_column(sa.Integer, nullable=False)
@@ -155,8 +155,8 @@ class TestResult(db.Model):
     __tablename__ = "test_results"
 
     test_id: so.Mapped[int] = so.mapped_column(primary_key=True)
-    user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey("user.id"), nullable=False)
-    cond_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey("condition.cond_id"), nullable=False)
+    user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey("users.id"), nullable=False)
+    cond_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey("conditions.cond_id"), nullable=False)
     result: so.Mapped[str] = so.mapped_column(sa.Text)
     timedate: so.Mapped[sa.DateTime] = so.mapped_column(sa.DateTime, default=datetime.utcnow)
 
@@ -181,8 +181,8 @@ class TherapeuticRec(db.Model):
 
     # Relationship:
     conditions: so.Mapped[list['Condition']] = so.relationship(
-        secondary="therapeutic_rec_condition",
-        back_populates="conditions"
+        secondary="therapeutic_rec_conditions",
+        back_populates="therapeutic_recs"
     )
 
 
@@ -196,8 +196,8 @@ class Resource(db.Model):
 
     # Relationship:
     conditions: so.Mapped[list['Condition']] = so.relationship(
-        secondary="resource_condition",
-        back_populates="conditions"
+        secondary="resource_conditions",
+        back_populates="resources"
     )
 
 
@@ -205,16 +205,16 @@ class Resource(db.Model):
 therapeutic_rec_condition = sa.Table(
     "therapeutic_rec_conditions",
     db.metadata,
-    sa.Column("therapeutic_id", sa.ForeignKey("therapeutic_rec.rec_id"), primary_key=True),
-    sa.Column("condition_id", sa.ForeignKey("condition.cond_id"), primary_key=True)
+    sa.Column("therapeutic_id", sa.ForeignKey("therapeutic_recs.rec_id"), primary_key=True),
+    sa.Column("condition_id", sa.ForeignKey("conditions.cond_id"), primary_key=True)
 )
 
 # Association table: Resource and Condition
 resource_condition = sa.Table(
     "resource_conditions",
     db.metadata,
-    sa.Column("resource_id", sa.ForeignKey("resource.resource_id"), primary_key=True),
-    sa.Column("condition_id", sa.ForeignKey("condition.cond_id"), primary_key=True)
+    sa.Column("resource_id", sa.ForeignKey("resources.resource_id"), primary_key=True),
+    sa.Column("condition_id", sa.ForeignKey("conditions.cond_id"), primary_key=True)
 )
 
 
@@ -224,7 +224,7 @@ class Notification(db.Model):
     __tablename__ = "notifications"
 
     notification_id: so.Mapped[int] = so.mapped_column(primary_key=True)
-    user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey("user.id"), nullable=False)
+    user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey("users.id"), nullable=False)
     time: so.Mapped[sa.DateTime] = so.mapped_column(sa.DateTime, default=datetime.utcnow)
     message: so.Mapped[str] = so.mapped_column(sa.Text, nullable=False)
     is_read: so.Mapped[bool] = so.mapped_column(sa.Boolean, default=False)
@@ -239,7 +239,7 @@ class SupportRequest(db.Model):
     __tablename__ = "support_requests"
 
     request_id: so.Mapped[int] = so.mapped_column(primary_key=True)
-    user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey("user.id"), nullable=False)
+    user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey("users.id"), nullable=False, unique=True)
     time: so.Mapped[sa.DateTime] = so.mapped_column(sa.DateTime, default=datetime.utcnow)
     description: so.Mapped[str] = so.mapped_column(sa.Text, nullable=False)
 

@@ -13,7 +13,9 @@ login = LoginManager(app)
 login.login_view = 'login'
 
 from app import views, models
+from app.debug_utils import reset_db
+
 
 @app.shell_context_processor
 def make_shell_context():
-    return dict(db=db, generate_password_hash=generate_password_hash)
+    return dict(db=db, generate_password_hash=generate_password_hash, reset_db=reset_db)
