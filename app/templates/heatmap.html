@@ -16,7 +16,12 @@
                                     >
                                     </div>
                                 {% else %}
-                                    <div class="border border-danger rounded-1 m-1 heatmap_day">
+                                    <div class="border border-danger rounded-1 m-1 heatmap_day"
+                                         data-bs-toggle="tooltip"
+                                         data-bs-placement="top"
+                                         data-bs-custom-class="center-tooltip"
+                                         title="{{ day }}"
+                                    >
                                     </div>
                                 {% endif %}
                             {% elif day == 0 %}
@@ -83,7 +88,13 @@
                                                         >
                                                         </div>
                                                     {% else %}
-                                                        <div class="border border-danger rounded-1 m-1 heatmap_day"></div>
+                                                        <div class="border border-danger rounded-1 m-1 heatmap_day"
+                                                             data-bs-toggle="tooltip"
+                                                             data-bs-placement="top"
+                                                             data-bs-custom-class="center-tooltip"
+                                                             title="{{ day }}"
+                                                        >
+                                                        </div>
                                                     {% endif %}
                                                 {% elif day == 0 %}
                                                     <div class="m-1 heatmap_day"></div>
