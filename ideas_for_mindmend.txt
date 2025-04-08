@@ -8,4 +8,10 @@ MindMirror
 |-> emotion bar graph could go along the x-axis
 
 Create Fake Data:
-|-> scripts to create fake data straight into SQLite
+|-> scripts to create fake data straight into SQLite: DONE (charlie)
+
+
+To check (Charlie):
+Due to changing model relationships from backref to back_populates,
+does this now mean that some of the Manager class functionality can be simplified?
+|-> Check if the M-1 relationships reduce the need for Manager classes?
