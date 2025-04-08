@@ -11,7 +11,7 @@
 <div class="container">
     <div class="responsive-grid m-5">
         {% if 'heatmap' in mindmirror_display and mindmirror_display.heatmap == True %}
-        <div class="w-100 {% if display_year_month == 'year' %} full-row {% endif %}">
+        <div class="w-100 {% if heatmap_info.display_year_month == 'year' %} full-row {% endif %}">
             {% include 'heatmap.html' %}
         </div>
         {% endif %}
@@ -38,11 +38,6 @@
         {% if 'track_heart_rate' in mindmirror_display and mindmirror_display.track_heart_rate == True %}
         <div>
             {% include 'track_heart.html' %}
-        </div>
-        {% endif %}
-        {% if 'track_blood_pressure' in mindmirror_display and mindmirror_display.track_blood_pressure == True %}
-        <div>
-            {% include 'track_blood_pressure.html' %}
         </div>
         {% endif %}
         {% if 'heart_zones' in mindmirror_display and mindmirror_display.heart_zones == True %}
