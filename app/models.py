@@ -103,11 +103,6 @@ class EmotionLog(db.Model):
     activity: so.Mapped['Activity'] = so.relationship(back_populates="emotion_logs")
     person: so.Mapped['Person'] = so.relationship(back_populates="emotion_logs")
 
-    # user = so.relationship("User", backref="emotion_logs")
-    # location = so.relationship("Location", backref="emotion_logs")
-    # activity = so.relationship("Activity", backref="emotion_logs")
-    # people = so.relationship("Person", backref="emotion_logs")
-
 
 ##Screening Tool tables
 # Condition Table
@@ -147,8 +142,6 @@ class ConditionQuestion(db.Model):
     # Relationships
     condition: so.Mapped['Condition'] = so.relationship(back_populates="questions")
 
-    # condition = so.relationship("Condition", backref="questions")
-
 
 # Test Result Table
 class TestResult(db.Model):
@@ -163,10 +156,6 @@ class TestResult(db.Model):
     # Relationships
     user: so.Mapped['User'] = so.relationship(back_populates="test_result")
     condition: so.Mapped['Condition'] = so.relationship(back_populates="test_result")
-
-
-    #user = so.relationship("User", backref="test_results")
-    #condition = so.relationship("Condition", backref="test_results")
 
 
 # Therapeutic Recommendations Table
