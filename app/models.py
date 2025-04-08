@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Optional
 import sqlalchemy as sa
 import sqlalchemy.orm as so
 from flask_login import UserMixin

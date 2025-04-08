@@ -78,7 +78,7 @@ def initialize():
                         f"Emotion: {log.emotion}, "
                         f"Location: {log.location.name if log.location else 'N/A'}, "
                         f"Activity: {log.activity.name if log.activity else 'N/A'}, "
-                        f"Person: {log.people.name if log.people else 'N/A'}, "
+                        f"Person: {log.person.name if log.person else 'N/A'}, "
                         f"Time: {log.time}, "
                         f"Steps: {log.steps}, "
                         f"Notes: {log.free_notes}"

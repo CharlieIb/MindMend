@@ -25,7 +25,7 @@ class EmotionLogManager:
             free_notes: Optional[str] = None,
             location_id: Optional[int] = None,
             activity_id: Optional[int] = None,
-            people_id: Optional[int] = None
+            person_id: Optional[int] = None
     ):
         '''
         Add new emotional log to the database and in-memory storage
@@ -41,7 +41,7 @@ class EmotionLogManager:
             free_notes=free_notes,
             location_id=location_id,
             activity_id=activity_id,
-            people_id=people_id
+            person_id=person_id
         )
         self.session.add(new_log)
         self.session.commit()
