@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, flash, request, send_file, send_from_directory, session
+from flask import render_template, redirect, url_for, flash, request, send_file, send_from_directory, session, abort
 from app import app
 from app import db
 from app.forms import ChooseForm, LoginForm, ChangePasswordForm, RegisterForm, FormRedirect, SelectSymptomsForm, \
@@ -11,9 +11,21 @@ from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
 from urllib.parse import urlsplit
 from datetime import datetime
+from functools import wraps
+
 
 initialized = False
 
+# Defines a decorator that specifies roles allowed for a route --- move to helper.py folder?
+def roles_required(*roles):
+    def decorator(f):
+        @wraps(f)
+        def wrapper(*args, **kwargs):
+            if current_user.role not in roles:
+                abort(403)
+            return f(*args, **kwargs)
+        return wrapper
+    return decorator
 
 # Load data into classes on first load
 @app.before_request
@@ -192,6 +204,7 @@ def home_admin(username):
 
 @app.route('/admin', methods=['GET', 'POST'])
 @login_required
+@roles_required('Admin')
 def admin():
     form = ChooseForm()
     if current_user.role != 'Admin':
@@ -425,6 +438,7 @@ def mindmirror():
 
 # MindMirror - edit what widgets are shown page
 @app.route('/mindmirror_edit', methods=['GET', 'POST'])
+@login_required
 def mindmirror_edit():
     form = FormMindMirrorLayout(data=session['mindmirror_display'])
     if form.validate_on_submit():
@@ -448,6 +462,7 @@ def mindmirror_edit():
 
 # CheckIn
 @app.route('/check-in')
+@login_required
 def emotion_log():
     emotions = [
         {"title": "Anxious", "feelings": ["Nervous", "Overwhelmed", "Irritable", "Restless", "Worried"],
@@ -493,6 +508,7 @@ def generate_questionnaires(conditions):
 
 # First Page: Select Symptoms
 @app.route('/select_symptoms', methods=['GET', 'POST'])
+@login_required
 def select_symptoms():
     form = SelectSymptomsForm()
     form.symptoms.choices = symptom_list
@@ -510,6 +526,7 @@ def select_symptoms():
 
 # Second Page: Answer Questionnaire
 @app.route('/answer_questionnaire', methods=['GET', 'POST'])
+@login_required
 def answer_questionnaire():
     selected_symptoms = session.get('selected_symptoms')
 
