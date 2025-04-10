@@ -7,7 +7,7 @@ from app.models import User, EmotionLog
 from app.utils import (HeatMap, TrackHealth, symptom_list, questions_database,
                        ConditionManager, ResourceManager, TherapeuticRecManager, TestResultManager,
                        EmotionLogManager, ActivityManager, LocationManager, PersonManager, TrackEmotions)
-from app.helpers import roles_required, get_emotions_info,get_health_info, get_heatmap_info, initialize_app
+from app.helpers import roles_required, get_emotions_info,get_health_info, get_heatmap_info, initialize_app, selectConditions, generate_questionnaires
 from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
 from urllib.parse import urlsplit
