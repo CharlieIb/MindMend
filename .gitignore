@@ -3,3 +3,7 @@
 # system generated
 .idea
 __pycache__
+
+
+# Database - can be reset with reset_db()
+*.sqlite
