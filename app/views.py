@@ -7,101 +7,22 @@ from app.models import User, EmotionLog
 from app.utils import (HeatMap, TrackHealth, symptom_list, questions_database,
                        ConditionManager, ResourceManager, TherapeuticRecManager, TestResultManager,
                        EmotionLogManager, ActivityManager, LocationManager, PersonManager, TrackEmotions)
+from app.helpers import roles_required, get_emotions_info,get_health_info, get_heatmap_info, initialize_app
 from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
 from urllib.parse import urlsplit
 from datetime import datetime
-from functools import wraps
 
-
-initialized = False
-
-# Defines a decorator that specifies roles allowed for a route --- move to helper.py folder?
-def roles_required(*roles):
-    def decorator(f):
-        @wraps(f)
-        def wrapper(*args, **kwargs):
-            if current_user.role not in roles:
-                abort(403)
-            return f(*args, **kwargs)
-        return wrapper
-    return decorator
 
 # Load data into classes on first load
 @app.before_request
-def initialize():
-    global initialized
-    if not initialized:
-        print("this only happens when the app initializes!")
-        # Screening Tool queries
-        session = db.session
-        try:
-            app.condition_manager = ConditionManager(session)
-            therapeutic_rec_manager = TherapeuticRecManager(session)
-            resource_manager = ResourceManager(session)
-            test_result_manager = TestResultManager(session)
-            initialized = True
-            flash("Data loaded into memory", "success")
-        except Exception as e:
-            flash(f"Exception: {e}, please restart", "danger")
-
-        # EXAMPLE USAGE OF NEW CLASSES--- DELETE WHEN NOT NEEDED
-        cond_id = 1
-
-        # Get a condition and its questions
-        condition = app.condition_manager.get_condition(cond_id)
-        questions = app.condition_manager.get_questions_for_condition(cond_id)
-
-        # Get therapeutic recommendations and resources for the condition
-        recommendations = therapeutic_rec_manager.get_recommendations_for_condition(cond_id)
-        resources = resource_manager.get_resources_for_condition(cond_id)
-
-        # Add a test result --- Try not to use too much, now there are like 10 entries of the same result!
-        # test_result_manager.add_test_result(user_id=1, cond_id=cond_id, result="Positive")
-
-        # Retrieve test results for a user
-        user_test_results = test_result_manager.get_test_results_for_user(user_id=1)
-
-        # The output is from the model classes, use the attribute there to access the data
-        # Example
-        print(condition.name, condition.threshold)
-        for question in questions:
-            print(f"{question.q_number}, {question.question}")
-        # Try these to get familiar
-        print(recommendations)
-        print(resources)
-        print(user_test_results)
-
-        # DO NOT DELETE! - between the two comments
-        if current_user.is_authenticated:
-            # Load user log data, if already logged in
-            emotion_log_manager = EmotionLogManager(db.session, current_user.id)
-            # DO NOT DELETE!
-
-            #### EXAMPLE  USAGE OF EMOTIONLOG CLASS --- CAN DELETE
-            logs = emotion_log_manager.emotional_logs
-            if not logs:
-                print(f"No emotion logs found for user ID {current_user.id}.")
-            else:
-                print(f"Emotion logs for user ID {current_user.id}:")
-                for log in logs.values():
-                    print(
-                        f"Log ID: {log.log_id}, "
-                        f"Emotion: {log.emotion}, "
-                        f"Location: {log.location.name if log.location else 'N/A'}, "
-                        f"Activity: {log.activity.name if log.activity else 'N/A'}, "
-                        f"Person: {log.person.name if log.person else 'N/A'}, "
-                        f"Time: {log.time}, "
-                        f"Steps: {log.steps}, "
-                        f"Notes: {log.free_notes}"
-                    )
-
+def before_request_handler():
+    initialize_app(app)
 
 # Not logged In Access
 @app.route('/')
 def home():
     return render_template('index.html', title='Home')
-
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -312,87 +233,6 @@ def settings():
 
 
 # Features
-# MindMirror - helper functions
-def get_heatmap_info():
-    now = datetime.now()
-    curr_day, curr_month, curr_year = now.day, now.month, now.year
-
-    # Data would normally get queries from db and passed to HeatMap
-    heatmap = HeatMap(curr_day, curr_month, curr_year)
-    month, year = heatmap.month_display(), heatmap.year_display()
-    months = [
-        'January', 'February', 'March',
-        'April', 'May', 'June',
-        'July', 'August', 'September',
-        'October', 'November', 'December'
-    ]
-
-    heatmap_info = {
-        'curr_day': curr_day,
-        'curr_month': curr_month,
-        'curr_year': curr_year,
-        'month': month,
-        'year': year,
-        'months': months
-    }
-    return heatmap_info
-
-
-def get_health_info():
-    # Data would normally get queries from db and passed to TrackHealth
-    steps, activity_duration, heart_rate = 6908, 110, [50, 64, 153]
-    track_health = TrackHealth(
-        steps=steps,
-        activity_duration=activity_duration,
-        heart_rate=heart_rate
-    )
-    steps_goal = track_health.steps_goal
-    steps_percentage_complete = track_health.steps_percentage_complete()
-
-    activity_duration_goal = track_health.activity_duration_goal
-    activity_percentage_complete = track_health.activity_percentage_complete()
-
-    max_heart_rate = track_health.max_heart_rate()
-    min_heart_rate = track_health.min_heart_rate()
-    avg_heart_rate = track_health.avg_heart_rate()
-    heart_rate_range = track_health.heart_rate_range()
-    heart_rate_zones = track_health.heart_rate_zones()
-    heart_zones_progress_bar = track_health.heart_rate_zone_progress_bar()
-
-    track_health_info = {
-        'steps': steps,
-        'steps_goal': steps_goal, 'steps_percentage_complete': steps_percentage_complete,
-        'activity_duration': activity_duration,
-        'activity_duration_goal': activity_duration_goal, 'activity_percentage_complete': activity_percentage_complete,
-        'heart_rate': heart_rate,
-        'max_heart_rate': max_heart_rate, 'min_heart_rate': min_heart_rate, 'avg_heart_rate': avg_heart_rate,
-        'heart_rate_range': heart_rate_range,
-        'heart_zones_scaled': heart_zones_progress_bar, 'heart_zones': heart_rate_zones
-    }
-    return track_health_info
-
-
-def get_emotions_info():
-    # Data would normally get queries from db and passed to TrackEmotions
-    track_emotions = TrackEmotions()
-    emotion_count = track_emotions.count_emotions()
-    total_emotion_logs = sum(info['length'] for info in emotion_count.values())
-    emotions_percentage = {
-        emotion: {
-            'percentage': round(((info['length'] / total_emotion_logs) * 100) / 2),
-            'colour': info['colour']
-        }
-        for emotion, info in emotion_count.items()
-    }
-    sorted_emotions_percentage = dict(sorted(emotions_percentage.items(), key=lambda item: item[1]['percentage']))
-    track_emotions_info = {
-        'emotion_count': emotion_count,
-        'total_emotion_logs': total_emotion_logs,
-        'emotions_percentage_unsorted': emotions_percentage,
-        'emotions_percentage': sorted_emotions_percentage,
-        'max_num': max(info['length'] for info in emotion_count.values())
-    }
-    return track_emotions_info
 
 
 # MindMirror - landing page
@@ -477,35 +317,6 @@ def emotion_log():
 
 
 # Screening Tool
-
-# Function to get condition ids from symptoms selected
-def selectConditions(selected_symptoms):
-    ### TO-DO: Replace function with actual logic of selecting condition
-    conditions = [int(id) for id in selected_symptoms]
-    return conditions
-
-def generate_questionnaires(conditions):
-    questionnaires = {}  # Dictionary to store the results
-
-    for cond_id in conditions:
-        condition = app.condition_manager.get_condition(cond_id)
-        questions = app.condition_manager.get_questions_for_condition(cond_id)
-
-        # Store condition info and questions in the dictionary
-        questionnaires[cond_id] = {
-            'name': condition.name,
-            'threshold': condition.threshold,
-            'questions': [
-                {
-                    'q_number': question.q_number,
-                    'question': question.question,
-                    'value': question.value
-                }
-                for question in questions
-            ]
-        }
-    return questionnaires
-
 # First Page: Select Symptoms
 @app.route('/select_symptoms', methods=['GET', 'POST'])
 @login_required
@@ -520,9 +331,6 @@ def select_symptoms():
 
         return redirect(url_for('answer_questionnaire'))
     return render_template('select_symptoms.html', title="Choose Symptoms", form=form)
-
-
-
 
 # Second Page: Answer Questionnaire
 @app.route('/answer_questionnaire', methods=['GET', 'POST'])
