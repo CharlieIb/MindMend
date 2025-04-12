@@ -4,7 +4,8 @@ from app import db
 from app.forms import (ChooseForm, LoginForm, ChangePasswordForm, RegisterForm, SettingsForm,
                        SelectSymptomsForm, generate_form, MindMirrorLayoutForm)
 from app.models import User, EmotionLog
-from app.utils import symptom_list, questions_database, EmotionLogManager, ActivityManager, LocationManager, PersonManager
+from app.utils import symptom_list, questions_database, EmotionLogManager, ActivityManager, LocationManager, \
+    PersonManager
 from app.helpers import (roles_required, get_emotions_info, get_health_info, get_heatmap_info, initialize_app,
                          selectConditions, generate_questionnaires)
 from flask_login import current_user, login_user, logout_user, login_required
@@ -232,8 +233,24 @@ def settings():
     )
 
 
-# Features
+@app.route('/track_physiological', methods=['GET', 'POST'])
+@login_required
+def track_physiological():
+    current_user.track_physiological = not current_user.track_physiological
+    db.session.commit()
+    flash(f"Your physiological is being tracked: {current_user.track_physiological}", 'success')
+    return redirect(url_for('settings'))
 
+@app.route('/share_data', methods=['GET', 'POST'])
+@login_required
+def share_data():
+    current_user.share_data = not current_user.share_data
+    db.session.commit()
+    flash(f"Your data is being shared: {current_user.share_data}", 'success')
+    return redirect(url_for('settings'))
+
+
+####################################################### FEATURES #######################################################
 
 # MindMirror - landing page
 @app.route('/mindmirror', methods=['GET', 'POST'])

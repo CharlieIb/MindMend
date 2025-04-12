@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import (SubmitField, HiddenField, StringField, PasswordField,
-                     BooleanField, IntegerField, ValidationError, EmailField, RadioField)
+from wtforms import (SubmitField, HiddenField, StringField, PasswordField, BooleanField, IntegerField, ValidationError,
+                     EmailField, RadioField)
 from wtforms.validators import DataRequired, NumberRange, Length, EqualTo
 from email_validator import validate_email, EmailNotValidError
 from wtforms.fields.choices import SelectMultipleField
@@ -74,13 +74,13 @@ class ChangePasswordForm(FlaskForm):
     submit = SubmitField('Update Password')
 
 
-class FormRedirect(FlaskForm):
+class SettingsForm(FlaskForm):
     register = SubmitField('Register')
     logout = SubmitField('Logout')
     change_password = SubmitField('Change Password')
 
 
-class FormMindMirrorLayout(FlaskForm):
+class MindMirrorLayoutForm(FlaskForm):
     heatmap = BooleanField('Check In Activity Heatmap', default=True)
     emotion_graph = BooleanField('Emotion Graph', default=True)
     emotion_info = BooleanField('Emotion Info', default=True)
@@ -98,6 +98,7 @@ class SelectSymptomsForm(FlaskForm):
                                    validators=[DataRequired(message='Please select at least 1 option')],
                                    widget=ListWidget(prefix_label=False), option_widget=CheckboxInput())
     submit = SubmitField('Submit')
+
 
 def generate_form(questionnaires):
     class AnswerQuestionnaireForm(FlaskForm):
