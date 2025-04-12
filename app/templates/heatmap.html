@@ -8,11 +8,11 @@
                         {% for day in week %}
                             {% if day == heatmap_info.curr_day or day is not number and day[0] == heatmap_info.curr_day %}
                                 {% if day is not number %}
-                                    <div class="border border-danger rounded-1 m-1 bg-{{ day[1]['colour'] }} bg-opacity-50 heatmap_day"
+                                    <div class="border border-danger rounded-1 m-1 {{ day[1]['colour'] }} heatmap_day"
                                          data-bs-toggle="tooltip"
                                          data-bs-placement="top"
                                          data-bs-custom-class="center-tooltip"
-                                         title="{{ day[0] }}"
+                                         title="{{ day[0] }}/{{ heatmap_info.curr_month }}/{{ heatmap_info.month[0][1] }} - {{ day[1]['emotion'] }}"
                                     >
                                     </div>
                                 {% else %}
@@ -36,11 +36,11 @@
                                 </div>
                             {% else %}
                                 {% if day is not number %}
-                                    <div class="border border-success rounded-1 m-1 bg-{{ day[1]['colour'] }} bg-opacity-50 heatmap_day"
+                                    <div class="border border-success rounded-1 m-1 {{ day[1]['colour'] }} heatmap_day"
                                          data-bs-toggle="tooltip"
                                          data-bs-placement="top"
                                          data-bs-custom-class="center-tooltip"
-                                         title="{{ day[0] }}"
+                                         title="{{ day[0] }}/{{ heatmap_info.curr_month }}/{{ heatmap_info.month[0][1] }} - {{ day[1]['emotion'] }}"
                                     >
                                     </div>
                                 {% else %}
@@ -80,11 +80,11 @@
                                                     or
                                                     day is not number and day[0] == heatmap_info.curr_day  and month_index == heatmap_info.curr_month %}
                                                     {% if day is not number %}
-                                                        <div class="border border-danger rounded-1 m-1 bg-{{ day[1]['colour'] }} bg-opacity-50 heatmap_day"
+                                                        <div class="border border-danger rounded-1 m-1 {{ day[1]['colour'] }} heatmap_day"
                                                              data-bs-toggle="tooltip"
                                                              data-bs-placement="top"
                                                              data-bs-custom-class="center-tooltip"
-                                                             title="{{ day[0] }}"
+                                                             title="{{ day[0] }}/{{ month_index }}/{{ heatmap_info.year[0][0][1] }} - {{ day[1]['emotion'] }}"
                                                         >
                                                         </div>
                                                     {% else %}
@@ -110,11 +110,11 @@
                                                     </div>
                                                 {% else %}
                                                     {% if day is not number %}
-                                                        <div class="border border-success rounded-1 m-1 bg-{{ day[1]['colour'] }} bg-opacity-50 heatmap_day"
+                                                        <div class="border border-success rounded-1 m-1 {{ day[1]['colour'] }} heatmap_day"
                                                              data-bs-toggle="tooltip"
                                                              data-bs-placement="top"
                                                              data-bs-custom-class="center-tooltip"
-                                                             title="{{ day[0] }}"
+                                                             title="{{ day[0] }}/{{ month_index }}/{{ heatmap_info.year[0][0][1] }} - {{ day[1]['emotion'] }}"
                                                         >
                                                         </div>
                                                     {% else %}
