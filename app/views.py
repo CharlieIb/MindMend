@@ -1,17 +1,15 @@
-from flask import render_template, redirect, url_for, flash, request, send_file, send_from_directory, session, abort
+from flask import render_template, redirect, url_for, flash, request, session, abort
 from app import app
 from app import db
-from app.forms import ChooseForm, LoginForm, ChangePasswordForm, RegisterForm, FormRedirect, SelectSymptomsForm, \
-    generate_form, FormMindMirrorLayout
+from app.forms import (ChooseForm, LoginForm, ChangePasswordForm, RegisterForm, SettingsForm,
+                       SelectSymptomsForm, generate_form, MindMirrorLayoutForm)
 from app.models import User, EmotionLog
-from app.utils import (HeatMap, TrackHealth, symptom_list, questions_database,
-                       ConditionManager, ResourceManager, TherapeuticRecManager, TestResultManager,
-                       EmotionLogManager, ActivityManager, LocationManager, PersonManager, TrackEmotions)
-from app.helpers import roles_required, get_emotions_info,get_health_info, get_heatmap_info, initialize_app, selectConditions, generate_questionnaires
+from app.utils import symptom_list, questions_database, EmotionLogManager, ActivityManager, LocationManager, PersonManager
+from app.helpers import (roles_required, get_emotions_info, get_health_info, get_heatmap_info, initialize_app,
+                         selectConditions, generate_questionnaires)
 from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
 from urllib.parse import urlsplit
-from datetime import datetime
 
 
 # Load data into classes on first load
@@ -19,17 +17,19 @@ from datetime import datetime
 def before_request_handler():
     initialize_app(app)
 
+
 # Not logged In Access
 @app.route('/')
 def home():
     return render_template('index.html', title='Home')
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('home'))
     form_login = LoginForm()
-    form_register = FormRedirect()
+    form_register = SettingsForm()
     if 'submit' in request.form and form_login.validate_on_submit():
         user = db.session.scalar(
             sa.select(User).where(User.username == form_login.username.data)
@@ -219,7 +219,7 @@ def logout():
 @app.route('/settings', methods=['GET', 'POST'])
 @login_required
 def settings():
-    form = FormRedirect()
+    form = SettingsForm()
     if form.validate_on_submit():
         if form.logout.data:
             return redirect(url_for('logout'))
@@ -280,7 +280,7 @@ def mindmirror():
 @app.route('/mindmirror_edit', methods=['GET', 'POST'])
 @login_required
 def mindmirror_edit():
-    form = FormMindMirrorLayout(data=session['mindmirror_display'])
+    form = MindMirrorLayoutForm(data=session['mindmirror_display'])
     if form.validate_on_submit():
         session['mindmirror_display'] = {
             'heatmap': form.heatmap.data,
@@ -332,14 +332,15 @@ def select_symptoms():
         return redirect(url_for('answer_questionnaire'))
     return render_template('select_symptoms.html', title="Choose Symptoms", form=form)
 
+
 # Second Page: Answer Questionnaire
 @app.route('/answer_questionnaire', methods=['GET', 'POST'])
 @login_required
 def answer_questionnaire():
     selected_symptoms = session.get('selected_symptoms')
 
-    conditions = selectConditions(selected_symptoms) # Selects appropriate condition_ids from selects symptoms
-    questionnaires = generate_questionnaires(conditions) # Retrieves all questionnaires of corresponding conditions
+    conditions = selectConditions(selected_symptoms)  # Selects appropriate condition_ids from selects symptoms
+    questionnaires = generate_questionnaires(conditions)  # Retrieves all questionnaires of corresponding conditions
 
     # Create Flask Forms
     AnswerQuestionnaireForm = generate_form(questionnaires)

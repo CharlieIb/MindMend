@@ -1,8 +1,7 @@
 from app import app
 from app import db
-from app.utils import (ConditionManager, ResourceManager, TherapeuticRecManager, TestResultManager,
-                       EmotionLogManager, ActivityManager, LocationManager, PersonManager,
-                       HeatMap, TrackHealth, TrackEmotions)
+from app.utils import (ConditionManager, ResourceManager, TherapeuticRecManager, TestResultManager, EmotionLogManager,
+                       ActivityManager, LocationManager, PersonManager, HeatMap, TrackHealth, TrackEmotions)
 from functools import wraps
 from flask import abort, flash
 from flask_login import current_user
