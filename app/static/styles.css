@@ -117,3 +117,37 @@ transform: translate(-50%, -50%) !important;
 .center-tooltip .tooltip-arrow {
 display: none;
 }
+
+
+/* EMOTION COLOURS */
+.bright_yellow {
+    background-color: rgba(255, 235, 59, 0.5);
+}
+
+.light_blue {
+    background-color: rgba(173, 216, 230, 0.5);
+}
+
+.grey {
+    background-color: rgba(128, 128, 128, 0.5);
+}
+
+.bright_orange {
+    background-color: rgba(255, 165, 0, 0.5);
+}
+
+.red {
+    background-color: rgba(220, 20, 60, 0.5);
+}
+
+.dark_blue {
+    background-color: rgba(0, 0, 128, 0.5);
+}
+
+.hot_pink {
+    background-color: rgba(255, 105, 180, 0.5);
+}
+
+.dark_red {
+    background-color: rgba(128, 0, 0, 0.5);
+}
