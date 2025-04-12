@@ -18,16 +18,17 @@ class User(UserMixin, db.Model, Base):
     email: so.Mapped[str] = so.mapped_column(sa.String(120), index=True, unique=True)
     password_hash: so.Mapped[Optional[str]] = so.mapped_column(sa.String(256))
     role: so.Mapped[str] = so.mapped_column(sa.String(24), nullable=False, default='Normal')
+    track_physiological: so.Mapped[bool] = so.mapped_column(default=False, nullable=False)
+    share_data: so.Mapped[bool] = so.mapped_column(default=False, nullable=False)
 
     # Relationships:
     emotion_logs: so.Mapped[list['EmotionLog']] = so.relationship(back_populates="user", cascade="all, delete-orphan")
     test_result: so.Mapped[list['TestResult']] = so.relationship(back_populates="user", cascade="all, delete-orphan")
-    notifications: so.Mapped[list['Notification']] = so.relationship(back_populates="user",
-                                                                     cascade="all, delete-orphan")
+    notifications: so.Mapped[list['Notification']] = so.relationship(back_populates="user", cascade="all, delete-orphan")
     support_request: so.Mapped['SupportRequest'] = so.relationship(back_populates="user", cascade="all, delete-orphan")
 
     def __repr__(self):
-        return f"User(id={self.id}, username={self.username}, email={self.email}, role={self.role})"
+        return f"User(id={self.id}, username={self.username}, email={self.email}, role={self.role}, track_physiological={self.track_physiological})"
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -102,7 +103,7 @@ class EmotionLog(db.Model):
 
     def __repr__(self):
         return (f"EmotionLog("
-                f"Log_id: {self.log_id}, User_id: {self.user_id}, Time: {self.time},"
+                f"Log Id: {self.log_id}, User Id: {self.user_id}, Time: {self.time},"
                 f"Emotion: {self.emotion}, Steps: {self.steps}, Activity Duration: {self.activity_duration},"
                 f"Heart_rate: {self.heart_rate}, Blood Pressure: {self.blood_pressure},"
                 f"Free Notes: {self.free_notes})")
