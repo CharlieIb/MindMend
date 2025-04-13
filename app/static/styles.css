@@ -84,17 +84,24 @@ body {
 }
 
 /* GRAPH BAR */
-.graph_bar_small {
+.graph_bar_x_small {
     height: 45px;
     width: 1px;
     padding: 1px;
     margin: 1px;
 }
 
-.graph_bar_med {
+.graph_bar_small {
     height: 45px;
     width: 1px;
     padding: 2px;
+    margin: 1px;
+}
+
+.graph_bar_med {
+    height: 45px;
+    width: 1px;
+    padding: 3px;
     margin: 1px;
 }
 

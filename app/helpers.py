@@ -138,7 +138,7 @@ def get_emotions_info():
     total_emotions = sum(x for x in emotions.values())
     emotions_percentage = {emotion: round(((emotions[emotion] / total_emotions) * 100) / 2) for emotion in emotions}
     max_emotion, max_value = max(emotions_percentage.items(), key=lambda item: item[1])
-    max_num = [max_emotion, max_value]
+    max_num = [max_emotion, max_value * 2]
     segments = []
     cumulative = 0
     for emotion, value in emotions_percentage.items():
