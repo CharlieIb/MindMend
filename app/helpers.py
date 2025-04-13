@@ -133,8 +133,8 @@ def get_health_info():
 
 def get_emotions_info():
     default_emotions = {
-        'Anxious': 0, 'Sad': 0, 'Angry': 0, 'Happy': 0,
-        'Stressed': 0, 'Energetic': 0, 'Excited': 0, 'Calm': 0
+        'Calm': 0, 'Excited': 0, 'Anxious': 0, 'Stressed': 0,
+        'Energetic': 0, 'Angry': 0, 'Sad': 0, 'Happy': 0
     }
 
     try:
