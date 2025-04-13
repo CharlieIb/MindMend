@@ -10,6 +10,7 @@
         {{ wtf.form_field(form.logout, False) }}
         {{ wtf.form_field(form.change_password, False) }}
     </form>
+    {% if current_user.role == 'Normal' %}
     <h2 class="mt-5">Track Physiological Data</h2>
     <div class="d-flex align-items-center justify-content-center border rounded">
         <h3 class="text-start w-25">{% if current_user.track_physiological %} ON {% else %} OFF {% endif %}</h3>
@@ -38,5 +39,6 @@
             </button>
         </form>
     </div>
+    {% endif %}
 </div>
 {% endblock %}
