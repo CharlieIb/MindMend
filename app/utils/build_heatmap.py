@@ -8,7 +8,7 @@ class HeatMap:
         self.dd = dd or now.day
         self.mm = mm or now.month
         self.yy = yy or now.year
-        self.data_log = data_log or self.fake_data_log_raw()
+        self.data_log = data_log
 
     def month_display(self):
         month_info = [[self.mm, self.yy], calendar.monthcalendar(self.yy, self.mm)]
@@ -54,40 +54,6 @@ class HeatMap:
                 group_data.append(data)
 
         return group_data
-
-    @staticmethod
-    def fake_data_log_raw():
-        return [
-            {'date': datetime.strptime('02/01/2025', '%d/%m/%Y'), 'emotion': 'Anxious', 'colour': 'danger'},
-            {'date': datetime.strptime('09/01/2025', '%d/%m/%Y'), 'emotion': 'Calm', 'colour': 'info'},
-            {'date': datetime.strptime('11/01/2025', '%d/%m/%Y'), 'emotion': 'Happy', 'colour': 'warning'},
-            {'date': datetime.strptime('15/01/2025', '%d/%m/%Y'), 'emotion': 'Sad', 'colour': 'success'},
-            {'date': datetime.strptime('17/01/2025', '%d/%m/%Y'), 'emotion': 'Happy', 'colour': 'warning'},
-            {'date': datetime.strptime('22/01/2025', '%d/%m/%Y'), 'emotion': 'Calm', 'colour': 'info'},
-            {'date': datetime.strptime('28/01/2025', '%d/%m/%Y'), 'emotion': 'Happy', 'colour': 'warning'},
-            {'date': datetime.strptime('30/01/2025', '%d/%m/%Y'), 'emotion': 'Anxious', 'colour': 'danger'},
-            {'date': datetime.strptime('04/02/2025', '%d/%m/%Y'), 'emotion': 'Happy', 'colour': 'warning'},
-            {'date': datetime.strptime('08/02/2025', '%d/%m/%Y'), 'emotion': 'Anxious', 'colour': 'danger'},
-            {'date': datetime.strptime('10/02/2025', '%d/%m/%Y'), 'emotion': 'Sad', 'colour': 'success'},
-            {'date': datetime.strptime('14/02/2025', '%d/%m/%Y'), 'emotion': 'Happy', 'colour': 'warning'},
-            {'date': datetime.strptime('19/02/2025', '%d/%m/%Y'), 'emotion': 'Anxious', 'colour': 'danger'},
-            {'date': datetime.strptime('23/02/2025', '%d/%m/%Y'), 'emotion': 'Calm', 'colour': 'info'},
-            {'date': datetime.strptime('26/02/2025', '%d/%m/%Y'), 'emotion': 'Anxious', 'colour': 'danger'},
-            {'date': datetime.strptime('01/03/2025', '%d/%m/%Y'), 'emotion': 'Happy', 'colour': 'warning'},
-            {'date': datetime.strptime('02/03/2025', '%d/%m/%Y'), 'emotion': 'Happy', 'colour': 'warning'},
-            {'date': datetime.strptime('04/03/2025', '%d/%m/%Y'), 'emotion': 'Happy', 'colour': 'warning'},
-            {'date': datetime.strptime('05/03/2025', '%d/%m/%Y'), 'emotion': 'Calm', 'colour': 'info'},
-            {'date': datetime.strptime('08/03/2025', '%d/%m/%Y'), 'emotion': 'Sad', 'colour': 'success'},
-            {'date': datetime.strptime('09/03/2025', '%d/%m/%Y'), 'emotion': 'Sad', 'colour': 'success'},
-            {'date': datetime.strptime('13/03/2025', '%d/%m/%Y'), 'emotion': 'Calm', 'colour': 'info'},
-            {'date': datetime.strptime('15/03/2025', '%d/%m/%Y'), 'emotion': 'Sad', 'colour': 'success'},
-            {'date': datetime.strptime('01/04/2025', '%d/%m/%Y'), 'emotion': 'Sad', 'colour': 'success'},
-            {'date': datetime.strptime('04/04/2025', '%d/%m/%Y'), 'emotion': 'Calm', 'colour': 'info'},
-            {'date': datetime.strptime('05/04/2025', '%d/%m/%Y'), 'emotion': 'Happy', 'colour': 'warning'},
-            {'date': datetime.strptime('06/04/2025', '%d/%m/%Y'), 'emotion': 'Calm', 'colour': 'info'},
-            {'date': datetime.strptime('07/04/2025', '%d/%m/%Y'), 'emotion': 'Calm', 'colour': 'info'},
-            {'date': datetime.strptime('20/04/2025', '%d/%m/%Y'), 'emotion': 'Calm', 'colour': 'info'}
-        ]
 
     @staticmethod
     def _create_logs_mapping(logs: list) -> dict:
