@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Dict, Any
 import sqlalchemy as sa
 import sqlalchemy.orm as so
 from flask_login import UserMixin
@@ -18,16 +18,18 @@ class User(UserMixin, db.Model, Base):
     email: so.Mapped[str] = so.mapped_column(sa.String(120), index=True, unique=True)
     password_hash: so.Mapped[Optional[str]] = so.mapped_column(sa.String(256))
     role: so.Mapped[str] = so.mapped_column(sa.String(24), nullable=False, default='Normal')
+    track_physiological: so.Mapped[bool] = so.mapped_column(default=False, nullable=False)
+    share_data: so.Mapped[bool] = so.mapped_column(default=False, nullable=False)
 
     # Relationships:
+    user_settings: so.Mapped[list['UserSettings']] = so.relationship(back_populates="user", cascade="all, delete-orphan", uselist=False)
     emotion_logs: so.Mapped[list['EmotionLog']] = so.relationship(back_populates="user", cascade="all, delete-orphan")
     test_result: so.Mapped[list['TestResult']] = so.relationship(back_populates="user", cascade="all, delete-orphan")
     notifications: so.Mapped[list['Notification']] = so.relationship(back_populates="user", cascade="all, delete-orphan")
     support_request: so.Mapped['SupportRequest'] = so.relationship(back_populates="user", cascade="all, delete-orphan")
 
-
     def __repr__(self):
-        return f"User(id={self.id}, username={self.username}, email={self.email}, role={self.role})"
+        return f"User(id={self.id}, username={self.username}, email={self.email}, role={self.role}, track_physiological={self.track_physiological})"
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -39,6 +41,44 @@ class User(UserMixin, db.Model, Base):
 @login.user_loader
 def load_user(id):
     return db.session.get(User, int(id))
+
+
+## User Settings
+class UserSettings(db.Model):
+    __tablename__ = 'users_settings'
+    id: so.Mapped[int] = so.mapped_column(primary_key=True)
+    user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey("users.id"), nullable=False)
+    mind_mirror_display: so.Mapped[Dict[str, Any]] = so.mapped_column(
+        sa.JSON, default=lambda: {
+            'heatmap': True,
+            'emotion_graph': True,
+            'emotion_info': True,
+            'track_activity': True,
+            'track_steps': True,
+            'track_heart_rate': True,
+            'heart_zones': True
+        }, nullable=False
+    )
+
+    # Relationship
+    user: so.Mapped['User'] = so.relationship(back_populates="user_settings")
+
+
+@sa.event.listens_for(User, 'after_insert')
+def create_user_settings(mapper, connection, target):
+    stmt = UserSettings.__table__.insert().values(
+        user_id=target.id,
+        mind_mirror_display={
+            'heatmap': True,
+            'emotion_graph': True,
+            'emotion_info': True,
+            'track_activity': False,
+            'track_steps': False,
+            'track_heart_rate': False,
+            'heart_zones': False
+        }
+    )
+    connection.execute(stmt)
 
 
 ## CheckIn Tables
@@ -53,7 +93,6 @@ class Person(db.Model):
     emotion_logs: so.Mapped['EmotionLog'] = so.relationship(back_populates="person")
 
 
-
 # Location Table - could be removed
 class Location(db.Model):
     __tablename__ = "locations"
@@ -63,7 +102,6 @@ class Location(db.Model):
 
     # Relationships:
     emotion_logs: so.Mapped['EmotionLog'] = so.relationship(back_populates="location")
-
 
 
 # Activity Table - could be removed
@@ -77,7 +115,6 @@ class Activity(db.Model):
     emotion_logs: so.Mapped['EmotionLog'] = so.relationship(back_populates="activity")
 
 
-
 # EmotionLog Table
 class EmotionLog(db.Model):
     __tablename__ = "emotion_logs"
@@ -86,7 +123,7 @@ class EmotionLog(db.Model):
     user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey("users.id"), nullable=False)
     time: so.Mapped[sa.DateTime] = so.mapped_column(sa.DateTime, default=datetime.utcnow)
     emotion: so.Mapped[str] = so.mapped_column(sa.String(50))
-    steps: so.Mapped[int] = so.mapped_column(sa.Integer) # Maybe update this to be nullable
+    steps: so.Mapped[int] = so.mapped_column(sa.Integer)  # Maybe update this to be nullable
     activity_duration: so.Mapped[int] = so.mapped_column(nullable=True)
     heart_rate: so.Mapped[int] = so.mapped_column(nullable=True)
     blood_pressure: so.Mapped[str] = so.mapped_column(sa.String(20), nullable=True)
@@ -103,6 +140,13 @@ class EmotionLog(db.Model):
     activity: so.Mapped['Activity'] = so.relationship(back_populates="emotion_logs")
     person: so.Mapped['Person'] = so.relationship(back_populates="emotion_logs")
 
+    def __repr__(self):
+        return (f"EmotionLog("
+                f"Log Id: {self.log_id}, User Id: {self.user_id}, Time: {self.time},"
+                f"Emotion: {self.emotion}, Steps: {self.steps}, Activity Duration: {self.activity_duration},"
+                f"Heart_rate: {self.heart_rate}, Blood Pressure: {self.blood_pressure},"
+                f"Free Notes: {self.free_notes})")
+
 
 ##Screening Tool tables
 # Condition Table
@@ -113,11 +157,11 @@ class Condition(db.Model):
     name: so.Mapped[str] = so.mapped_column(sa.String(255), nullable=False, unique=True)
     threshold: so.Mapped[int] = so.mapped_column(sa.Integer, nullable=False)
 
-
     # Relationships:
-    questions: so.Mapped[list['ConditionQuestion']] = so.relationship(back_populates="condition", cascade="all, delete-orphan")
-    test_result: so.Mapped[list['TestResult']] = so.relationship(back_populates="condition", cascade="all, delete-orphan")
-
+    questions: so.Mapped[list['ConditionQuestion']] = so.relationship(back_populates="condition",
+                                                                      cascade="all, delete-orphan")
+    test_result: so.Mapped[list['TestResult']] = so.relationship(back_populates="condition",
+                                                                 cascade="all, delete-orphan")
 
     # Relationships through secondary tables
     therapeutic_recs: so.Mapped[list['TherapeuticRec']] = so.relationship(

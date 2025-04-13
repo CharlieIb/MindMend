@@ -1,13 +1,11 @@
 from app import app
 from app import db
-from app.utils import (ConditionManager, ResourceManager, TherapeuticRecManager, TestResultManager,
-                       EmotionLogManager, ActivityManager, LocationManager, PersonManager,
-                       HeatMap, TrackHealth, TrackEmotions)
+from app.utils import (ConditionManager, ResourceManager, TherapeuticRecManager, TestResultManager, EmotionLogManager,
+                       ActivityManager, LocationManager, PersonManager, HeatMap, TrackHealth)
 from functools import wraps
 from flask import abort, flash
 from flask_login import current_user
 from datetime import datetime
-
 
 
 ##################### GENERAL ##################################
@@ -19,12 +17,15 @@ def roles_required(*roles):
             if current_user.role not in roles:
                 abort(403)
             return f(*args, **kwargs)
+
         return wrapper
+
     return decorator
 
 
 ################ Initializing App ####################
 initialized = False
+
 
 def initialize_app(app):
     global initialized
@@ -66,14 +67,17 @@ def _demo_managers(app):
     print(f"Demo:\n{condition.name}\n{questions}\n{recommendations}\n{resources}\n{user_test_results}")
 
 
-
 ######################### MindMirror ##################################
 def get_heatmap_info():
     now = datetime.now()
     curr_day, curr_month, curr_year = now.day, now.month, now.year
 
-    # Data would normally get queries from db and passed to HeatMap
-    heatmap = HeatMap(curr_day, curr_month, curr_year)
+    data_log = [
+        {'date': log.time, 'emotion': log.emotion}
+        for log in current_user.emotion_logs
+    ]
+
+    heatmap = HeatMap(curr_day, curr_month, curr_year, data_log)
     month, year = heatmap.month_display(), heatmap.year_display()
     months = [
         'January', 'February', 'March',
@@ -128,29 +132,64 @@ def get_health_info():
 
 
 def get_emotions_info():
-    # Data would normally get queries from db and passed to TrackEmotions
-    track_emotions = TrackEmotions()
-    emotion_count = track_emotions.count_emotions()
-    total_emotion_logs = sum(info['length'] for info in emotion_count.values())
-    emotions_percentage = {
-        emotion: {
-            'percentage': round(((info['length'] / total_emotion_logs) * 100) / 2),
-            'colour': info['colour']
+    default_emotions = {
+        'Calm': 0, 'Excited': 0, 'Anxious': 0, 'Stressed': 0,
+        'Energetic': 0, 'Angry': 0, 'Sad': 0, 'Happy': 0
+    }
+
+    try:
+        emotions = default_emotions.copy()
+        for log in current_user.emotion_logs:
+            emotions[log.emotion] = emotions.get(log.emotion, 0) + 1
+
+        total_emotions = sum(emotions.values())
+        if total_emotions:
+            emotions_percentage = {
+                emotion: round(((emotions[emotion] / total_emotions) * 100) / 2)
+                for emotion in emotions
+            }
+            max_emotion, max_value = max(
+                emotions_percentage.items(), key=lambda item: item[1], default=(None, 0)
+            )
+            max_num = [max_emotion, max_value * 2]
+            segments = []
+            cumulative = 0
+            for emotion, value in emotions_percentage.items():
+                cumulative += value
+                segments.append({'emotion': emotion, 'value': value, 'cumulative': cumulative})
+        else:
+            emotions_percentage = default_emotions.copy()
+            segments = [
+                {'emotion': emotion, 'value': 0, 'cumulative': -1}
+                for emotion in default_emotions
+            ]
+            max_num = [None, 0]
+
+        track_emotions_info = {
+            'emotions': emotions,
+            'total_emotion_logs': total_emotions,
+            'emotions_percentage': emotions_percentage,
+            'segments': segments,
+            'max_num': max_num
         }
-        for emotion, info in emotion_count.items()
-    }
-    sorted_emotions_percentage = dict(sorted(emotions_percentage.items(), key=lambda item: item[1]['percentage']))
-    track_emotions_info = {
-        'emotion_count': emotion_count,
-        'total_emotion_logs': total_emotion_logs,
-        'emotions_percentage_unsorted': emotions_percentage,
-        'emotions_percentage': sorted_emotions_percentage,
-        'max_num': max(info['length'] for info in emotion_count.values())
-    }
-    return track_emotions_info
-
-
-
+        return track_emotions_info
+    except Exception as e:
+        print(f"Error: {e}")
+        emotions = default_emotions.copy()
+        total_emotions = 0
+        emotions_percentage = default_emotions.copy()
+        segments = [
+            {'emotion': emotion, 'value': 0, 'cumulative': 0}
+            for emotion in default_emotions
+        ]
+        max_num = [None, 0]
+        return {
+            'emotions': emotions,
+            'total_emotion_logs': total_emotions,
+            'emotions_percentage': emotions_percentage,
+            'segments': segments,
+            'max_num': max_num
+        }
 
 
 ################### SCREENING TOOL ##############################
@@ -159,6 +198,7 @@ def selectConditions(selected_symptoms):
     ### TO-DO: Replace function with actual logic of selecting condition
     conditions = [int(id) for id in selected_symptoms]
     return conditions
+
 
 def generate_questionnaires(conditions):
     questionnaires = {}  # Dictionary to store the results

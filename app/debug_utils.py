@@ -25,11 +25,13 @@ emotion_combinations = [
     ("Energetic", (5000, 15000), (60, 180), (80, 110), "120/75-140/85", [4, 5], [3, 4], [2, 3, 4]),
     ("Anxious", (1000, 4000), (30, 120), (85, 105), "125/80-145/95", [1, 3, 6], [1, 2, 6], [1, 6]),
     ("Sad", (500, 2000), (120, 360), (65, 85), "105/70-125/80", [2, 7], [7], [3, 4]),
-    ("Excited", (4000, 12000), (60, 180), (85, 100), "115/75-135/85", [3, 5], [3, 4, 6], [2, 3, 4])
+    ("Excited", (4000, 12000), (60, 180), (85, 100), "115/75-135/85", [3, 5], [3, 4, 6], [2, 3, 4]),
+    ("Angry", (100, 9000), (10, 180), (85, 200), "90/80-125/95", [1, 3], [1, 2, 5], [1, 2, 4])
 ]
 
 def generate_emotion_logs(user_id, count=100):
     logs = []
+    used_times = set()
     for i in range(count):
         # Choose a random emotion profile
         emotion_profile = random.choice(emotion_combinations)
@@ -48,9 +50,16 @@ def generate_emotion_logs(user_id, count=100):
         person_id = random.choice(emotion_profile[7])
 
         # Generate timestamp - spread over last 90 days
-        time = datetime.utcnow() - timedelta(days=random.randint(1, 90),
-                                             hours=random.randint(0, 23),
-                                             minutes=random.randint(0, 59))
+        while True:
+            time_candidate = datetime.utcnow() - timedelta(
+                days=random.randint(1, 120),
+                hours=random.randint(0, 23),
+                minutes=random.randint(0, 59)
+            )
+            candidate_date = time_candidate.date()
+            if candidate_date not in used_times:
+                used_times.add(candidate_date)
+                break
 
         # Create free notes based on activity
         notes = generate_free_note(activity_id, location_id, person_id, emotion)
@@ -66,7 +75,7 @@ def generate_emotion_logs(user_id, count=100):
             location_id=location_id,
             activity_id=activity_id,
             person_id=person_id,
-            time=time
+            time=time_candidate
         )
         logs.append(log)
     return logs

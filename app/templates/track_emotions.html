@@ -1,28 +1,30 @@
 {% import 'widget_macro.html' as macro %}
-{% call macro.medium_widget_four(
-medium_widget_four,
-title="Emotion Info",
-label_one="Anxious", content_one=track_emotions_info.emotion_count.anxious.length,
-label_two="Calm", content_two=track_emotions_info.emotion_count.calm.length,
-label_three="Happy", content_three=track_emotions_info.emotion_count.happy.length,
-label_four="Sad", content_four=track_emotions_info.emotion_count.sad.length
+{% call macro.medium_widget_eight(
+    medium_widget_eight,
+    title="Emotion Info",
+    label_one="Calm", content_one=track_emotions_info.emotions.Calm,
+    label_two="Excited", content_two=track_emotions_info.emotions.Excited,
+    label_three="Anxious", content_three=track_emotions_info.emotions.Anxious,
+    label_four="Stressed", content_four=track_emotions_info.emotions.Stressed,
+    label_five="Energetic", content_five=track_emotions_info.emotions.Energetic,
+    label_six="Angry", content_six=track_emotions_info.emotions.Angry,
+    label_seven="Sad", content_seven=track_emotions_info.emotions.Sad,
+    label_eight="Happy", content_eight=track_emotions_info.emotions.Happy
 ) %}
-    {% set percentages = track_emotions_info.emotions_percentage.values() | list %}
-    {% set cum0 = percentages[0]['percentage'] %}
-    {% set cum1 = cum0 + percentages[1]['percentage'] %}
-    {% set cum2 = cum1 + percentages[2]['percentage'] %}
-    {% set cum3 = cum2 + percentages[3]['percentage'] %}
-    {% for i in range(0, 50) %}
-        {% set base_class =
-            'bg-' ~ percentages[0]['colour'] ~ ' border border-' ~ percentages[0]['colour']
-            if i < cum0
-            else 'bg-' ~ percentages[1]['colour'] ~ ' border border-' ~ percentages[1]['colour']
-                if i < cum1
-            else 'bg-' ~ percentages[2]['colour'] ~ ' border border-' ~ percentages[2]['colour']
-                if i < cum2
-            else 'bg-' ~ percentages[3]['colour'] ~ ' border border-' ~ percentages[3]['colour']
-        %}
-        {% set rounded_class = ' rounded-start' if i == 0 else ' rounded-end' if i == 49 else '' %}
-        <div class="{{ base_class }}{{ rounded_class }} progress_bar"></div>
+    {% set ns = namespace(base_class='') %}
+    {% set total_bars = track_emotions_info.segments[-1].cumulative + 1 %}
+    {% for i in range(0, total_bars) %}
+        {% set ns.base_class = '' %}
+        {% for segment in track_emotions_info.segments %}
+            {% if ns.base_class == '' and i <= segment.cumulative %}
+                {% set ns.base_class = segment.emotion %}
+            {% endif %}
+        {% endfor %}
+        {% if ns.base_class == '' %}
+            {% set ns.base_class = 'default' %}
+        {% endif %}
+        {% set border_class = ns.base_class ~ '_border' %}
+        {% set rounded_class = ' rounded-start' if i == 0 else ' rounded-end' if i == (total_bars - 1) else '' %}
+        <div class="{{ ns.base_class }} {{ border_class }}{{ rounded_class }} progress_bar"></div>
     {% endfor %}
 {% endcall %}
