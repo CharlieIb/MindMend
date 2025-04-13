@@ -241,6 +241,7 @@ def track_physiological():
     flash(f"Your physiological is being tracked: {current_user.track_physiological}", 'success')
     return redirect(url_for('settings'))
 
+
 @app.route('/share_data', methods=['GET', 'POST'])
 @login_required
 def share_data():
@@ -271,23 +272,12 @@ def mindmirror():
     track_health_info = get_health_info()
     track_emotions_info = get_emotions_info()
 
-    if 'mindmirror_display' not in session:
-        session['mindmirror_display'] = {
-            'heatmap': True,
-            'emotion_graph': True,
-            'emotion_info': True,
-            'track_activity': True,
-            'track_steps': True,
-            'track_heart_rate': True,
-            'heart_zones': True
-        }
-
     return render_template(
         'mindmirror.html',
         title='MindMirror',
         form_display=form_display,
         heatmap_info=heatmap_info,
-        mindmirror_display=session.get('mindmirror_display', {}),
+        mindmirror_display=current_user.user_settings.mind_mirror_display,
         track_health_info=track_health_info,
         track_emotions_info=track_emotions_info
     )
@@ -297,9 +287,10 @@ def mindmirror():
 @app.route('/mindmirror_edit', methods=['GET', 'POST'])
 @login_required
 def mindmirror_edit():
-    form = MindMirrorLayoutForm(data=session['mindmirror_display'])
+    mind_mirror_display = current_user.user_settings.mind_mirror_display
+    form = MindMirrorLayoutForm(data=mind_mirror_display)
     if form.validate_on_submit():
-        session['mindmirror_display'] = {
+        current_user.user_settings.mind_mirror_display = {
             'heatmap': form.heatmap.data,
             'emotion_graph': form.emotion_graph.data,
             'emotion_info': form.emotion_info.data,
@@ -308,6 +299,8 @@ def mindmirror_edit():
             'track_heart_rate': form.track_heart_rate.data,
             'heart_zones': form.heart_zones.data
         }
+        db.session.commit()
+
         return redirect(url_for('mindmirror'))
 
     return render_template(

@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Dict, Any
 import sqlalchemy as sa
 import sqlalchemy.orm as so
 from flask_login import UserMixin
@@ -22,6 +22,7 @@ class User(UserMixin, db.Model, Base):
     share_data: so.Mapped[bool] = so.mapped_column(default=False, nullable=False)
 
     # Relationships:
+    user_settings: so.Mapped[list['UserSettings']] = so.relationship(back_populates="user", cascade="all, delete-orphan", uselist=False)
     emotion_logs: so.Mapped[list['EmotionLog']] = so.relationship(back_populates="user", cascade="all, delete-orphan")
     test_result: so.Mapped[list['TestResult']] = so.relationship(back_populates="user", cascade="all, delete-orphan")
     notifications: so.Mapped[list['Notification']] = so.relationship(back_populates="user", cascade="all, delete-orphan")
@@ -40,6 +41,44 @@ class User(UserMixin, db.Model, Base):
 @login.user_loader
 def load_user(id):
     return db.session.get(User, int(id))
+
+
+## User Settings
+class UserSettings(db.Model):
+    __tablename__ = 'users_settings'
+    id: so.Mapped[int] = so.mapped_column(primary_key=True)
+    user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey("users.id"), nullable=False)
+    mind_mirror_display: so.Mapped[Dict[str, Any]] = so.mapped_column(
+        sa.JSON, default=lambda: {
+            'heatmap': True,
+            'emotion_graph': True,
+            'emotion_info': True,
+            'track_activity': True,
+            'track_steps': True,
+            'track_heart_rate': True,
+            'heart_zones': True
+        }, nullable=False
+    )
+
+    # Relationship
+    user: so.Mapped['User'] = so.relationship(back_populates="user_settings")
+
+
+@sa.event.listens_for(User, 'after_insert')
+def create_user_settings(mapper, connection, target):
+    stmt = UserSettings.__table__.insert().values(
+        user_id=target.id,
+        mind_mirror_display={
+            'heatmap': True,
+            'emotion_graph': True,
+            'emotion_info': True,
+            'track_activity': False,
+            'track_steps': False,
+            'track_heart_rate': False,
+            'heart_zones': False
+        }
+    )
+    connection.execute(stmt)
 
 
 ## CheckIn Tables

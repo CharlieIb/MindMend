@@ -84,11 +84,11 @@ class MindMirrorLayoutForm(FlaskForm):
     heatmap = BooleanField('Check In Activity Heatmap', default=True)
     emotion_graph = BooleanField('Emotion Graph', default=True)
     emotion_info = BooleanField('Emotion Info', default=True)
-    track_activity = BooleanField('Track Activity', default=True)
-    track_steps = BooleanField('Track Steps', default=True)
-    track_heart_rate = BooleanField('Track Heart Rate', default=True)
-    track_blood_pressure = BooleanField('Blood Pressure', default=True)
-    heart_zones = BooleanField('Heart Zones', default=True)
+    track_activity = BooleanField('Track Activity', default=False)
+    track_steps = BooleanField('Track Steps', default=False)
+    track_heart_rate = BooleanField('Track Heart Rate', default=False)
+    track_blood_pressure = BooleanField('Blood Pressure', default=False)
+    heart_zones = BooleanField('Heart Zones', default=False)
     submit = SubmitField('Submit')
 
 
