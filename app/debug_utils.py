@@ -31,6 +31,7 @@ emotion_combinations = [
 
 def generate_emotion_logs(user_id, count=100):
     logs = []
+    used_times = set()
     for i in range(count):
         # Choose a random emotion profile
         emotion_profile = random.choice(emotion_combinations)
@@ -49,9 +50,16 @@ def generate_emotion_logs(user_id, count=100):
         person_id = random.choice(emotion_profile[7])
 
         # Generate timestamp - spread over last 90 days
-        time = datetime.utcnow() - timedelta(days=random.randint(1, 90),
-                                             hours=random.randint(0, 23),
-                                             minutes=random.randint(0, 59))
+        while True:
+            time_candidate = datetime.utcnow() - timedelta(
+                days=random.randint(1, 120),
+                hours=random.randint(0, 23),
+                minutes=random.randint(0, 59)
+            )
+            candidate_date = time_candidate.date()
+            if candidate_date not in used_times:
+                used_times.add(candidate_date)
+                break
 
         # Create free notes based on activity
         notes = generate_free_note(activity_id, location_id, person_id, emotion)
@@ -67,7 +75,7 @@ def generate_emotion_logs(user_id, count=100):
             location_id=location_id,
             activity_id=activity_id,
             person_id=person_id,
-            time=time
+            time=time_candidate
         )
         logs.append(log)
     return logs
