@@ -25,6 +25,10 @@
         {% endfor %}
     </div>
     <div class="bg-light border rounded d-flex justify-content-center align-items-center w-100">
-        <div class="widget_caller text-center {{ track_emotions_info.max_num[0] }} rounded w-100">Most logged: {{ track_emotions_info.max_num[0] }} - {{ track_emotions_info.max_num[1] }}%</div>
+        {% if track_emotions_info.max_num[1] > 0 %}
+        <div class="widget_caller text-center {{ track_emotions_info.max_num[0] }} rounded w-100">
+            Most logged: {{ track_emotions_info.max_num[0] }} - {{ track_emotions_info.max_num[1] }}%
+        </div>
+        {% endif %}
     </div>
 </div>

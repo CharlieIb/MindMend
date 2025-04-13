@@ -132,27 +132,64 @@ def get_health_info():
 
 
 def get_emotions_info():
-    emotions = {}
-    for log in current_user.emotion_logs:
-        emotions[log.emotion] = emotions.get(log.emotion, 0) + 1
-    total_emotions = sum(x for x in emotions.values())
-    emotions_percentage = {emotion: round(((emotions[emotion] / total_emotions) * 100) / 2) for emotion in emotions}
-    max_emotion, max_value = max(emotions_percentage.items(), key=lambda item: item[1])
-    max_num = [max_emotion, max_value * 2]
-    segments = []
-    cumulative = 0
-    for emotion, value in emotions_percentage.items():
-        cumulative += value
-        segments.append({'emotion': emotion, 'value': value, 'cumulative': cumulative})
-
-    track_emotions_info = {
-        'emotions': emotions,
-        'total_emotion_logs': total_emotions,
-        'emotions_percentage': emotions_percentage,
-        'segments': segments,
-        'max_num': max_num
+    default_emotions = {
+        'Anxious': 0, 'Sad': 0, 'Angry': 0, 'Happy': 0,
+        'Stressed': 0, 'Energetic': 0, 'Excited': 0, 'Calm': 0
     }
-    return track_emotions_info
+
+    try:
+        emotions = default_emotions.copy()
+        for log in current_user.emotion_logs:
+            emotions[log.emotion] = emotions.get(log.emotion, 0) + 1
+
+        total_emotions = sum(emotions.values())
+        if total_emotions:
+            emotions_percentage = {
+                emotion: round(((emotions[emotion] / total_emotions) * 100) / 2)
+                for emotion in emotions
+            }
+            max_emotion, max_value = max(
+                emotions_percentage.items(), key=lambda item: item[1], default=(None, 0)
+            )
+            max_num = [max_emotion, max_value * 2]
+            segments = []
+            cumulative = 0
+            for emotion, value in emotions_percentage.items():
+                cumulative += value
+                segments.append({'emotion': emotion, 'value': value, 'cumulative': cumulative})
+        else:
+            emotions_percentage = default_emotions.copy()
+            segments = [
+                {'emotion': emotion, 'value': 0, 'cumulative': -1}
+                for emotion in default_emotions
+            ]
+            max_num = [None, 0]
+
+        track_emotions_info = {
+            'emotions': emotions,
+            'total_emotion_logs': total_emotions,
+            'emotions_percentage': emotions_percentage,
+            'segments': segments,
+            'max_num': max_num
+        }
+        return track_emotions_info
+    except Exception as e:
+        print(f"Error: {e}")
+        emotions = default_emotions.copy()
+        total_emotions = 0
+        emotions_percentage = default_emotions.copy()
+        segments = [
+            {'emotion': emotion, 'value': 0, 'cumulative': 0}
+            for emotion in default_emotions
+        ]
+        max_num = [None, 0]
+        return {
+            'emotions': emotions,
+            'total_emotion_logs': total_emotions,
+            'emotions_percentage': emotions_percentage,
+            'segments': segments,
+            'max_num': max_num
+        }
 
 
 ################### SCREENING TOOL ##############################
