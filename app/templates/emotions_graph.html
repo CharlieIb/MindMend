@@ -1,25 +1,28 @@
 <div class="border rounded-3 d-flex flex-column align-items-start justify-content-between p-1 medium_widget">
     <h3 class="bg-light text-center rounded-3 py-1 w-100">Emotion Graph</h3>
-    <div class="d-flex flex-column">
-        {% for emotion, info in track_emotions_info.emotions_percentage_unsorted.items() %}
-        <div class="d-flex align-items-center mt-1">
-            <h4 class="d-flex align-items-center justify-content-center bg-light text-body-secondary text-center rounded-start-3 m-0 small_widget_title">
+    <div class="d-flex flex-column align-items-between">
+        {% for emotion, percentage in track_emotions_info.emotions_percentage.items() %}
+        <div class="d-flex">
+            <h4 class="bg-light text-body-secondary text-center rounded-3 py-3 graph_widget_title">
                 {{ emotion|title }}
             </h4>
-            {% if track_emotions_info.max_num <= 12 %}
-               {% set graph_style = 'graph_bar_big' %}
-            {% elif 12 < track_emotions_info.max_num < 30 %}
-               {% set graph_style = 'graph_bar_med' %}
-            {% elif 30 <= track_emotions_info.max_num <= 50 %}
-               {% set graph_style = 'graph_bar_small' %}
+            {% if track_emotions_info.max_num[1] <= 10 %}
+            {% set graph_style = 'graph_bar_big' %}
+            {% elif track_emotions_info.max_num[1] <= 30 %}
+            {% set graph_style = 'graph_bar_med' %}
+            {% elif track_emotions_info.max_num[1] <= 50 %}
+            {% set graph_style = 'graph_bar_small' %}
             {% endif %}
             <div class="d-flex flex-grow-1 align-items-center ms-1">
-                {% for i in range(info['percentage']) %}
-                <div class="bg-{{ info['colour'] }} {{ graph_style }} {{ 'rounded-end-3' if i == info['percentage'] - 1 else '' }}">
+                {% for i in range(percentage) %}
+                <div class="{{ emotion }} {{ graph_style }} {{ 'rounded-end-3' if i == percentage - 1 else '' }}">
                 </div>
                 {% endfor %}
             </div>
         </div>
         {% endfor %}
+    </div>
+    <div class="bg-light border rounded d-flex justify-content-center align-items-center w-100">
+        <div class="widget_caller text-center {{ track_emotions_info.max_num[0] }} rounded w-100">Most logged: {{ track_emotions_info.max_num[0] }} - {{ track_emotions_info.max_num[1] }}%</div>
     </div>
 </div>
