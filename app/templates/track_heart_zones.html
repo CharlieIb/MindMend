@@ -7,13 +7,14 @@
 {% set zone_five = track_health_info.heart_zones.zone_five %}
 
 {% call macro.medium_widget_five(
-medium_widget_five,
-title="Heart Zones",
-label_one="Zone 5", content_one=(zone_five.minimum)|string ~'-'~ (zone_five.maximum)|string, bg_colour_one='bg-warning',
-label_two="Zone 4", content_two=(zone_four.minimum)|string ~'-'~ (zone_four.maximum)|string, bg_colour_two='bg-primary',
-label_three="Zone 3", content_three=(zone_three.minimum)|string ~'-'~ (zone_three.maximum)|string, bg_colour_three='bg-info',
-label_four="Zone 2", content_four=(zone_two.minimum)|string ~'-'~ (zone_two.maximum)|string, bg_colour_four='bg-success',
-label_five="Zone 1", content_five=(zone_one.minimum)|string ~'-'~ (zone_one.maximum)|string, bg_colour_five='bg-warning-subtle'
+    medium_widget_five,
+    title="Heart Zones",
+    label_one="Zone 5", content_one=(zone_five.minimum)|string ~'-'~ (zone_five.maximum)|string, bg_colour_one='bg-warning',
+    label_two="Zone 4", content_two=(zone_four.minimum)|string ~'-'~ (zone_four.maximum)|string, bg_colour_two='bg-primary',
+    label_three="Zone 3", content_three=(zone_three.minimum)|string ~'-'~ (zone_three.maximum)|string, bg_colour_three='bg-info',
+    label_four="Zone 2", content_four=(zone_two.minimum)|string ~'-'~ (zone_two.maximum)|string, bg_colour_four='bg-success',
+    label_five="Zone 1", content_five=(zone_one.minimum)|string ~'-'~ (zone_one.maximum)|string, bg_colour_five='bg-warning-subtle',
+    content_info=track_health_info.age
 ) %}
 <div class="d-flex flex-column">
     {% set zone_one_scaled = track_health_info.heart_zones_scaled.zone_one %}

@@ -35,7 +35,8 @@
     label_two="", content_two=None, bg_colour_two='bg-light',
     label_three="", content_three=None, bg_colour_three='bg-light',
     label_four="", content_four=None, bg_colour_four='bg-light',
-    label_five="", content_five=None, bg_colour_five='bg-light'
+    label_five="", content_five=None, bg_colour_five='bg-light',
+    content_info=""
 ) %}
 <div class="border rounded-3 d-flex align-items-center justify-content-between flex-column p-1 medium_widget">
     <h3 class="bg-light text-center rounded-3 py-1 w-100">{{ title }}</h3>
@@ -55,11 +56,13 @@
 
             <h4 class="{{ bg_colour_five }} text-body-secondary text-center rounded-3 py-1 mt-2 medium_widget_title">{{ label_five }}</h4>
             <h4 class="bg-light fw-bold text-center rounded-3 p-3 mb-0">{{ content_five }}</h4>
+
         </div>
         <div class="bg-light border rounded d-flex justify-content-center align-items-center mb-0 w-100 mh-100">
             {{ caller() }}
         </div>
     </div>
+    <div class="bg-dark text-light text-center rounded-3 mt-1 m-0 w-100 small_text">Heart Rate Zones for a {{ content_info }} year old</div>
 </div>
 {% endmacro %}
 
