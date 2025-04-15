@@ -5,9 +5,11 @@
 <div class="container">
     <h1>Your Results</h1>
     <hr class="border-5">
-        {% for score in scores  %}
-            <h5>{{ score.condition }} : {{ score.score }}</h5>
-        {% endfor %}
+        {% if results %}
+            {% for cond in results  %}
+                <h5>You may have {{ cond }}</h5>
+            {% endfor %}
+        {% endif %}
 
     <hr class="border-5">
     <h5>Here are some recommendations:</h5>

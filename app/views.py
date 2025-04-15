@@ -357,7 +357,7 @@ def answer_questionnaire():
     form = AnswerQuestionnaireForm(obj=None)
 
     if form.validate_on_submit():
-        scores = []
+        results = []
 
         for cond_id, condition_info in questionnaires.items():
             condition_score = 0
@@ -367,9 +367,10 @@ def answer_questionnaire():
                 if user_answer == 'True':
                     condition_score += question['value']
 
-                ### TO-DO: Check Threshold and get necessary actions ###
-            scores.append({'condition': condition_info['name'], 'score': condition_score})
-        return render_template('results.html', scores=scores, title="Questionnaire Result")
+                ### TO-DO: Get necessary actions ###
+            if condition_score > condition_info['threshold']:
+                results.append(condition_info['name'])
+        return render_template('results.html', results=results, title="Questionnaire Result")
     return render_template('questionnaire.html', questionnaires=questionnaires, title='Questionnaire',
                            form=form, enumerate=enumerate)
 
