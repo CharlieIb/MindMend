@@ -208,8 +208,6 @@ class TherapeuticRec(db.Model):
 
     rec_id: so.Mapped[int] = so.mapped_column(primary_key=True)
     description: so.Mapped[str] = so.mapped_column(sa.Text, nullable=False, unique=True)
-    evidence_based: so.Mapped[bool] = so.mapped_column(sa.Boolean, default=False)
-    source: so.Mapped[str] = so.mapped_column(sa.String(256))
     treatments: so.Mapped[str] = so.mapped_column(sa.Text)
 
     # Relationship:

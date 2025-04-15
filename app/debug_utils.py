@@ -240,10 +240,9 @@ def reset_db():
                 {"q_number": 8, "question": "Do you have trouble sleeping?", "value": 1},
             ],
             "therapeutic_recs": [
-                {"description": "Practice mindfulness meditation for 10 minutes daily.", "evidence_based": True,
-                 "source": "NIH", "treatments": "Mindfulness-Based Stress Reduction (MBSR)"},
-                {"description": "Engage in regular physical exercise, such as yoga or jogging.", "evidence_based": True,
-                 "source": "Mayo Clinic", "treatments": "Exercise Therapy"},
+                {"description": "Reach out to your doctor for further help", "treatments": "Medical help"},
+                {"description": "Practice mindfulness meditation for 10 minutes daily.", "treatments": "Mindfulness-Based Stress Reduction (MBSR)"},
+                {"description": "Engage in regular physical exercise, such as yoga or jogging.", "treatments": "Exercise Therapy"},
             ],
             "resources": [
                 {"label": "Anxiety and Depression Association of America", "link": "https://adaa.org"},
@@ -270,10 +269,11 @@ def reset_db():
                  "question": "Have you worried about having another panic attack for at least one month?", "value": 1},
             ],
             "therapeutic_recs": [
+                {"description": "Reach out to your doctor for further help", "treatments": "Medical help"},
                 {"description": "Learn and practice deep breathing techniques to manage panic symptoms.",
-                 "evidence_based": True, "source": "APA", "treatments": "Cognitive Behavioral Therapy (CBT)"},
+                 "treatments": "Cognitive Behavioral Therapy (CBT)"},
                 {"description": "Gradual exposure to feared situations with the help of a therapist.",
-                 "evidence_based": True, "source": "NIH", "treatments": "Exposure Therapy"},
+                 "treatments": "Exposure Therapy"},
             ],
             "resources": [
                 {"label": "National Institute of Mental Health - Panic Disorder",
@@ -298,10 +298,11 @@ def reset_db():
                  "value": 1},
             ],
             "therapeutic_recs": [
+                {"description": "Reach out to your doctor for further help", "treatments": "Medical help"},
                 {"description": "Practice gradual exposure to social situations with the help of a therapist.",
-                 "evidence_based": True, "source": "APA", "treatments": "Exposure Therapy"},
+                 "treatments": "Exposure Therapy"},
                 {"description": "Learn and practice social skills through role-playing exercises.",
-                 "evidence_based": True, "source": "NIH", "treatments": "Social Skills Training"},
+                 "treatments": "Social Skills Training"},
             ],
             "resources": [
                 {"label": "Social Anxiety Association", "link": "https://socialphobia.org"},
@@ -324,10 +325,11 @@ def reset_db():
                 {"q_number": 7, "question": "Have you had thoughts of death, self-harm, or suicide?", "value": 3},
             ],
             "therapeutic_recs": [
+                {"description": "Reach out to your doctor for further help", "treatments": "Medical help"},
                 {"description": "Engage in regular physical activity, such as walking or jogging.",
-                 "evidence_based": True, "source": "Mayo Clinic", "treatments": "Exercise Therapy"},
+                 "treatments": "Exercise Therapy"},
                 {"description": "Consider cognitive behavioral therapy (CBT) to address negative thought patterns.",
-                 "evidence_based": True, "source": "APA", "treatments": "CBT"},
+                 "treatments": "CBT"},
             ],
             "resources": [
                 {"label": "National Institute of Mental Health - Depression",
@@ -348,10 +350,10 @@ def reset_db():
                 {"q_number": 4, "question": "Do you weigh yourself or check your body obsessively?", "value": 1},
             ],
             "therapeutic_recs": [
-                {"description": "Work with a dietitian to develop a healthy meal plan.", "evidence_based": True,
-                 "source": "NIH", "treatments": "Nutritional Counseling"},
+                {"description": "Reach out to your doctor for further help", "treatments": "Medical help"},
+                {"description": "Work with a dietitian to develop a healthy meal plan.", "treatments": "Nutritional Counseling"},
                 {"description": "Engage in family-based therapy (FBT) to address underlying issues.",
-                 "evidence_based": True, "source": "APA", "treatments": "Family-Based Therapy"},
+                "treatments": "Family-Based Therapy"},
             ],
             "resources": [
                 {"label": "National Eating Disorders Association", "link": "https://www.nationaleatingdisorders.org"},
@@ -373,10 +375,11 @@ def reset_db():
                  "value": 1},
             ],
             "therapeutic_recs": [
+                {"description": "Reach out to your doctor for further help", "treatments": "Medical help"},
                 {"description": "Consider cognitive behavioral therapy (CBT) to address binge-purge cycles.",
-                 "evidence_based": True, "source": "APA", "treatments": "CBT"},
-                {"description": "Practice mindfulness to reduce emotional triggers for bingeing.",
-                 "evidence_based": True, "source": "NIH", "treatments": "Mindfulness-Based Therapy"},
+                 "treatments": "CBT"},
+                {"description": "Practice mindfulness to reduce emotional triggers for binging.",
+                 "treatments": "Mindfulness-Based Therapy"},
             ],
             "resources": [
                 {"label": "Bulimia Nervosa Resource Center", "link": "https://www.bulimia.com"},
@@ -396,10 +399,10 @@ def reset_db():
                 {"q_number": 5, "question": "Has this happened at least once a week for 3 months?", "value": 1},
             ],
             "therapeutic_recs": [
+                {"description": "Reach out to your doctor for further help", "treatments": "Medical help"},
                 {"description": "Engage in dialectical behavior therapy (DBT) to manage emotional eating.",
-                 "evidence_based": True, "source": "APA", "treatments": "DBT"},
-                {"description": "Keep a food diary to identify triggers for binge episodes.", "evidence_based": True,
-                 "source": "NIH", "treatments": "Self-Monitoring"},
+                "treatments": "DBT"},
+                {"description": "Keep a food diary to identify triggers for binge episodes.", "treatments": "Self-Monitoring"},
             ],
             "resources": [
                 {"label": "Binge Eating Disorder Association", "link": "https://www.bedaonline.com"},
@@ -409,22 +412,20 @@ def reset_db():
         },
         {
             "name": "Substance Use Disorder",
-            "threshold": 7,
+            "threshold": 3,
             "questions": [
-                {"q_number": 1, "question": "Do you use substances more than intended?", "value": 2},
-                {"q_number": 2, "question": "Have you tried unsuccessfully to cut down?", "value": 2},
+                {"q_number": 1, "question": "Have you had a strong desire/compulsion to consume the substance?", "value": 1},
+                {"q_number": 2, "question": "Do you find yourself thinking (preoccupied) with use of the substance?", "value": 1},
                 {"q_number": 3,
-                 "question": "Do you spend a lot of time obtaining, using, or recovering from substances?", "value": 2},
-                {"q_number": 4, "question": "Have you continued using despite negative consequences?", "value": 1},
-                {"q_number": 5, "question": "Do you experience cravings?", "value": 1},
-                {"q_number": 6, "question": "Do you have withdrawal symptoms?", "value": 3},
+                 "question": "Have you experienced any symptoms when trying to cut down or quit?", "value": 1},
+                {"q_number": 4, "question": "Have you found it difficult to quit the substance?", "value": 1},
+                {"q_number": 5, "question": "Do you find yourself having to take more of the substance for the same effect?", "value": 1},
+                {"q_number": 6, "question": "Does the substance have harmful effects on yourself and your relationships?", "value": 1},
             ],
             "therapeutic_recs": [
-                {
-                    "description": "Consider joining a support group like Alcoholics Anonymous (AA) or Narcotics Anonymous (NA).",
-                    "evidence_based": True, "source": "NIH", "treatments": "Support Groups"},
-                {"description": "Work with a therapist to address underlying causes of substance use.",
-                 "evidence_based": True, "source": "APA", "treatments": "CBT"},
+                {"description": "Reach out to your doctor for further help", "treatments": "Medical help"},
+                 {"description": "Consider joining a support group like Alcoholics Anonymous (AA) or Narcotics Anonymous (NA).", "treatments": "Support Groups"},
+                {"description": "Work with a medical professional to address underlying causes of substance use.","treatments": "CBT"},
             ],
             "resources": [
                 {"label": "Substance Abuse and Mental Health Services Administration",
@@ -446,43 +447,16 @@ def reset_db():
                 {"q_number": 7, "question": "Did these symptoms start before age 12?", "value": 3},
             ],
             "therapeutic_recs": [
+                {"description": "Reach out to your doctor for further help", "treatments": "Medical help"},
                 {"description": "Use organizational tools like planners or apps to manage tasks.",
-                 "evidence_based": True, "source": "APA", "treatments": "Behavioral Therapy"},
+                 "treatments": "Behavioral Therapy"},
                 {"description": "Consider medication management under the guidance of a psychiatrist.",
-                 "evidence_based": True, "source": "NIH", "treatments": "Medication"},
+                 "treatments": "Medication"},
             ],
             "resources": [
                 {"label": "CHADD - ADHD Support", "link": "https://chadd.org"},
                 {"label": "ADHD Management Tips",
                  "link": "https://www.helpguide.org/articles/add-adhd/adult-adhd-attention-deficit-disorder.htm"},
-            ],
-        },
-        {
-            "name": "Paranoid Schizophrenia",
-            "threshold": 8,
-            "questions": [
-                {"q_number": 1,
-                 "question": "Do you have persistent delusions (false beliefs despite evidence to the contrary)?",
-                 "value": 3},
-                {"q_number": 2,
-                 "question": "Have you experienced hallucinations (seeing/hearing things that aren't there)?",
-                 "value": 3},
-                {"q_number": 3, "question": "Do you have disorganized speech (frequent derailment or incoherence)?",
-                 "value": 2},
-                {"q_number": 4, "question": "Have you displayed disorganized or unusual behavior?", "value": 1},
-                {"q_number": 5, "question": "Have you had symptoms continuously for at least 6 months?", "value": 1},
-            ],
-            "therapeutic_recs": [
-                {"description": "Work with a psychiatrist to manage symptoms with antipsychotic medications.",
-                 "evidence_based": True, "source": "NIH", "treatments": "Medication Management"},
-                {"description": "Engage in cognitive behavioral therapy (CBT) to address delusions and hallucinations.",
-                 "evidence_based": True, "source": "APA", "treatments": "CBT"},
-            ],
-            "resources": [
-                {"label": "National Alliance on Mental Illness - Schizophrenia",
-                 "link": "https://www.nami.org/About-Mental-Illness/Mental-Health-Conditions/Schizophrenia"},
-                {"label": "Schizophrenia Support Guide",
-                 "link": "https://www.helpguide.org/articles/mental-disorders/schizophrenia.htm"},
             ],
         },
         {
@@ -501,10 +475,11 @@ def reset_db():
                 {"q_number": 5, "question": "Have you had at least one major depressive episode?", "value": 1},
             ],
             "therapeutic_recs": [
+                {"description": "Reach out to your doctor for further help", "treatments": "Medical help"},
                 {"description": "Work with a psychiatrist to stabilize mood with medications like lithium.",
-                 "evidence_based": True, "source": "NIH", "treatments": "Medication Management"},
+                "treatments": "Medication Management"},
                 {"description": "Engage in psychoeducation to understand and manage mood episodes.",
-                 "evidence_based": True, "source": "APA", "treatments": "Psychoeducation"},
+                 "treatments": "Psychoeducation"},
             ],
             "resources": [
                 {"label": "International Bipolar Foundation", "link": "https://ibpf.org"},
@@ -517,19 +492,18 @@ def reset_db():
             "threshold": 7,
             "questions": [
                 {"q_number": 1,
-                 "question": "Have you had episodes of increased energy and activity lasting at least 4 days?",
+                 "question": "Have you had periods of extremely high energy or activity lasting at least one week?",
                  "value": 3},
-                {"q_number": 2, "question": "Did you feel unusually confident or talkative during these episodes?",
+                {"q_number": 2, "question": "Did you feel unusually confident or grandiose during these periods?",
                  "value": 2},
-                {"q_number": 3, "question": "Have you had a major depressive episode lasting at least 2 weeks?",
-                 "value": 3},
+                {"q_number": 3, "question": "Did you sleep much less but still feel energetic?", "value": 1},
+                {"q_number": 4,
+                 "question": "Did you engage in impulsive or risky behaviors (e.g., spending sprees, reckless driving)?",
+                 "value": 1},
+                {"q_number": 5, "question": "Have you had at least one major depressive episode?", "value": 1},
             ],
             "therapeutic_recs": [
-                {"description": "Consider mood stabilizers or anticonvulsants under the guidance of a psychiatrist.",
-                 "evidence_based": True, "source": "NIH", "treatments": "Medication Management"},
-                {
-                    "description": "Engage in interpersonal and social rhythm therapy (IPSRT) to stabilize daily routines.",
-                    "evidence_based": True, "source": "APA", "treatments": "IPSRT"},
+                {"description": "Reach out to your doctor for further help", "treatments": "Medical help"},
             ],
             "resources": [
                 {"label": "Depression and Bipolar Support Alliance", "link": "https://www.dbsalliance.org"},
@@ -549,10 +523,9 @@ def reset_db():
                 {"q_number": 4, "question": "Have you self-harmed multiple times in the past year?", "value": 1},
             ],
             "therapeutic_recs": [
-                {"description": "Engage in dialectical behavior therapy (DBT) to learn healthier coping mechanisms.",
-                 "evidence_based": True, "source": "APA", "treatments": "DBT"},
+                {"description": "Reach out to your doctor for further help", "treatments": "Medical help"},
                 {"description": "Practice mindfulness to manage emotional distress without self-harm.",
-                 "evidence_based": True, "source": "NIH", "treatments": "Mindfulness-Based Therapy"},
+                 "treatments": "Mindfulness-Based Therapy"},
             ],
             "resources": [
                 {"label": "Self-Injury Outreach and Support", "link": "https://sioutreach.org"},
@@ -596,8 +569,6 @@ def reset_db():
                     if not therapeutic_rec_exists(rec_data["description"]):
                         therapeutic_rec = TherapeuticRec(
                             description=rec_data["description"],
-                            evidence_based=rec_data["evidence_based"],
-                            source=rec_data["source"],
                             treatments=rec_data["treatments"],
                         )
                         condition.therapeutic_recs.append(therapeutic_rec)
