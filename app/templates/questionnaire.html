@@ -2,7 +2,11 @@
 
 {% block content %}
 <div class="container">
-    <h1>Questionnaire</h1>
+    <h1>Diagnostic Questionnaire</h1>
+<p>Below is a questionnaire for you to complete, based off of your presenting symptom(s):</p>
+
+<p><em>This tool only provides general guidance and is <strong>not</strong> an official diagnosis.</em></p>
+
 <hr class="border-5">
     <form method="POST" action="{{ url_for('answer_questionnaire') }}">
         {{ form.hidden_tag() }}
