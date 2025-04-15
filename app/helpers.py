@@ -108,6 +108,9 @@ def get_health_info():
     steps_goal = track_health.steps_goal
     steps_percentage_complete = track_health.steps_percentage_complete()
 
+    # Basic Implementation - if no aged saved / logged
+    age = track_health.age
+
     activity_duration_goal = track_health.activity_duration_goal
     activity_percentage_complete = track_health.activity_percentage_complete()
 
@@ -126,7 +129,8 @@ def get_health_info():
         'heart_rate': heart_rate,
         'max_heart_rate': max_heart_rate, 'min_heart_rate': min_heart_rate, 'avg_heart_rate': avg_heart_rate,
         'heart_rate_range': heart_rate_range,
-        'heart_zones_scaled': heart_zones_progress_bar, 'heart_zones': heart_rate_zones
+        'heart_zones_scaled': heart_zones_progress_bar, 'heart_zones': heart_rate_zones,
+        'age': age
     }
     return track_health_info
 

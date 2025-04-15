@@ -27,6 +27,11 @@
         {% include 'emotions_graph.html' %}
     </div>
     {% endif %}
+    {% if 'heart_zones' in mindmirror_display and mindmirror_display.heart_zones == True %}
+    <div>
+        {% include 'track_heart_zones.html' %}
+    </div>
+    {% endif %}
     {% if 'track_activity' in mindmirror_display and mindmirror_display.track_activity == True %}
     <div>
         {% include 'track_activity.html' %}
@@ -40,11 +45,6 @@
     {% if 'track_heart_rate' in mindmirror_display and mindmirror_display.track_heart_rate == True %}
     <div>
         {% include 'track_heart.html' %}
-    </div>
-    {% endif %}
-    {% if 'heart_zones' in mindmirror_display and mindmirror_display.heart_zones == True %}
-    <div>
-        {% include 'track_heart_zones.html' %}
     </div>
     {% endif %}
 </div>

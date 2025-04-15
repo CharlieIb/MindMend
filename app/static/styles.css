@@ -112,6 +112,11 @@ body {
     margin: 1px;
 }
 
+/* FONT SIZE */
+.small_text {
+    font-size: 0.725rem;
+}
+
 /* GRID SETTINGS */
 .grid-wrapper {
   max-width: 1200px;
