@@ -248,6 +248,10 @@ def reset_db():
                 {"label": "Anxiety and Depression Association of America", "link": "https://adaa.org"},
                 {"label": "Mindfulness Meditation Guide",
                  "link": "https://www.mindful.org/meditation/mindfulness-getting-started/"},
+                {"label": "University of Birmingham Therapeutic Support",
+                 "link": "https://intranet.birmingham.ac.uk/student/your-wellbeing/mental-health/therapeutic-support.aspx"},
+                {"label": "University of Birmingham Mental Health & Wellbeing Service",
+                 "link": "https://intranet.birmingham.ac.uk/student/your-wellbeing/mental-health/index.aspx"}
             ],
         },
         {
@@ -280,6 +284,10 @@ def reset_db():
                  "link": "https://www.nimh.nih.gov/health/topics/panic-disorder"},
                 {"label": "Panic Disorder Self-Help Guide",
                  "link": "https://www.helpguide.org/articles/anxiety/panic-attacks-and-panic-disorder.htm"},
+                {"label": "University of Birmingham Therapeutic Support",
+                 "link": "https://intranet.birmingham.ac.uk/student/your-wellbeing/mental-health/therapeutic-support.aspx"},
+                {"label": "University of Birmingham Mental Health & Wellbeing Service",
+                 "link": "https://intranet.birmingham.ac.uk/student/your-wellbeing/mental-health/index.aspx"}
             ],
         },
         {
@@ -308,6 +316,10 @@ def reset_db():
                 {"label": "Social Anxiety Association", "link": "https://socialphobia.org"},
                 {"label": "CBT for Social Anxiety",
                  "link": "https://www.apa.org/ptsd-guideline/patients-and-families/cognitive-behavioral"},
+                {"label": "University of Birmingham Therapeutic Support",
+                 "link": "https://intranet.birmingham.ac.uk/student/your-wellbeing/mental-health/therapeutic-support.aspx"},
+                {"label": "University of Birmingham Mental Health & Wellbeing Service",
+                 "link": "https://intranet.birmingham.ac.uk/student/your-wellbeing/mental-health/index.aspx"}
             ],
         },
         {
@@ -335,6 +347,10 @@ def reset_db():
                 {"label": "National Institute of Mental Health - Depression",
                  "link": "https://www.nimh.nih.gov/health/topics/depression"},
                 {"label": "Depression and Bipolar Support Alliance", "link": "https://www.dbsalliance.org"},
+                {"label": "University of Birmingham Therapeutic Support",
+                 "link": "https://intranet.birmingham.ac.uk/student/your-wellbeing/mental-health/therapeutic-support.aspx"},
+                {"label": "University of Birmingham Mental Health & Wellbeing Service",
+                 "link": "https://intranet.birmingham.ac.uk/student/your-wellbeing/mental-health/index.aspx"}
             ],
         },
         {
@@ -359,6 +375,10 @@ def reset_db():
                 {"label": "National Eating Disorders Association", "link": "https://www.nationaleatingdisorders.org"},
                 {"label": "Anorexia Nervosa Treatment Guide",
                  "link": "https://www.helpguide.org/articles/eating-disorders/anorexia-nervosa.htm"},
+                {"label": "University of Birmingham Therapeutic Support",
+                 "link": "https://intranet.birmingham.ac.uk/student/your-wellbeing/mental-health/therapeutic-support.aspx"},
+                {"label": "University of Birmingham Mental Health & Wellbeing Service",
+                 "link": "https://intranet.birmingham.ac.uk/student/your-wellbeing/mental-health/index.aspx"}
             ],
         },
         {
@@ -385,6 +405,10 @@ def reset_db():
                 {"label": "Bulimia Nervosa Resource Center", "link": "https://www.bulimia.com"},
                 {"label": "Overcoming Bulimia Guide",
                  "link": "https://www.helpguide.org/articles/eating-disorders/bulimia-nervosa.htm"},
+                {"label": "University of Birmingham Therapeutic Support",
+                 "link": "https://intranet.birmingham.ac.uk/student/your-wellbeing/mental-health/therapeutic-support.aspx"},
+                {"label": "University of Birmingham Mental Health & Wellbeing Service",
+                 "link": "https://intranet.birmingham.ac.uk/student/your-wellbeing/mental-health/index.aspx"}
             ],
         },
         {
@@ -408,6 +432,10 @@ def reset_db():
                 {"label": "Binge Eating Disorder Association", "link": "https://www.bedaonline.com"},
                 {"label": "Binge Eating Disorder Self-Help Guide",
                  "link": "https://www.helpguide.org/articles/eating-disorders/binge-eating-disorder.htm"},
+                {"label": "University of Birmingham Therapeutic Support",
+                 "link": "https://intranet.birmingham.ac.uk/student/your-wellbeing/mental-health/therapeutic-support.aspx"},
+                {"label": "University of Birmingham Mental Health & Wellbeing Service",
+                 "link": "https://intranet.birmingham.ac.uk/student/your-wellbeing/mental-health/index.aspx"}
             ],
         },
         {
@@ -431,6 +459,12 @@ def reset_db():
                 {"label": "Substance Abuse and Mental Health Services Administration",
                  "link": "https://www.samhsa.gov"},
                 {"label": "Alcoholics Anonymous", "link": "https://www.aa.org"},
+                {"label": "University of Birmingham Therapeutic Support",
+                 "link": "https://intranet.birmingham.ac.uk/student/your-wellbeing/mental-health/therapeutic-support.aspx"},
+                {"label": "University of Birmingham Mental Health & Wellbeing Service",
+                 "link": "https://intranet.birmingham.ac.uk/student/your-wellbeing/mental-health/index.aspx"},
+                {"label": "Birmingham Drug & Alcohol Support Service",
+                 "link": "https://forwardthinkingbirmingham.nhs.uk/drugs-and-alcohol-support-services/"}
             ],
         },
         {
@@ -457,6 +491,10 @@ def reset_db():
                 {"label": "CHADD - ADHD Support", "link": "https://chadd.org"},
                 {"label": "ADHD Management Tips",
                  "link": "https://www.helpguide.org/articles/add-adhd/adult-adhd-attention-deficit-disorder.htm"},
+                {"label": "University of Birmingham Therapeutic Support",
+                 "link": "https://intranet.birmingham.ac.uk/student/your-wellbeing/mental-health/therapeutic-support.aspx"},
+                {"label": "University of Birmingham Mental Health & Wellbeing Service",
+                 "link": "https://intranet.birmingham.ac.uk/student/your-wellbeing/mental-health/index.aspx"}
             ],
         },
         {
@@ -485,6 +523,10 @@ def reset_db():
                 {"label": "International Bipolar Foundation", "link": "https://ibpf.org"},
                 {"label": "Bipolar Disorder Management Guide",
                  "link": "https://www.helpguide.org/articles/bipolar-disorder/bipolar-disorder-symptoms-and-causes.htm"},
+                {"label": "University of Birmingham Therapeutic Support",
+                 "link": "https://intranet.birmingham.ac.uk/student/your-wellbeing/mental-health/therapeutic-support.aspx"},
+                {"label": "University of Birmingham Mental Health & Wellbeing Service",
+                 "link": "https://intranet.birmingham.ac.uk/student/your-wellbeing/mental-health/index.aspx"}
             ],
         },
         {
@@ -509,6 +551,10 @@ def reset_db():
                 {"label": "Depression and Bipolar Support Alliance", "link": "https://www.dbsalliance.org"},
                 {"label": "Bipolar Disorder Self-Help Guide",
                  "link": "https://www.helpguide.org/articles/bipolar-disorder/bipolar-disorder-symptoms-and-causes.htm"},
+                {"label": "University of Birmingham Therapeutic Support",
+                 "link": "https://intranet.birmingham.ac.uk/student/your-wellbeing/mental-health/therapeutic-support.aspx"},
+                {"label": "University of Birmingham Mental Health & Wellbeing Service",
+                 "link": "https://intranet.birmingham.ac.uk/student/your-wellbeing/mental-health/index.aspx"}
             ],
         },
         {
@@ -531,6 +577,10 @@ def reset_db():
                 {"label": "Self-Injury Outreach and Support", "link": "https://sioutreach.org"},
                 {"label": "Self-Harm Recovery Guide",
                  "link": "https://www.helpguide.org/articles/anxiety/cutting-and-self-harm.htm"},
+                {"label": "University of Birmingham Therapeutic Support",
+                 "link": "https://intranet.birmingham.ac.uk/student/your-wellbeing/mental-health/therapeutic-support.aspx"},
+                {"label": "University of Birmingham Mental Health & Wellbeing Service",
+                 "link": "https://intranet.birmingham.ac.uk/student/your-wellbeing/mental-health/index.aspx"}
             ],
         }
 
