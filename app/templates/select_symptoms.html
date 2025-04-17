@@ -8,6 +8,8 @@
 
 <form method="POST" action="" novalidate>
     {{ form.hidden_tag() }}
+
+    <!-- Symptoms -->
     <ul class="options-list">
        {% for symptom in form.symptoms %}
            <div class="col-mb-6 mb-2">
@@ -19,6 +21,7 @@
        {% endfor %}
     </ul>
 
+    <!-- Error Handling -->
     {% if form.symptoms.errors %}
         <div class="alert alert-danger mt-3">
             {% for error in form.symptoms.errors %}

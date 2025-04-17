@@ -4,7 +4,7 @@ from app import db
 from app.forms import (ChooseForm, LoginForm, ChangePasswordForm, RegisterForm, SettingsForm,
                        SelectSymptomsForm, generate_form, MindMirrorLayoutForm)
 from app.models import User, EmotionLog
-from app.utils import symptom_list, questions_database, EmotionLogManager, ActivityManager, LocationManager, \
+from app.utils import symptom_list, EmotionLogManager, ActivityManager, LocationManager, \
     PersonManager
 from app.helpers import (roles_required, get_emotions_info, get_health_info, get_heatmap_info, initialize_app,
                          selectConditions, generate_questionnaires)
@@ -333,7 +333,6 @@ def emotion_log():
 def select_symptoms():
     form = SelectSymptomsForm()
     form.symptoms.choices = symptom_list
-    selected_symptoms = []
 
     if form.validate_on_submit():
         selected_symptoms = form.symptoms.data
@@ -347,33 +346,66 @@ def select_symptoms():
 @app.route('/answer_questionnaire', methods=['GET', 'POST'])
 @login_required
 def answer_questionnaire():
+    # Initialize session results properly
+    if 'results' not in session:
+        session['results'] = []
+        session.modified = True
+
     selected_symptoms = session.get('selected_symptoms')
+    conditions = selectConditions(selected_symptoms)  # Selects appropriate condition_ids from selected symptoms
 
-    conditions = selectConditions(selected_symptoms)  # Selects appropriate condition_ids from selects symptoms
-    questionnaires = generate_questionnaires(conditions)  # Retrieves all questionnaires of corresponding conditions
+    current_index = int(request.args.get('index', 0))
+    if current_index == 0:
+        session['results'] = []  # Reset scores for new attempt
+    if current_index >= len(conditions):
+        results = session.pop('results', [])  # Clear session storage
+        return render_template('results.html', results=results, title="Questionnaire Result")
 
-    # Create Flask Forms
-    AnswerQuestionnaireForm = generate_form(questionnaires)
+
+    cond_id = conditions[current_index]
+    # Generate new form for each condition
+    questionnaire = generate_questionnaires(cond_id)
+    AnswerQuestionnaireForm = generate_form(questionnaire)
     form = AnswerQuestionnaireForm(obj=None)
 
     if form.validate_on_submit():
-        results = []
+        condition_score = 0
+        for q_index, question in enumerate(questionnaire['questions']):
+            field_name = f"question_{questionnaire['id']}_{q_index}"
+            user_answer = getattr(form, field_name).data
+            if user_answer=='True':
+                condition_score += question['value']
 
-        for cond_id, condition_info in questionnaires.items():
-            condition_score = 0
-            for index, question in enumerate(condition_info['questions']):
-                question_id = f"question_{cond_id}_{index}"
-                user_answer = getattr(form, question_id).data
-                if user_answer == 'True':
-                    condition_score += question['value']
+        cond_obj = app.condition_manager.get_condition(cond_id)
+        # Convert SQLAlchemy objects to dictionaries as flask session cannot store SQLAlchemy objects
+        recs = [
+            {'description': rec.description, 'treatments':rec.treatments}
+            for rec in app.therapeutic_rec_manager.get_recommendations_for_condition(cond_id)
+        ]
+        rsrcs = [
+            {'label': rsrc.label, 'link': rsrc.link}
+            for rsrc in app.resource_manager.get_resources_for_condition(cond_id)
+        ]
+        threshold_met = (condition_score > cond_obj.threshold)
+        result = {
+                 'condition': cond_obj.name,
+                 'score': condition_score,
+                 'is_met_threshold': threshold_met,
+                 'therapeutic_recs': recs,
+                 'resources': rsrcs
+             }
+        session['results'].append(result)
+        session.modified = True
 
-                ### TO-DO: Get necessary actions ###
-            if condition_score > condition_info['threshold']:
-                results.append(condition_info['name'])
-        return render_template('results.html', results=results, title="Questionnaire Result")
-    return render_template('questionnaire.html', questionnaires=questionnaires, title='Questionnaire',
-                           form=form, enumerate=enumerate)
+        # Move to next condition or render results
+        next_index = current_index + 1
+        if next_index < len(conditions):
+            return redirect(url_for('answer_questionnaire', index=next_index))
+        else:
+            results = session.pop('results', [])  # Clear session and get results
+            return render_template('results.html',title="Questionnaire Result",results=results)
 
+    return render_template('questionnaire.html',title='Questionnaire',form=form,questionnaires=questionnaire,current_index=current_index,conditions=conditions,enumerate=enumerate)
 
 # Error handlers
 # Error handler for 403 Forbidden
