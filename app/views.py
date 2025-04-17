@@ -4,7 +4,7 @@ from app import db
 from app.forms import (ChooseForm, LoginForm, ChangePasswordForm, RegisterForm, SettingsForm,
                        SelectSymptomsForm, generate_form, MindMirrorLayoutForm)
 from app.models import User, EmotionLog
-from app.utils import symptom_list, questions_database, EmotionLogManager, ActivityManager, LocationManager, \
+from app.utils import symptom_list, EmotionLogManager, ActivityManager, LocationManager, \
     PersonManager
 from app.helpers import (roles_required, get_emotions_info, get_health_info, get_heatmap_info, initialize_app,
                          selectConditions, generate_questionnaires)
