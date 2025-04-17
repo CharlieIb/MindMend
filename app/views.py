@@ -4,7 +4,7 @@ from app import db
 from app.forms import (ChooseForm, LoginForm, ChangePasswordForm, RegisterForm, SettingsForm,
                        SelectSymptomsForm, generate_form, MindMirrorLayoutForm)
 from app.models import User, EmotionLog
-from app.utils import symptom_list, questions_database, EmotionLogManager, ActivityManager, LocationManager, \
+from app.utils import symptom_list, EmotionLogManager, ActivityManager, LocationManager, \
     PersonManager
 from app.helpers import (roles_required, get_emotions_info, get_health_info, get_heatmap_info, initialize_app,
                          selectConditions, generate_questionnaires)
@@ -348,11 +348,9 @@ def select_symptoms():
 @login_required
 def answer_questionnaire():
     selected_symptoms = session.get('selected_symptoms')
-
     conditions = selectConditions(selected_symptoms)  # Selects appropriate condition_ids from selects symptoms
     questionnaires = generate_questionnaires(conditions)  # Retrieves all questionnaires of corresponding conditions
 
-    # Create Flask Forms
     AnswerQuestionnaireForm = generate_form(questionnaires)
     form = AnswerQuestionnaireForm(obj=None)
 
@@ -367,11 +365,53 @@ def answer_questionnaire():
                 if user_answer == 'True':
                     condition_score += question['value']
 
-                ### TO-DO: Check Threshold and get necessary actions ###
-            scores.append({'condition': condition_info['name'], 'score': condition_score})
+            cond_obj = app.condition_manager.get_condition(cond_id)
+            recs = app.therapeutic_rec_manager.get_recommendations_for_condition(cond_id)
+            rsrcs = app.resource_manager.get_resources_for_condition(cond_id)
+
+            threshold_met = (condition_score > cond_obj.threshold)
+
+            scores.append({
+                'condition': cond_obj.name,
+                'score': condition_score,
+                'is_met_threshold': threshold_met,
+                'therapeutic_recs': recs,
+                'resources': rsrcs
+            })
+
         return render_template('results.html', scores=scores, title="Questionnaire Result")
-    return render_template('questionnaire.html', questionnaires=questionnaires, title='Questionnaire',
-                           form=form, enumerate=enumerate)
+
+    return render_template('questionnaire.html',
+                           questionnaires = questionnaires,
+                           title='Questionnaire',
+                           form=form,
+                           enumerate=enumerate)
+    #
+    #                        selected_symptoms = session.get('selected_symptoms')
+    #
+    # conditions = selectConditions(selected_symptoms)  # Selects appropriate condition_ids from selects symptoms
+    # questionnaires = generate_questionnaires(conditions)  # Retrieves all questionnaires of corresponding conditions
+    #
+    # # Create Flask Forms
+    # AnswerQuestionnaireForm = generate_form(questionnaires)
+    # form = AnswerQuestionnaireForm(obj=None)
+    #
+    # if form.validate_on_submit():
+    #     scores = []
+    #
+    #     for cond_id, condition_info in questionnaires.items():
+    #         condition_score = 0
+    #         for index, question in enumerate(condition_info['questions']):
+    #             question_id = f"question_{cond_id}_{index}"
+    #             user_answer = getattr(form, question_id).data
+    #             if user_answer == 'True':
+    #                 condition_score += question['value']
+    #
+    #             ### TO-DO: Check Threshold and get necessary actions ###
+    #         scores.append({'condition': condition_info['name'], 'score': condition_score})
+    #     return render_template('results.html', scores=scores, title="Questionnaire Result")
+    # return render_template('questionnaire.html', questionnaires=questionnaires, title='Questionnaire',
+    #                        form=form, enumerate=enumerate)
 
 
 # Error handlers
