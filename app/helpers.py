@@ -6,6 +6,7 @@ from functools import wraps
 from flask import abort, flash
 from flask_login import current_user
 from datetime import datetime
+from app.utils.screeningtool import SYMPTOM_TO_CONDITION_MAP
 
 
 ##################### GENERAL ##################################
@@ -198,9 +199,11 @@ def get_emotions_info():
 
 ################### SCREENING TOOL ##############################
 # Function to get condition ids from symptoms selected
-def selectConditions(selected_symptoms):
-    ### TO-DO: Replace function with actual logic of selecting condition
-    conditions = [int(id) for id in selected_symptoms]
+def selectConditions(selected_symptom):
+    condition_ids = []
+    for i in selected_symptom:
+        condition_ids.extend(SYMPTOM_TO_CONDITION_MAP[i])
+    conditions = [id for id in condition_ids]
     return conditions
 
 
