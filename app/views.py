@@ -1,17 +1,22 @@
+from crypt import methods
+
 from flask import render_template, redirect, url_for, flash, request, send_file, send_from_directory, session, abort
 from app import app
 from app import db
 from app.forms import ChooseForm, LoginForm, ChangePasswordForm, RegisterForm, FormRedirect, SelectSymptomsForm, \
-    generate_form, FormMindMirrorLayout
+    generate_form, FormMindMirrorLayout, EmotionForm, EmotionNoteForm
 from app.models import User, EmotionLog
 from app.utils import (HeatMap, TrackHealth, symptom_list, questions_database,
                        ConditionManager, ResourceManager, TherapeuticRecManager, TestResultManager,
                        EmotionLogManager, ActivityManager, LocationManager, PersonManager, TrackEmotions)
-from app.helpers import roles_required, get_emotions_info,get_health_info, get_heatmap_info, initialize_app, selectConditions, generate_questionnaires
+from app.helpers import roles_required, get_emotions_info, get_health_info, get_heatmap_info, initialize_app, \
+    selectConditions, generate_questionnaires
 from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
 from urllib.parse import urlsplit
 from datetime import datetime
+
+from app.utils.CheckIn.EmotionLog import emotions
 
 
 # Load data into classes on first load
@@ -19,10 +24,12 @@ from datetime import datetime
 def before_request_handler():
     initialize_app(app)
 
+
 # Not logged In Access
 @app.route('/')
 def home():
     return render_template('index.html', title='Home')
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -301,19 +308,51 @@ def mindmirror_edit():
 
 
 # CheckIn
-@app.route('/check-in')
+@app.route('/check-in', methods=['GET', 'POST'])
 @login_required
 def emotion_log():
-    emotions = [
-        {"title": "Anxious", "feelings": ["Nervous", "Overwhelmed", "Irritable", "Restless", "Worried"],
-         "border": "border-danger"},
-        {"title": "Calm", "feelings": ["Relaxed", "Peaceful", "Content", "At Ease", "Serene"], "border": "border-info"},
-        {"title": "Happy", "feelings": ["Joyful", "Excited", "Optimistic", "Grateful", "Energetic"],
-         "border": "border-warning"},
-        {"title": "Sad", "feelings": ["Down", "Lonely", "Disheartened", "Hopeless", "Heartbroken"],
-         "border": "border-success"}
+    form = EmotionForm()
+
+    form.emotions.choices = [
+        (f"{feeling}::{emotion['title']}", feeling)
+        for emotion in emotions
+        for feeling in emotion["feelings"]
     ]
-    return render_template('emotion-log.html', title='Check-In', emotions=emotions)
+
+    if form.validate_on_submit():
+        session['selected_emotions'] = form.emotions.data
+        return redirect(url_for('emotion_details'))
+
+    return render_template('emotion-log.html', title='Check-In', emotions=emotions, form=form)
+
+
+# Add Extra details to check in
+@app.route('/emotion-details', methods=['GET', 'POST'])
+@login_required
+def emotion_details():
+    form = EmotionNoteForm()
+    selected_emotions = session.get('selected_emotions')
+
+    if not selected_emotions:
+        flash("Please select emotions first.")
+        return redirect(url_for('emotion_log'))
+
+    if form.validate_on_submit():
+        manager = EmotionLogManager(session=db.session, user_id=current_user.id)
+
+        for val in selected_emotions:
+            feeling, _ = val.split("::")
+            manager.add_new_log(
+                emotion=feeling,
+                steps=0,
+                free_notes=form.notes.data
+            )
+
+        session.pop('selected_emotions', None)
+        flash("Successfully saved!", "success")
+        return redirect(url_for('home'))
+
+    return render_template('emotion_details.html', title="Tell us more", form=form)
 
 
 # Screening Tool
@@ -332,14 +371,15 @@ def select_symptoms():
         return redirect(url_for('answer_questionnaire'))
     return render_template('select_symptoms.html', title="Choose Symptoms", form=form)
 
+
 # Second Page: Answer Questionnaire
 @app.route('/answer_questionnaire', methods=['GET', 'POST'])
 @login_required
 def answer_questionnaire():
     selected_symptoms = session.get('selected_symptoms')
 
-    conditions = selectConditions(selected_symptoms) # Selects appropriate condition_ids from selects symptoms
-    questionnaires = generate_questionnaires(conditions) # Retrieves all questionnaires of corresponding conditions
+    conditions = selectConditions(selected_symptoms)  # Selects appropriate condition_ids from selects symptoms
+    questionnaires = generate_questionnaires(conditions)  # Retrieves all questionnaires of corresponding conditions
 
     # Create Flask Forms
     AnswerQuestionnaireForm = generate_form(questionnaires)

@@ -1,22 +1,49 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h3 class="pt-5">{{title}}</h3>
-<p>How do you feel today?</p>
-<div class="container mt-4">
-    <div class="row">
-        {% for emotion in emotions %}
-        <div class="col-sm-6 mb-3">
-            <div class="card border border-3 {{ emotion.border }}">
-                <div class="card-body">
-                    <h5 class="card-title">{{ emotion.title }}</h5>
-                    {% for feeling in emotion.feelings %}
-                    <a href="#" class="btn btn-outline-dark">{{ feeling }}</a>
-                    {% endfor %}
+<div class="text-center mb-1">
+    <h3 class="pt-5">{{title}}</h3>
+    <p>How are you feel today {{ current_user.username }}?</p>
+</div>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <div class="container mt-4">
+        <div class="row g-0 w-auto">
+            {% for emotion in emotions %}
+            <div class="col-sm-4 p-2 d-flex justify-content-center">
+                <div class="card border border-2 border-dark rounded-3 d-flex align-items-center flex-column p-3 medium_widget">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ emotion.title }}</h5>
+                        <div class="row">
+                            {% for field in form.emotions %}
+                            {% set val = field._value().split('::') %}
+                            {% if val[1] == emotion.title %}
+                            <div class="col-12 d-flex justify-content-center mb-2">
+                                <input type="checkbox"
+                                       id="emotion-{{ val[0]|lower|replace(' ', '-') }}"
+                                       name="{{ field.name }}"
+                                       value="{{ field._value() }}"
+                                       class="d-none"
+                                       {% if field.checked %}checked{% endif %}>
+
+                                <label for="emotion-{{ val[0]|lower|replace(' ', '-') }}"
+                                       class="btn text-dark {{ emotion['button-color'] }} w-100">
+                                    <span>{{ val[0] }}</span>
+                                </label>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
+        <div class="d-flex justify-content-end mt-3">
+            {{ form.submit(class="btn btn-primary px-4") }}
+        </div>
     </div>
-</div>
+</form>
 {% endblock %}
+
+

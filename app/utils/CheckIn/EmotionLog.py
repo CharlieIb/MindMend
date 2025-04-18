@@ -61,5 +61,18 @@ class EmotionLogManager:
         del self.emotional_logs[log_id]
         return True
 
+emotions = [
+        {"title": "Anxious", "feelings": ["Nervous", "Overwhelmed", "Irritable", "Restless", "Worried"],
+         "button-color": "btn btn-outline-secondary"},
+        {"title": "Calm", "feelings": ["Relaxed", "Peaceful", "Content", "At Ease", "Serene"], "button-color": "btn btn-outline-primary"},
+        {"title": "Happy", "feelings": ["Joyful", "Excited", "Optimistic", "Grateful", "Energetic"],
+         "button-color": "btn btn-outline-warning"},
+        {"title": "Sad", "feelings": ["Down", "Lonely", "Disheartened", "Hopeless", "Heartbroken"],
+         "button-color": "btn btn-outline-info"},
+        {"title": "Anger", "feelings": ["Irritated", "Vexed", "Raged", "Annoyed", "Cross"],
+         "button-color": "btn btn-outline-danger"},
+        {"title": "Fear", "feelings": ["Panicked", "Distressed", "Uneasy", "Alarmed", "Scared"],
+         "button-color": "btn btn-outline-success"}
+    ]
 
 

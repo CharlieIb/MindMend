@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import (SubmitField, HiddenField, StringField, PasswordField,
                      BooleanField, IntegerField, ValidationError, EmailField, RadioField)
+from wtforms.fields.simple import TextAreaField
 from wtforms.validators import DataRequired, NumberRange, Length, EqualTo
 from email_validator import validate_email, EmailNotValidError
 from wtforms.fields.choices import SelectMultipleField
@@ -118,3 +119,16 @@ def generate_form(questionnaires):
             )
     setattr(AnswerQuestionnaireForm, 'submit', SubmitField('Submit'))
     return AnswerQuestionnaireForm
+
+class EmotionForm(FlaskForm):
+    emotions = SelectMultipleField(
+        'Emotions',
+        choices=[],  # Set in view
+        option_widget=CheckboxInput(),
+        widget=ListWidget(prefix_label=False)
+    )
+    submit = SubmitField('Next')
+
+class EmotionNoteForm(FlaskForm):
+    notes = TextAreaField("How are you feeling?", validators=[DataRequired()])
+    submit = SubmitField("Save")
