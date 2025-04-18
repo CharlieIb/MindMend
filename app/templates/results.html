@@ -20,7 +20,6 @@
                 <h5>{{ item.condition }}</h5>
              </div>
             <div class="card-body">
-             <p><strong>Your Score:</strong> {{  item.score }}</p>
 
             <!-- Diagnosis -->
              {% if item.is_met_threshold %}
@@ -50,7 +49,7 @@
                  </ul>
              {% endif %}
             </div>
-         </div>
-     </div>
- {% endfor %}
- {%  endblock %}
+        </div>
+    {% endfor %}
+ </div>
+{%  endblock %}
