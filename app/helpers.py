@@ -199,23 +199,21 @@ def get_emotions_info():
 
 ################### SCREENING TOOL ##############################
 # Function to get condition ids from symptoms selected
-def selectConditions(selected_symptom):
+def selectConditions(selected_symptoms):
     condition_ids = []
-    for i in selected_symptom:
+    for i in selected_symptoms:
         condition_ids.extend(SYMPTOM_TO_CONDITION_MAP[i])
-    conditions = [id for id in condition_ids]
+    conditions = list(dict.fromkeys([id for id in condition_ids]))
     return conditions
 
 
-def generate_questionnaires(conditions):
-    questionnaires = {}  # Dictionary to store the results
+def generate_questionnaires(cond_id):
+    condition = app.condition_manager.get_condition(cond_id)
+    questions = app.condition_manager.get_questions_for_condition(cond_id)
 
-    for cond_id in conditions:
-        condition = app.condition_manager.get_condition(cond_id)
-        questions = app.condition_manager.get_questions_for_condition(cond_id)
-
-        # Store condition info and questions in the dictionary
-        questionnaires[cond_id] = {
+    # Store condition info and questions in the dictionary
+    questionnaire = {
+            'id': cond_id,
             'name': condition.name,
             'threshold': condition.threshold,
             'questions': [
@@ -226,5 +224,5 @@ def generate_questionnaires(conditions):
                 }
                 for question in questions
             ]
-        }
-    return questionnaires
+    }
+    return questionnaire

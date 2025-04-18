@@ -2,14 +2,27 @@
 
 {% block content %}
 <div class="container">
-    <h1>Diagnostic Questionnaire</h1>
-<p>Below is a questionnaire for you to complete, based off of your presenting symptom(s):</p>
+    <h1 class="my-4">Diagnostic Questionnaire</h1>
+    <p>Below is a questionnaire for you to complete, based off of your presenting symptom(s):</p>
 
-<p><em>This tool only provides general guidance and is <strong>not</strong> an official diagnosis.</em></p>
+    <p><em>This tool only provides general guidance and is <strong>not</strong> an official diagnosis.</em></p>
 
-<hr class="border-5">
-    <form method="POST" action="{{ url_for('answer_questionnaire') }}">
+    <!-- Progress Bar -->
+    <div class="progress mb-4">
+        <div class="progress-bar bg-secondary" role="progressbar"
+             style="width: {{ (current_index + 1)/conditions|length * 100 }}%"
+             aria-valuenow="{{ current_index + 1 }}"
+             aria-valuemin="0"
+             aria-valuemax="{{ conditions|length }}">
+            {{ current_index + 1 }} of {{ conditions|length }}
+        </div>
+    </div>
+
+
+    <form method="POST" action="{{ url_for('answer_questionnaire', index=current_index) }}">
         {{ form.hidden_tag() }}
+
+        <!-- Error Handling -->
         {% if form.errors %}
         <div class="alert alert-danger">
             <ul>
@@ -21,18 +34,27 @@
             </ul>
         </div>
         {% endif %}
-        {% for cond_id, condition_info in questionnaires.items() %}
-            <h5>Condition {{ cond_id }}</h5>
-            {% for index, question in enumerate(condition_info.questions) %}
-                <div>
-                    <h8>{{ question.question }}</h8>
-                    {{ form['question_' ~ cond_id ~ '_'  ~ index]() }}
-                    <hr>
-
-                </div>
-            {% endfor %}
-            <hr class="border-2">
+        <!-- Questions -->
+        {% for index, question in enumerate(questionnaires.questions) %}
+            <div>
+                <p>{{ question.question }}</p>
+                {{ form['question_' ~ questionnaires.id ~ '_'  ~ index]() }}
+                <hr>
+            </div>
         {% endfor %}
-    {{ form.submit(class="btn btn-dark") }}
+
+        <!-- Navigation Buttons -->
+        <div>
+            {% if current_index > 0 %}
+                <a href="{{ url_for('answer_questionnaire', index=current_index-1) }}"
+                   class="btn btn-outline-dark">Previous</a>
+            {% endif %}
+
+            <button type="submit" class="btn btn-dark">
+                {{ 'Submit' if current_index + 1 == conditions|length else 'Next' }}
+            </button>
+        </div>
+
+    </form>
 </div>
 {% endblock %}
