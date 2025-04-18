@@ -6,7 +6,7 @@ class TrackHealth:
                  activity_duration_goal=120,
                  heart_rate=None,
                  blood_pressure=None,
-                 age=800
+                 age=25
                  ):
         self.steps = steps
         self.steps_goal = steps_goal

@@ -1,6 +1,4 @@
-
 # Sample list of symptoms
-# symptom_list = [('1','Symptom 1'),('2','Symptom 2'),('3','Symptom 3'),('4','Symptom 4'),('5','Symptom 5'),('6','Symptom 6'),('7','Symptom 7'),('8','Symptom 8'),('9','Symptom 9'),('10','Symptom 10')]
 symptom_list = [('1','Excessive Worry/Anxiety'),('2','Panic Attack/Intense Fear'),('3','Fear/Intense Discomfort in Social Settings'),
                  ('4','Avoidance of Social Situations'),('5','Low Mood'),('6','No Enjoyment in Anything'),('7','Low Energy/Fatigue'),
                  ('8','Poor Concentration'),('9','Fluctuating Mood'),('10','Incredibly (unusually) Energetic'),
@@ -24,5 +22,3 @@ SYMPTOM_TO_CONDITION_MAP = {
      '14': [8],
      '15': [12]
  }
-
-
