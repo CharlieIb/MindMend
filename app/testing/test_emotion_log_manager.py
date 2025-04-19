@@ -2,16 +2,23 @@ import pytest
 from app.models import EmotionLog, User
 from app.utils.CheckIn.EmotionLog import EmotionLogManager
 from datetime import datetime
+from sqlalchemy import delete
 
 def test_load_emotional_logs_by_user(session, test_user):
     """Positive test: Load existing emotion logs for a user."""
+
+    # Remove all emotion logs in the db before starting the test
+    delete_statement = delete(EmotionLog)
+    session.execute(delete_statement)
+    session.commit()
+
     log1 = EmotionLog(user_id=test_user.id, emotion='Happy', steps=1000, time=datetime.utcnow())
     log2 = EmotionLog(user_id=test_user.id, emotion='Sad', steps=500, time=datetime.utcnow())
     session.add_all([log1, log2])
     session.commit()
 
     manager = EmotionLogManager(session, test_user.id)
-    logs = manager.emotional_logs # Access the loaded logs directly for verification
+    logs = manager.emotional_logs
 
     assert len(logs) == 2
     assert log1.log_id in logs
@@ -47,7 +54,7 @@ def test_add_new_log_mandatory_fields(session, test_user):
 
     manager.add_new_log(emotion='Excited', steps=2000)
 
-    # Verify it's added to the database
+    # Verify log has been added to db
     logs_in_db = session.query(EmotionLog).filter_by(user_id=test_user.id).all()
     assert len(logs_in_db) == initial_log_count + 1
     new_log = logs_in_db[-1]
@@ -61,15 +68,17 @@ def test_add_new_log_mandatory_fields(session, test_user):
     assert new_log.activity_id is None
     assert new_log.person_id is None
 
-    # Note: The current EmotionLogManager implementation doesn't re-load logs
-    # into the in-memory dictionary after adding. You might want to adjust this
-    # in your manager class if you need the in-memory list/dict to be live.
-    # For this test, we check the database directly.
-
 def test_add_new_log_all_fields(session, test_user, setup_conditions):
     """Positive test: Successfully add a new emotion log with all optional fields."""
-    # Create some related entities first
+
     from app.models import Location, Activity, Person
+    # Empty the tables first
+    session.execute(delete(Location))
+    session.execute(delete(Activity))
+    session.execute(delete(Person))
+    session.commit()
+
+    # Proceed with creating related test data
     location = Location(name='Home')
     activity = Activity(name='Reading')
     person = Person(name='Partner')
@@ -94,7 +103,7 @@ def test_add_new_log_all_fields(session, test_user, setup_conditions):
         person_id=person.person_id
     )
 
-    # Verify it's added to the database
+    # Verify log has been added to db
     logs_in_db = session.query(EmotionLog).filter_by(user_id=test_user.id).all()
     assert len(logs_in_db) == initial_log_count + 1
     new_log = logs_in_db[-1]
@@ -122,11 +131,11 @@ def test_delete_log_existing(session, test_user):
 
     assert is_deleted is True
 
-    # Verify it's removed from the database
+    # Verify log has been removed from db
     log_in_db = session.query(EmotionLog).get(log_to_delete.log_id)
     assert log_in_db is None
 
-    # Verify it's removed from the in-memory dictionary
+    # Verify log removed from in-memory manager
     assert log_to_delete.log_id not in manager.emotional_logs
     assert len(manager.emotional_logs) == initial_log_count_in_manager - 1
 
