@@ -8,7 +8,7 @@ from datetime import datetime
 @pytest.fixture(scope='session')
 def app():
     """Session-wide test application."""
-    # app config for testing
+    # app config for tests
     flask_app.config.update({
         'TESTING': True,
         'SQLALCHEMY_DATABASE_URI': 'sqlite:///:memory:',
@@ -80,7 +80,7 @@ def test_user(session):
 
 @pytest.fixture(scope='function')
 def setup_conditions(session):
-    """Function-wide fixture to set up conditions and questions, ensures clean tables and smooth testing."""
+    """Function-wide fixture to set up conditions and questions, ensures clean tables and smooth tests."""
 
     # Ensure conditions and condition_questions tables are empty
     # use the session fixture
