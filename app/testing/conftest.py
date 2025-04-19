@@ -1,92 +1,114 @@
 import pytest
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, scoped_session
-# Import your app instance and db instance directly
-from app import app as flask_app
-from app import db as flask_db
-from app.models import Base, User, EmotionLog, Condition, ConditionQuestion, UserSettings, Person, Location, Activity # Import all your models
+from app import app as flask_app, db as flask_db
+from app.models import User, EmotionLog, Condition, ConditionQuestion, UserSettings, Person, Location, Activity, TherapeuticRec, Resource, therapeutic_rec_condition, resource_condition
+
 
 @pytest.fixture(scope='session')
 def app():
     """Session-wide test application."""
-    # Use the app instance imported from app/__init__.py
+    # app config for testing
     flask_app.config.update({
         'TESTING': True,
         'SQLALCHEMY_DATABASE_URI': 'sqlite:///:memory:',
-        'LOGIN_DISABLED': True # Disable Flask-Login during tests if needed
+        'LOGIN_DISABLED': True
+        # Add any other test configurations here
     })
 
-    # Establish an application context before creating the database
+    # Push an application context that will be available during the session setup
     with flask_app.app_context():
         yield flask_app
 
-# Rest of the fixtures remain largely the same, using the imported flask_app and flask_db
-
-@pytest.fixture(scope='function')
-def client(app):
-    """A test client for the app."""
-    return app.test_client()
 
 @pytest.fixture(scope='session')
-def engine(app):
-    """Session-wide database engine."""
-    # Use the app's config directly
-    engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
-    # Use Base.metadata from your models
-    Base.metadata.create_all(engine)
-    yield engine
-    Base.metadata.drop_all(engine)
+def _db(app):
+    """Session-wide test database."""
+    # Access the db instance within the app context provided by the 'app' fixture
+    with app.app_context():
+
+        flask_db.create_all()
+        yield flask_db
+        flask_db.drop_all()
+
 
 @pytest.fixture(scope='function')
-def session(engine):
-    """Function-wide database session."""
-    connection = engine.connect()
-    transaction = connection.begin()
-    # Use scoped_session for thread-safety if needed, but sessionmaker is usually sufficient for tests
-    session = scoped_session(sessionmaker(bind=connection))
+def session(_db, app):
+    """Function-wide database session with transaction rollback."""
+    # Ensure app context is pushed for this function's scope
+    ctx = app.app_context()
+    ctx.push()
 
-    # Bind the session to your Flask-SQLAlchemy db object
-    flask_db.session = session
+    # Get the database session managed by Flask-SQLAlchemy
+    # This session is tied to the engine created in the _db fixture
+    session = _db.session
 
-    yield session
+    # Use nested transaction to achieve per-test isolation
+    session.begin_nested()
 
-    session.remove()
-    transaction.rollback()
-    connection.close()
+    yield session # Yield the session to the test function
 
-# Add any other fixtures you might need, like a test user
+    # Clean up after each test
+    session.rollback() # Rollback the nested transaction
+    ctx.pop() # Pop the application context
+
+
 @pytest.fixture(scope='function')
 def test_user(session):
-    user = User(username='testuser', email='test@example.com')
-    user.set_password('password') # Assuming set_password works without app context initially
-    session.add(user)
+    """Function-wide test user fixture, ensures a clean user table."""
+    # Ensure users table is empty before creating a new user for this test
+    # Use the session provided by the fixture
+    session.query(User).delete()
+    # Commit the delete to make sure the table is cleared before adding new data
     session.commit()
-    # Refresh the user object to get the assigned ID and trigger after_insert listener
+
+    user = User(username='testuser', email='test@example.com')
+    # Ensure app context is active for operations potentially needing it (like password hashing)
+    with flask_app.app_context():
+         user.set_password('password')
+
+    session.add(user)
+    # Commit the new user. This will trigger the after_insert listener for UserSettings.
+    session.commit()
+
+    # Refresh to get the ID assigned by the database and ensure listeners have run
     session.refresh(user)
     return user
 
 @pytest.fixture(scope='function')
 def setup_conditions(session):
+    """Function-wide fixture to set up conditions and questions, ensures clean tables."""
+    # Ensure conditions and condition_questions tables are empty
+    # Use the session provided by the fixture
+    session.query(ConditionQuestion).delete()
+    session.query(Condition).delete()
+    # Commit the deletes
+    session.commit()
+
+    # Now add the specific data for this fixture
     cond1 = Condition(name='Anxiety', threshold=10)
     cond2 = Condition(name='Depression', threshold=15)
     cond3 = Condition(name='Stress', threshold=5)
     session.add_all([cond1, cond2, cond3])
+    # Commit conditions to get their primary keys assigned before adding questions
     session.commit()
 
+    # Refresh conditions to ensure their IDs are loaded into the objects
+    session.refresh(cond1)
+    session.refresh(cond2)
+    session.refresh(cond3)
+
+    # Add questions, linking them by object relationship
     q1_c1 = ConditionQuestion(condition=cond1, q_number=1, question='Question 1 for Anxiety?', value=2)
     q2_c1 = ConditionQuestion(condition=cond1, q_number=2, question='Question 2 for Anxiety?', value=3)
     q1_c2 = ConditionQuestion(condition=cond2, q_number=1, question='Question 1 for Depression?', value=4)
     session.add_all([q1_c1, q2_c1, q1_c2])
+    # Commit the questions
     session.commit()
 
-    # Refresh objects to get assigned IDs
-    session.refresh(cond1)
-    session.refresh(cond2)
-    session.refresh(cond3)
+    # Refresh questions if needed, though linking by object should handle IDs
     session.refresh(q1_c1)
     session.refresh(q2_c1)
     session.refresh(q1_c2)
-
 
     return {
         'conditions': [cond1, cond2, cond3],
