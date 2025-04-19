@@ -52,19 +52,19 @@ def initialize_app(app):
 
 
 def _demo_managers(app):
-    """Demo/test function (remove in production)"""
-    cond_id = 1
-
-    # Demo condition manager
-    condition = app.condition_manager.get_condition(cond_id)
-    questions = app.condition_manager.get_questions_for_condition(cond_id)
-
-    # Demo other managers
-    recommendations = app.therapeutic_rec_manager.get_recommendations_for_condition(cond_id)
-    resources = app.resource_manager.get_resources_for_condition(cond_id)
-    user_test_results = app.test_result_manager.get_test_results_for_user(user_id=1)
-
-    print(f"Demo:\n{condition.name}\n{questions}\n{recommendations}\n{resources}\n{user_test_results}")
+    """Demo/test function (remove)"""
+    # cond_id = 1
+    #
+    # # Demo condition manager
+    # condition = app.condition_manager.get_condition(cond_id)
+    # questions = app.condition_manager.get_questions_for_condition(cond_id)
+    #
+    # # Demo other managers
+    # recommendations = app.therapeutic_rec_manager.get_recommendations_for_condition(cond_id)
+    # resources = app.resource_manager.get_resources_for_condition(cond_id)
+    # user_test_results = app.test_result_manager.get_test_results_for_user(user_id=1)
+    #
+    # print(f"Demo:\n{condition.name}\n{questions}\n{recommendations}\n{resources}\n{user_test_results}")
 
 
 ######################### MindMirror ##################################
