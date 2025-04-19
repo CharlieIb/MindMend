@@ -2,18 +2,18 @@ import pytest
 from app.models import EmotionLog, User
 from app.utils.CheckIn.EmotionLog import EmotionLogManager
 from datetime import datetime
-from sqlalchemy import delete
+import sqlalchemy as sa
 
 def test_load_emotional_logs_by_user(session, test_user):
     """Positive test: Load existing emotion logs for a user."""
 
     # Remove all emotion logs in the db before starting the test
-    delete_statement = delete(EmotionLog)
+    delete_statement = sa.delete(EmotionLog)
     session.execute(delete_statement)
     session.commit()
 
-    log1 = EmotionLog(user_id=test_user.id, emotion='Happy', steps=1000, time=datetime.utcnow())
-    log2 = EmotionLog(user_id=test_user.id, emotion='Sad', steps=500, time=datetime.utcnow())
+    log1 = EmotionLog(user_id=test_user.id, emotion='Happy', steps=1000, time=datetime.now())
+    log2 = EmotionLog(user_id=test_user.id, emotion='Sad', steps=500, time=datetime.now())
     session.add_all([log1, log2])
     session.commit()
 
@@ -28,7 +28,7 @@ def test_load_emotional_logs_by_user(session, test_user):
 
 def test_get_emotion_log_existing(session, test_user):
     """Positive test: Retrieve an existing emotional log by its ID."""
-    log = EmotionLog(user_id=test_user.id, emotion='Neutral', steps=700, time=datetime.utcnow())
+    log = EmotionLog(user_id=test_user.id, emotion='Neutral', steps=700, time=datetime.now())
     session.add(log)
     session.commit()
 
@@ -57,7 +57,8 @@ def test_add_new_log_mandatory_fields(session, test_user):
     manager.add_new_log(emotion='Excited', steps=2000)
 
     # Verify log has been added to db
-    logs_in_db = session.query(EmotionLog).filter_by(user_id=test_user.id).all()
+    q = sa.select(EmotionLog).where(EmotionLog.user_id==test_user.id)
+    logs_in_db = session.execute(q).scalars().all()
     assert len(logs_in_db) == initial_log_count + 1
     new_log = logs_in_db[-1]
     assert new_log.emotion == 'Excited'
@@ -75,9 +76,9 @@ def test_add_new_log_all_fields(session, test_user, setup_conditions):
 
     from app.models import Location, Activity, Person
     # Empty the tables first
-    session.execute(delete(Location))
-    session.execute(delete(Activity))
-    session.execute(delete(Person))
+    session.execute(sa.delete(Location))
+    session.execute(sa.delete(Activity))
+    session.execute(sa.delete(Person))
     session.commit()
 
     # Proceed with creating related test data
@@ -106,7 +107,8 @@ def test_add_new_log_all_fields(session, test_user, setup_conditions):
     )
 
     # Verify log has been added to db
-    logs_in_db = session.query(EmotionLog).filter_by(user_id=test_user.id).all()
+    q = sa.select(EmotionLog).where(EmotionLog.user_id==test_user.id)
+    logs_in_db = session.execute(q).scalars().all()
     assert len(logs_in_db) == initial_log_count + 1
     new_log = logs_in_db[-1]
     assert new_log.emotion == 'Calm'
@@ -121,7 +123,7 @@ def test_add_new_log_all_fields(session, test_user, setup_conditions):
 
 def test_delete_log_existing(session, test_user):
     """Positive test: Successfully delete an existing emotional log."""
-    log_to_delete = EmotionLog(user_id=test_user.id, emotion='Angry', steps=100, time=datetime.utcnow())
+    log_to_delete = EmotionLog(user_id=test_user.id, emotion='Angry', steps=100, time=datetime.now())
     session.add(log_to_delete)
     session.commit()
     session.refresh(log_to_delete)
@@ -134,7 +136,7 @@ def test_delete_log_existing(session, test_user):
     assert is_deleted is True
 
     # Verify log has been removed from db
-    log_in_db = session.query(EmotionLog).get(log_to_delete.log_id)
+    log_in_db = session.get(EmotionLog, log_to_delete.log_id)
     assert log_in_db is None
 
     # Verify log removed from in-memory manager
