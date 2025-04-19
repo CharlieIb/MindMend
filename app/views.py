@@ -42,9 +42,9 @@ def login():
         next_page = request.args.get('next')
 
         # Load user relevant data
-        emotion_log_manager = EmotionLogManager(db.session, current_user.id)
+        app.emotion_log_manager = EmotionLogManager(db.session, current_user.id)
         #### EXAMPLE  USAGE OF EMOTIONLOG CLASS
-        logs = emotion_log_manager.emotional_logs
+        logs = app.emotion_log_manager.emotional_logs
         if not logs:
             print(f"No emotion logs found for user ID {current_user.id}.")
         else:
