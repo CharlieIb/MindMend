@@ -1,15 +1,18 @@
 from app.models import EmotionLog
 from typing import List, Optional
 from datetime import datetime
+import sqlalchemy as sa
 
 class EmotionLogManager:
     def __init__(self, session, user_id):
         self.session = session
         self.user_id = user_id
         self.emotional_logs = self._load_emotional_logs_by_user(self.user_id)
+
     def _load_emotional_logs_by_user(self, user_id):
         """Load the emotion logs for a user"""
-        return {log.log_id: log for log in self.session.query(EmotionLog).filter_by(user_id=user_id).all()}
+        q = sa.select(EmotionLog).where(EmotionLog.user_id==user_id)
+        return {log.log_id: log for log in self.session.execute(q).scalars().all()}
 
     def get_emotion_log(self, log_id):
         '''Get an emotional log by its ID'''

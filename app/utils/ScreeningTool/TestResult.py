@@ -1,5 +1,6 @@
 from app.models import TestResult
 from datetime import datetime
+import sqlalchemy as sa
 
 
 class TestResultManager:
@@ -19,8 +20,10 @@ class TestResultManager:
 
     def get_test_results_for_user(self, user_id):
         '''Retrieves all test results for a specific user.'''
-        return self.session.query(TestResult).filter_by(user_id=user_id).all()
+        q = sa.select(TestResult).where(TestResult.user_id == user_id)
+        return self.session.execute(q).scalars().all()
 
     def get_test_resutls_for_condition(self, cond_id):
         '''Retrieves all test results for a specific condition'''
-        return self.session.query(TestResult).filter_by(cond_id=cond_id).all()
+        q = sa.select(TestResult).where(TestResult.cond_id == cond_id)
+        return self.session.execute(q).scalars().all()

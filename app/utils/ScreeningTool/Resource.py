@@ -1,4 +1,5 @@
 from app.models import Resource, Condition
+import sqlalchemy as sa
 
 class ResourceManager:
     def __init__(self, session):
@@ -7,7 +8,8 @@ class ResourceManager:
 
     def _load_resources(self):
         '''Loads all resources into memory'''
-        return {res.resource_id: res for res in self.session.query(Resource).all()}
+        q = sa.select(Resource)
+        return {res.resource_id: res for res in self.session.execute(q).scalars().all()}
 
     def get_resource(self, resource_id):
         '''Retrieves a resource by its ID'''
