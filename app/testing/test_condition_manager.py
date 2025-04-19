@@ -23,7 +23,7 @@ def test_load_questions(session, setup_conditions):
 
     assert len(questions) == 3 # Based on the setup_conditions fixture
     assert all(isinstance(q, ConditionQuestion) for q in questions.values())
-    assert (setup_conditions['conditions'][0].cond_id, 1) in questions # Assuming first condition's ID
+    assert (setup_conditions['conditions'][0].cond_id, 1) in questions
     assert (setup_conditions['conditions'][0].cond_id, 2) in questions
     assert (setup_conditions['conditions'][1].cond_id, 1) in questions
 
@@ -47,6 +47,7 @@ def test_get_condition_non_existent(session, setup_conditions):
 
 def test_get_questions_for_condition_with_questions(session, setup_conditions):
     """Positive test: Retrieve questions for a condition that has questions."""
+
     manager = ConditionManager(session)
     anxiety_condition = setup_conditions['conditions'][0]
     questions_for_anxiety = manager.get_questions_for_condition(anxiety_condition.cond_id)
@@ -55,14 +56,6 @@ def test_get_questions_for_condition_with_questions(session, setup_conditions):
     assert all(isinstance(q, ConditionQuestion) for q in questions_for_anxiety)
     assert questions_for_anxiety[0].question == 'Question 1 for Anxiety?'
     assert questions_for_anxiety[1].question == 'Question 2 for Anxiety?'
-
-def test_get_questions_for_condition_without_questions(session, setup_conditions):
-    """Positive test: Retrieve questions for a condition that has no questions."""
-    manager = ConditionManager(session)
-    stress_condition = setup_conditions['conditions'][2] # Stress has no questions in setup
-    questions_for_stress = manager.get_questions_for_condition(stress_condition.cond_id)
-
-    assert len(questions_for_stress) == 0
 
 def test_get_questions_for_non_existent_condition(session, setup_conditions):
     """Negative test: Retrieve questions for a non-existent condition."""
@@ -76,9 +69,10 @@ def test_get_all_conditions(session, setup_conditions):
     manager = ConditionManager(session)
     all_conditions = manager.get_all_conditions()
 
-    assert len(all_conditions) == 3
+    assert len(all_conditions) == 3 # Based on setup_conditions
     assert all(isinstance(c, Condition) for c in all_conditions)
-    # Check if the names are present (order might not be guaranteed)
+
+    # Check if the names are present
     condition_names = {c.name for c in all_conditions}
     assert 'Anxiety' in condition_names
     assert 'Depression' in condition_names

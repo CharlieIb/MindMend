@@ -31,7 +31,9 @@ def test_get_emotion_log_existing(session, test_user):
     log = EmotionLog(user_id=test_user.id, emotion='Neutral', steps=700, time=datetime.utcnow())
     session.add(log)
     session.commit()
-    session.refresh(log) # Refresh to get the log_id
+
+    # Ensure IDs have been loaded into DB
+    session.refresh(log)
 
     manager = EmotionLogManager(session, test_user.id)
     retrieved_log = manager.get_emotion_log(log.log_id)
@@ -43,7 +45,7 @@ def test_get_emotion_log_existing(session, test_user):
 def test_get_emotion_log_non_existent(session, test_user):
     """Negative test: Retrieve a non-existent emotional log by its ID."""
     manager = EmotionLogManager(session, test_user.id)
-    retrieved_log = manager.get_emotion_log(999) # Assuming 999 is a non-existent ID
+    retrieved_log = manager.get_emotion_log(999) # Make sure 999 is not used
 
     assert retrieved_log is None
 
@@ -141,12 +143,13 @@ def test_delete_log_existing(session, test_user):
 
 def test_delete_log_non_existent(session, test_user):
     """Negative test: Attempt to delete a non-existent emotional log."""
+
     manager = EmotionLogManager(session, test_user.id)
     initial_log_count_in_manager = len(manager.emotional_logs)
 
-    is_deleted = manager.delete_log(999) # Assuming 999 is a non-existent ID
+    is_deleted = manager.delete_log(999) # Make sure 999 is not used in app context
 
     assert is_deleted is False
 
-    # Verify no logs were deleted from the database (by checking manager's dict size after attempt)
+    # Verify no logs were deleted from the database
     assert len(manager.emotional_logs) == initial_log_count_in_manager
