@@ -9,7 +9,7 @@ def test_load_conditions(session, setup_conditions):
 
     assert len(conditions) == 3
     assert all(isinstance(c, Condition) for c in conditions.values())
-    assert 1 in conditions # Assuming IDs start from 1 or are assigned sequentially
+    assert 1 in conditions
     assert 2 in conditions
     assert 3 in conditions
     assert conditions[1].name == 'Anxiety'
