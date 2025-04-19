@@ -39,7 +39,7 @@ def initialize_app(app):
             app.test_result_manager = TestResultManager(db.session)
             if current_user.is_authenticated:
                 # Load user log data, if already logged in
-                emotion_log_manager = EmotionLogManager(db.session, current_user.id)
+                app.emotion_log_manager = EmotionLogManager(db.session, current_user.id)
             initialized = True
             flash("Application data loaded into memory", "success")
 
