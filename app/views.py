@@ -1,11 +1,18 @@
+from flask import render_template, redirect, url_for, flash, request, session, abort
 from crypt import methods
 
 from flask import render_template, redirect, url_for, flash, request, send_file, send_from_directory, session, abort
 from app import app
 from app import db
+from app.forms import (ChooseForm, LoginForm, ChangePasswordForm, RegisterForm, SettingsForm,
+                       SelectSymptomsForm, generate_form, MindMirrorLayoutForm)
 from app.forms import ChooseForm, LoginForm, ChangePasswordForm, RegisterForm, FormRedirect, SelectSymptomsForm, \
     generate_form, FormMindMirrorLayout, EmotionForm, EmotionNoteForm
 from app.models import User, EmotionLog
+from app.utils import symptom_list, EmotionLogManager, ActivityManager, LocationManager, \
+    PersonManager
+from app.helpers import (roles_required, get_emotions_info, get_health_info, get_heatmap_info, initialize_app,
+                         selectConditions, generate_questionnaires)
 from app.utils import (HeatMap, TrackHealth, symptom_list, questions_database,
                        ConditionManager, ResourceManager, TherapeuticRecManager, TestResultManager,
                        EmotionLogManager, ActivityManager, LocationManager, PersonManager, TrackEmotions)
@@ -14,7 +21,6 @@ from app.helpers import roles_required, get_emotions_info, get_health_info, get_
 from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
 from urllib.parse import urlsplit
-from datetime import datetime
 
 from app.utils.CheckIn.EmotionLog import emotions
 
@@ -36,7 +42,7 @@ def login():
     if current_user.is_authenticated:
         return redirect(url_for('home'))
     form_login = LoginForm()
-    form_register = FormRedirect()
+    form_register = SettingsForm()
     if 'submit' in request.form and form_login.validate_on_submit():
         user = db.session.scalar(
             sa.select(User).where(User.username == form_login.username.data)
@@ -48,9 +54,9 @@ def login():
         next_page = request.args.get('next')
 
         # Load user relevant data
-        emotion_log_manager = EmotionLogManager(db.session, current_user.id)
+        app.emotion_log_manager = EmotionLogManager(db.session, current_user.id)
         #### EXAMPLE  USAGE OF EMOTIONLOG CLASS
-        logs = emotion_log_manager.emotional_logs
+        logs = app.emotion_log_manager.emotional_logs
         if not logs:
             print(f"No emotion logs found for user ID {current_user.id}.")
         else:
@@ -226,7 +232,7 @@ def logout():
 @app.route('/settings', methods=['GET', 'POST'])
 @login_required
 def settings():
-    form = FormRedirect()
+    form = SettingsForm()
     if form.validate_on_submit():
         if form.logout.data:
             return redirect(url_for('logout'))
@@ -239,8 +245,25 @@ def settings():
     )
 
 
-# Features
+@app.route('/track_physiological', methods=['GET', 'POST'])
+@login_required
+def track_physiological():
+    current_user.track_physiological = not current_user.track_physiological
+    db.session.commit()
+    flash(f"Your physiological is being tracked: {current_user.track_physiological}", 'success')
+    return redirect(url_for('settings'))
 
+
+@app.route('/share_data', methods=['GET', 'POST'])
+@login_required
+def share_data():
+    current_user.share_data = not current_user.share_data
+    db.session.commit()
+    flash(f"Your data is being shared: {current_user.share_data}", 'success')
+    return redirect(url_for('settings'))
+
+
+####################################################### FEATURES #######################################################
 
 # MindMirror - landing page
 @app.route('/mindmirror', methods=['GET', 'POST'])
@@ -261,23 +284,12 @@ def mindmirror():
     track_health_info = get_health_info()
     track_emotions_info = get_emotions_info()
 
-    if 'mindmirror_display' not in session:
-        session['mindmirror_display'] = {
-            'heatmap': True,
-            'emotion_graph': True,
-            'emotion_info': True,
-            'track_activity': True,
-            'track_steps': True,
-            'track_heart_rate': True,
-            'heart_zones': True
-        }
-
     return render_template(
         'mindmirror.html',
         title='MindMirror',
         form_display=form_display,
         heatmap_info=heatmap_info,
-        mindmirror_display=session.get('mindmirror_display', {}),
+        mindmirror_display=current_user.user_settings.mind_mirror_display,
         track_health_info=track_health_info,
         track_emotions_info=track_emotions_info
     )
@@ -287,9 +299,10 @@ def mindmirror():
 @app.route('/mindmirror_edit', methods=['GET', 'POST'])
 @login_required
 def mindmirror_edit():
-    form = FormMindMirrorLayout(data=session['mindmirror_display'])
+    mind_mirror_display = current_user.user_settings.mind_mirror_display
+    form = MindMirrorLayoutForm(data=mind_mirror_display)
     if form.validate_on_submit():
-        session['mindmirror_display'] = {
+        current_user.user_settings.mind_mirror_display = {
             'heatmap': form.heatmap.data,
             'emotion_graph': form.emotion_graph.data,
             'emotion_info': form.emotion_info.data,
@@ -298,6 +311,8 @@ def mindmirror_edit():
             'track_heart_rate': form.track_heart_rate.data,
             'heart_zones': form.heart_zones.data
         }
+        db.session.commit()
+
         return redirect(url_for('mindmirror'))
 
     return render_template(
@@ -372,7 +387,6 @@ def emotion_details():
 def select_symptoms():
     form = SelectSymptomsForm()
     form.symptoms.choices = symptom_list
-    selected_symptoms = []
 
     if form.validate_on_submit():
         selected_symptoms = form.symptoms.data
@@ -386,32 +400,66 @@ def select_symptoms():
 @app.route('/answer_questionnaire', methods=['GET', 'POST'])
 @login_required
 def answer_questionnaire():
+    # Initialize session results properly
+    if 'results' not in session:
+        session['results'] = []
+        session.modified = True
+
     selected_symptoms = session.get('selected_symptoms')
+    conditions = selectConditions(selected_symptoms)  # Selects appropriate condition_ids from selected symptoms
 
-    conditions = selectConditions(selected_symptoms)  # Selects appropriate condition_ids from selects symptoms
-    questionnaires = generate_questionnaires(conditions)  # Retrieves all questionnaires of corresponding conditions
+    current_index = int(request.args.get('index', 0))
+    if current_index == 0:
+        session['results'] = []  # Reset scores for new attempt
+    if current_index >= len(conditions):
+        results = session.pop('results', [])  # Clear session storage
+        return render_template('results.html', results=results, title="Questionnaire Result")
 
-    # Create Flask Forms
-    AnswerQuestionnaireForm = generate_form(questionnaires)
+
+    cond_id = conditions[current_index]
+    # Generate new form for each condition
+    questionnaire = generate_questionnaires(cond_id)
+    AnswerQuestionnaireForm = generate_form(questionnaire)
     form = AnswerQuestionnaireForm(obj=None)
 
     if form.validate_on_submit():
-        scores = []
+        condition_score = 0
+        for q_index, question in enumerate(questionnaire['questions']):
+            field_name = f"question_{questionnaire['id']}_{q_index}"
+            user_answer = getattr(form, field_name).data
+            if user_answer=='True':
+                condition_score += question['value']
 
-        for cond_id, condition_info in questionnaires.items():
-            condition_score = 0
-            for index, question in enumerate(condition_info['questions']):
-                question_id = f"question_{cond_id}_{index}"
-                user_answer = getattr(form, question_id).data
-                if user_answer == 'True':
-                    condition_score += question['value']
+        cond_obj = app.condition_manager.get_condition(cond_id)
+        # Convert SQLAlchemy objects to dictionaries as flask session cannot store SQLAlchemy objects
+        recs = [
+            {'description': rec.description, 'treatments':rec.treatments}
+            for rec in app.therapeutic_rec_manager.get_recommendations_for_condition(cond_id)
+        ]
+        rsrcs = [
+            {'label': rsrc.label, 'link': rsrc.link}
+            for rsrc in app.resource_manager.get_resources_for_condition(cond_id)
+        ]
+        threshold_met = (condition_score > cond_obj.threshold)
+        result = {
+                 'condition': cond_obj.name,
+                 'score': condition_score,
+                 'is_met_threshold': threshold_met,
+                 'therapeutic_recs': recs,
+                 'resources': rsrcs
+             }
+        session['results'].append(result)
+        session.modified = True
 
-                ### TO-DO: Check Threshold and get necessary actions ###
-            scores.append({'condition': condition_info['name'], 'score': condition_score})
-        return render_template('results.html', scores=scores, title="Questionnaire Result")
-    return render_template('questionnaire.html', questionnaires=questionnaires, title='Questionnaire',
-                           form=form, enumerate=enumerate)
+        # Move to next condition or render results
+        next_index = current_index + 1
+        if next_index < len(conditions):
+            return redirect(url_for('answer_questionnaire', index=next_index))
+        else:
+            results = session.pop('results', [])  # Clear session and get results
+            return render_template('results.html',title="Questionnaire Result",results=results)
 
+    return render_template('questionnaire.html',title='Questionnaire',form=form,questionnaires=questionnaire,current_index=current_index,conditions=conditions,enumerate=enumerate)
 
 # Error handlers
 # Error handler for 403 Forbidden
@@ -435,5 +483,3 @@ def error_413(error):
 @app.errorhandler(500)
 def error_500(error):
     return render_template('errors/500.html', title='Error'), 500
-
-

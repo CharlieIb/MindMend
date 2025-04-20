@@ -9,6 +9,8 @@ body {
     padding: 0;
 }
 
+
+/* NAVBAR */
 .navbar {
     position: sticky;
     top: 0;
@@ -19,9 +21,10 @@ body {
     width: 125px;
 }
 
-.small_widget_title {
-    width: 105px;
-    height: 58px;
+
+/* WIDGETS */
+.graph_widget_title {
+    width: 135px;
 }
 
 .medium_widget {
@@ -37,6 +40,13 @@ body {
     width: 435px;
 }
 
+.widget_caller {
+    height: 25px;
+    padding: 1px;
+    margin: 1px;
+}
+
+/* HEATMAP */
 .heatmap_day {
     height: 20px;
     width: 20px;
@@ -46,6 +56,7 @@ body {
     min-width: 1rem;
 }
 
+/* PROGRESS BAR */
 .progress_bar {
     height: 25px;
     width: 1px;
@@ -73,40 +84,74 @@ body {
     margin: 1px;
 }
 
-.graph_bar_small {
+/* GRAPH BAR */
+.graph_bar_x_small {
     height: 45px;
     width: 1px;
     padding: 1px;
     margin: 1px;
 }
 
-.graph_bar_med {
+.graph_bar_small {
     height: 45px;
     width: 1px;
     padding: 2px;
     margin: 1px;
 }
 
-.graph_bar_big {
+.graph_bar_med {
     height: 45px;
     width: 1px;
-    padding: 3.5px;
+    padding: 3px;
     margin: 1px;
 }
 
+.graph_bar_big {
+    height: 45px;
+    width: 1px;
+    padding: 5px;
+    margin: 1px;
+}
+
+/* FONT SIZE */
+.small_text {
+    font-size: 0.725rem;
+}
+
+/* GRID SETTINGS */
+.grid-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
 .responsive-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, 315px);
-    gap: 1rem;
-    justify-content: center;
-    justify-items: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(315px, 1fr));
+  gap: 1rem;
+  justify-content: center;
+  justify-items: center;
+}
+
+.responsive-flex {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.responsive-flex > * {
+  flex: 0 0 315px;
 }
 
 .full-row {
-    grid-column: 1 / -1;
-    justify-items: space-between;
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
+/* TOOLTIP */
 .center-tooltip.bs-tooltip-top,
 .center-tooltip.bs-tooltip-bottom,
 .center-tooltip.bs-tooltip-start,
@@ -117,6 +162,89 @@ transform: translate(-50%, -50%) !important;
 }
 .center-tooltip .tooltip-arrow {
 display: none;
+}
+
+
+/* EMOTION BACKGROUND */
+.Happy,
+.bright_yellow {
+    background-color: rgba(255, 235, 59, 0.5);
+}
+
+.Calm,
+.light_blue {
+    background-color: rgba(173, 216, 230, 0.5);
+}
+
+.Stressed,
+.grey {
+    background-color: rgba(128, 128, 128, 0.5);
+}
+
+.Energetic,
+.bright_orange {
+    background-color: rgba(255, 165, 0, 0.5);
+}
+
+.Anxious,
+.red {
+    background-color: rgba(220, 20, 60, 0.5);
+}
+
+.Sad,
+.dark_blue {
+    background-color: rgba(0, 0, 128, 0.5);
+}
+
+.Excited,
+.hot_pink {
+    background-color: rgba(255, 105, 180, 0.5);
+}
+
+.Angry,
+.dark_red {
+    background-color: rgba(128, 0, 0, 0.5);
+}
+
+/* EMOTION BORDERS */
+.Happy_border,
+.bright_yellow_border {
+    border: 1px solid rgba(255, 235, 59, 0.5);
+}
+
+.Calm_border,
+.light_blue_border {
+    border: 1px solid rgba(173, 216, 230, 0.5);
+}
+
+.Stressed_border,
+.grey_border {
+    border: 1px solid rgba(128, 128, 128, 0.5);
+}
+
+.Energetic_border,
+.bright_orange_border {
+    border: 1px solid rgba(255, 165, 0, 0.5);
+}
+
+.Anxious_border,
+.red_border {
+    border: 1px solid rgba(220, 20, 60, 0.5);
+}
+
+.Sad_border,
+.dark_blue_border {
+    border: 1px solid rgba(0, 0, 128, 0.5);
+}
+
+.Excited_border,
+.hot_pink_border {
+    border: 1px solid rgba(255, 105, 180, 0.5);
+}
+
+.Angry_border,
+.dark_red_border {
+    border: 1px solid rgba(128, 0, 0, 0.5);
 }
 input[type="checkbox"] {
     display: none;

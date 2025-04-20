@@ -8,43 +8,45 @@
     <a href="{{ url_for('mindmirror_edit') }}" class="btn btn-dark opacity-75">Edit</a>
 </div>
 <h2 class="text-center">Here is your personalised Insight</h2>
-<div class="container">
-    <div class="responsive-grid m-5">
-        {% if 'heatmap' in mindmirror_display and mindmirror_display.heatmap == True %}
-        <div class="w-100 {% if heatmap_info.display_year_month == 'year' %} full-row {% endif %}">
-            {% include 'heatmap.html' %}
-        </div>
-        {% endif %}
-        {% if 'emotion_info' in mindmirror_display and mindmirror_display.emotion_info == True %}
-        <div>
-            {% include 'track_emotions.html' %}
-        </div>
-        {% endif %}
-        {% if 'emotion_graph' in mindmirror_display and mindmirror_display.emotion_graph == True %}
-        <div>
-            {% include 'emotions_graph.html' %}
-        </div>
-        {% endif %}
-        {% if 'track_activity' in mindmirror_display and mindmirror_display.track_activity == True %}
-        <div>
-            {% include 'track_activity.html' %}
-        </div>
-        {% endif %}
-        {% if 'track_steps' in mindmirror_display and mindmirror_display.track_steps == True %}
-        <div>
-            {% include 'track_steps.html' %}
-        </div>
-        {% endif %}
-        {% if 'track_heart_rate' in mindmirror_display and mindmirror_display.track_heart_rate == True %}
-        <div>
-            {% include 'track_heart.html' %}
-        </div>
-        {% endif %}
-        {% if 'heart_zones' in mindmirror_display and mindmirror_display.heart_zones == True %}
-        <div>
-            {% include 'track_heart_zones.html' %}
-        </div>
-        {% endif %}
+<div class="grid-wrapper">
+<div class="responsive-grid mb-3">
+    {% if 'heatmap' in mindmirror_display and mindmirror_display.heatmap == True %}
+    <div class="w-100 full-row">
+        {% include 'heatmap.html' %}
     </div>
+    {% endif %}
+</div>
+<div class="responsive-flex">
+    {% if 'emotion_info' in mindmirror_display and mindmirror_display.emotion_info == True %}
+    <div>
+        {% include 'track_emotions.html' %}
+    </div>
+    {% endif %}
+    {% if 'emotion_graph' in mindmirror_display and mindmirror_display.emotion_graph == True %}
+    <div>
+        {% include 'emotions_graph.html' %}
+    </div>
+    {% endif %}
+    {% if 'heart_zones' in mindmirror_display and mindmirror_display.heart_zones == True %}
+    <div>
+        {% include 'track_heart_zones.html' %}
+    </div>
+    {% endif %}
+    {% if 'track_activity' in mindmirror_display and mindmirror_display.track_activity == True %}
+    <div>
+        {% include 'track_activity.html' %}
+    </div>
+    {% endif %}
+    {% if 'track_steps' in mindmirror_display and mindmirror_display.track_steps == True %}
+    <div>
+        {% include 'track_steps.html' %}
+    </div>
+    {% endif %}
+    {% if 'track_heart_rate' in mindmirror_display and mindmirror_display.track_heart_rate == True %}
+    <div>
+        {% include 'track_heart.html' %}
+    </div>
+    {% endif %}
+</div>
 </div>
 {% endblock %}
