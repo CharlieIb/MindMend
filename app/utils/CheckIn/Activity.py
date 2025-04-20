@@ -13,6 +13,6 @@ class ActivityManager:
 
     def get_activity_id_by_name(self, activity_name):
         '''Gets the activity id by the name'''
-        q = sa.select(Activity).where(Activity.name == activity_name)
+        q = sa.select(Activity.activity_id).where(Activity.name == activity_name)
         return self.session.execute(q).scalar()
 

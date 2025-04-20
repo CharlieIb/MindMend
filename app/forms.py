@@ -1,12 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms import (SubmitField, HiddenField, StringField, PasswordField, BooleanField, IntegerField, ValidationError,
-                     EmailField, RadioField)
-from wtforms.fields.simple import TextAreaField
-from wtforms.validators import DataRequired, NumberRange, Length, EqualTo
 from wtforms import (SubmitField, HiddenField, StringField, PasswordField,
-                     BooleanField, IntegerField, ValidationError, EmailField, RadioField)
+                     BooleanField, ValidationError, EmailField, RadioField)
 from wtforms.fields.simple import TextAreaField
-from wtforms.validators import DataRequired, NumberRange, Length, EqualTo, Optional, optional
+from wtforms.validators import DataRequired, Length, EqualTo, Optional
 from email_validator import validate_email, EmailNotValidError
 from wtforms.fields.choices import SelectMultipleField, SelectField
 from wtforms.widgets.core import ListWidget, CheckboxInput
@@ -133,7 +129,7 @@ class EmotionForm(FlaskForm):
     submit = SubmitField('Next')
 
 class EmotionNoteForm(FlaskForm):
-    notes = TextAreaField("How are you feeling?", validators=[optional()])
+    notes = TextAreaField("How are you feeling?", validators=[Optional()])
     activity = SelectField(
         'What activity were you doing at the time?',
         choices=[('Working', 'Working'), ('Commuting', 'Commuting'), ('Socialising', 'Socialising'), ('Exercising', 'Exercising'), ('Studying', 'Studying'), ('Shopping', 'Shopping'), ('Relaxing', 'Relaxing')]
