@@ -13,4 +13,6 @@ class LocationManager:
 
     def get_location_id_by_name(self, location_name):
         '''Gets the location id by the name'''
-        return self.session.query(Location.location_id).filter_by(name=location_name).scalar()
+        q = sa.select(Location.location_id).where(Location.name == location_name)
+        return self.session.execute(q).scalar()
+

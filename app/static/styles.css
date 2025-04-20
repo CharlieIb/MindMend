@@ -165,47 +165,6 @@ display: none;
 }
 
 
-input[type="checkbox"] {
-    display: none;
-}
-
-input[type="checkbox"]:checked + label.btn-outline-secondary {
-    color: #212529;
-    background-color: #6c757d;
-    border-color: #6c757d;
-}
-
-input[type="checkbox"]:checked + label.btn-outline-primary {
-    color: white;
-    background-color: #0d6efd;
-    border-color: #0d6efd;
-}
-
-input[type="checkbox"]:checked + label.btn-outline-warning {
-    color: #212529;
-    background-color: #ffc107;
-    border-color: #ffc107;
-}
-
-input[type="checkbox"]:checked + label.btn-outline-info {
-    color: white;
-    background-color: #0dcaf0;
-    border-color: #0dcaf0;
-}
-
-input[type="checkbox"]:checked + label.btn-outline-danger {
-    color: white;
-    background-color: #dc3545;
-    border-color: #dc3545;
-}
-
-
-input[type="checkbox"]:checked + label.btn-outline-success {
-    color: white;
-    background-color: #198754;
-    border-color: #198754;
-
-
 /* EMOTION BACKGROUND */
 .Happy,
 .bright_yellow {
@@ -286,4 +245,44 @@ input[type="checkbox"]:checked + label.btn-outline-success {
 .Angry_border,
 .dark_red_border {
     border: 1px solid rgba(128, 0, 0, 0.5);
+}
+input[type="checkbox"] {
+    display: none;
+}
+
+input[type="checkbox"]:checked + label.btn-outline-secondary {
+    color: #212529;
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+input[type="checkbox"]:checked + label.btn-outline-primary {
+    color: white;
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+input[type="checkbox"]:checked + label.btn-outline-warning {
+    color: #212529;
+    background-color: #ffc107;
+    border-color: #ffc107;
+}
+
+input[type="checkbox"]:checked + label.btn-outline-info {
+    color: white;
+    background-color: #0dcaf0;
+    border-color: #0dcaf0;
+}
+
+input[type="checkbox"]:checked + label.btn-outline-danger {
+    color: white;
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+
+input[type="checkbox"]:checked + label.btn-outline-success {
+    color: white;
+    background-color: #198754;
+    border-color: #198754;
 }

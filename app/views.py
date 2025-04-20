@@ -13,7 +13,6 @@ from urllib.parse import urlsplit
 
 from app.utils.CheckIn.EmotionLog import emotions
 
-
 # Load data into classes on first load
 @app.before_request
 def before_request_handler():
@@ -404,8 +403,6 @@ def answer_questionnaire():
         results = session.pop('results', [])  # Clear session storage
         return render_template('results.html', results=results, title="Questionnaire Result")
 
-    conditions = selectConditions(selected_symptoms)  # Selects appropriate condition_ids from selects symptoms
-    questionnaires = generate_questionnaires(conditions)  # Retrieves all questionnaires of corresponding conditions
 
     cond_id = conditions[current_index]
     # Generate new form for each condition
@@ -474,5 +471,3 @@ def error_413(error):
 @app.errorhandler(500)
 def error_500(error):
     return render_template('errors/500.html', title='Error'), 500
-
-

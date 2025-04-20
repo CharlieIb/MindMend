@@ -13,4 +13,6 @@ class PersonManager:
 
     def get_person_id_by_name(self, person_name):
         '''Gets the person id by the name'''
-        return self.session.query(Person.person_id).filter_by(name=person_name).scalar()
+        q = sa.select(Person.person_id).where(Person.name == person_name)
+        return self.session.execute(q).scalar()
+
