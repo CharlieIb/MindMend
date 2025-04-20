@@ -2,15 +2,16 @@ from flask import render_template, redirect, url_for, flash, request, session, a
 from app import app
 from app import db
 from app.forms import (ChooseForm, LoginForm, ChangePasswordForm, RegisterForm, SettingsForm,
-                       SelectSymptomsForm, generate_form, MindMirrorLayoutForm)
+                       SelectSymptomsForm, generate_form, MindMirrorLayoutForm, EmotionForm, EmotionNoteForm)
 from app.models import User, EmotionLog
-from app.utils import symptom_list, EmotionLogManager, ActivityManager, LocationManager, \
-    PersonManager
+from app.utils import symptom_list, EmotionLogManager, ActivityManager, LocationManager, PersonManager
 from app.helpers import (roles_required, get_emotions_info, get_health_info, get_heatmap_info, initialize_app,
                          selectConditions, generate_questionnaires)
 from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
 from urllib.parse import urlsplit
+
+from app.utils.CheckIn.EmotionLog import emotions
 
 
 # Load data into classes on first load
@@ -311,19 +312,61 @@ def mindmirror_edit():
 
 
 # CheckIn
-@app.route('/check-in')
+@app.route('/check-in', methods=['GET', 'POST'])
 @login_required
 def emotion_log():
-    emotions = [
-        {"title": "Anxious", "feelings": ["Nervous", "Overwhelmed", "Irritable", "Restless", "Worried"],
-         "border": "border-danger"},
-        {"title": "Calm", "feelings": ["Relaxed", "Peaceful", "Content", "At Ease", "Serene"], "border": "border-info"},
-        {"title": "Happy", "feelings": ["Joyful", "Excited", "Optimistic", "Grateful", "Energetic"],
-         "border": "border-warning"},
-        {"title": "Sad", "feelings": ["Down", "Lonely", "Disheartened", "Hopeless", "Heartbroken"],
-         "border": "border-success"}
+    form = EmotionForm()
+
+    form.emotions.choices = [
+        (f"{feeling}::{emotion['title']}", feeling)
+        for emotion in emotions
+        for feeling in emotion["feelings"]
     ]
-    return render_template('emotion-log.html', title='Check-In', emotions=emotions)
+
+    if form.validate_on_submit():
+        session['selected_emotions'] = form.emotions.data
+        return redirect(url_for('emotion_details'))
+
+    return render_template('emotion-log.html', title='Check-In', emotions=emotions, form=form)
+
+
+# Add Extra details to check in
+@app.route('/emotion-details', methods=['GET', 'POST'])
+@login_required
+def emotion_details():
+    form = EmotionNoteForm()
+    selected_emotions = session.get('selected_emotions')
+
+    if not selected_emotions:
+        flash("Please select emotions first.")
+        return redirect(url_for('emotion_log'))
+
+    if form.validate_on_submit():
+        manager = EmotionLogManager(session=db.session, user_id=current_user.id)
+        activity_manager = ActivityManager(session=db.session)
+        person_manager = PersonManager(session=db.session)
+        location_manager = LocationManager(session=db.session)
+
+        activity_id = activity_manager.get_activity_id_by_name(form.activity.data)
+        person_id = person_manager.get_person_id_by_name(form.person.data)
+        location_id = location_manager.get_location_id_by_name(form.location.data)
+
+        for val in selected_emotions:
+            feeling, _ = val.split("::")
+            manager.add_new_log(
+                emotion=feeling,
+                steps=0,
+                free_notes=form.notes.data,
+                activity_id = activity_id,
+                person_id = person_id,
+                location_id = location_id
+            )
+
+        session.pop('selected_emotions', None)
+        flash("Successfully saved!", "success")
+        return redirect(url_for('mindmirror'))
+
+    return render_template('emotion_details.html', title="Tell us more", form=form)
 
 
 # Screening Tool
@@ -361,6 +404,8 @@ def answer_questionnaire():
         results = session.pop('results', [])  # Clear session storage
         return render_template('results.html', results=results, title="Questionnaire Result")
 
+    conditions = selectConditions(selected_symptoms)  # Selects appropriate condition_ids from selects symptoms
+    questionnaires = generate_questionnaires(conditions)  # Retrieves all questionnaires of corresponding conditions
 
     cond_id = conditions[current_index]
     # Generate new form for each condition
@@ -429,3 +474,5 @@ def error_413(error):
 @app.errorhandler(500)
 def error_500(error):
     return render_template('errors/500.html', title='Error'), 500
+
+

@@ -11,8 +11,6 @@ class LocationManager:
         q = sa.select(Location)
         return {loc.name: loc.location_id for loc in self.session.execute(q).scalars().all()}
 
-    def get_activity_id_by_name(self, location_name):
+    def get_location_id_by_name(self, location_name):
         '''Gets the location id by the name'''
-        q = sa.select(Location).where(Location.name == location_name)
-        return self.session.execute(q).scalar()
-
+        return self.session.query(Location.location_id).filter_by(name=location_name).scalar()

@@ -13,6 +13,5 @@ class ActivityManager:
 
     def get_activity_id_by_name(self, activity_name):
         '''Gets the activity id by the name'''
-        q = sa.select(Activity).where(Activity.name == activity_name)
-        return self.session.execute(q).scalar()
-
+        return self.session.query(Activity.activity_id).filter_by(name=activity_name).scalar()
+      
