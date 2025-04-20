@@ -2,14 +2,43 @@
 {% import "bootstrap_wtf.html" as wtf %}
 
 {% block content %}
-<h1>Settings</h1>
-<h2>Account Actions</h2>
-<form action="" method="POST" novalidate>
-    {{ form.hidden_tag() }}
-    {{ wtf.form_field(form.logout, False) }}
-    {{ wtf.form_field(form.change_password, False) }}
-</form>
-<h2>Share Data</h2>
-<h2>Track Wearable Data</h2>
-<!-- bool forms -->
+<div class="text-center">
+    <h1 class="mb-5 border-bottom border-5 border-dark">Settings</h1>
+    <h2>Account Actions</h2>
+    <form action="" method="POST" novalidate>
+        {{ form.hidden_tag() }}
+        {{ wtf.form_field(form.logout, False) }}
+        {{ wtf.form_field(form.change_password, False) }}
+    </form>
+    {% if current_user.role == 'Normal' %}
+    <h2 class="mt-5">Track Physiological Data</h2>
+    <div class="d-flex align-items-center justify-content-center border rounded">
+        <h3 class="text-start w-25">{% if current_user.track_physiological %} ON {% else %} OFF {% endif %}</h3>
+        <form action="{{ url_for('track_physiological') }}" method="post">
+            {{ form.csrf_token() }}
+            <button class="btn" type="submit">
+                {% if current_user.track_physiological %}
+                <i class="bi bi-toggle-on fs-2"></i>
+                {% else %}
+                <i class="bi bi-toggle-off fs-2"></i>
+                {% endif %}
+            </button>
+        </form>
+    </div>
+    <h2 class="mt-5">Share Data</h2>
+    <div class="d-flex align-items-center justify-content-center border rounded">
+        <h3 class="text-start w-25">{% if current_user.share_data %} ON {% else %} OFF {% endif %}</h3>
+        <form action="{{ url_for('share_data') }}" method="post">
+            {{ form.csrf_token() }}
+            <button class="btn" type="submit">
+                {% if current_user.share_data %}
+                <i class="bi bi-toggle-on fs-2"></i>
+                {% else %}
+                <i class="bi bi-toggle-off fs-2"></i>
+                {% endif %}
+            </button>
+        </form>
+    </div>
+    {% endif %}
+</div>
 {% endblock %}

@@ -1,4 +1,5 @@
 from app.models import Condition, ConditionQuestion
+import sqlalchemy as sa
 
 class ConditionManager():
     def __init__(self, session):
@@ -9,11 +10,13 @@ class ConditionManager():
 
     def _load_conditions(self):
         """Loads all conditions into memory """
-        return {cond.cond_id: cond for cond in self.session.query(Condition).all()}
+        q = sa.select(Condition)
+        return {cond.cond_id: cond for cond in self.session.execute(q).scalars().all()}
 
     def _load_questions(self):
         """Loads all condition questions into memory """
-        return {(q.cond_id, q.q_number): q for q in self.session.query(ConditionQuestion).all()}
+        query = sa.select(ConditionQuestion)
+        return {(q.cond_id, q.q_number): q for q in self.session.execute(query).scalars().all()}
 
     def get_condition(self, cond_id):
         '''Retrieves a condition by its ID'''

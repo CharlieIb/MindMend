@@ -75,21 +75,21 @@ class ChangePasswordForm(FlaskForm):
     submit = SubmitField('Update Password')
 
 
-class FormRedirect(FlaskForm):
+class SettingsForm(FlaskForm):
     register = SubmitField('Register')
     logout = SubmitField('Logout')
     change_password = SubmitField('Change Password')
 
 
-class FormMindMirrorLayout(FlaskForm):
+class MindMirrorLayoutForm(FlaskForm):
     heatmap = BooleanField('Check In Activity Heatmap', default=True)
     emotion_graph = BooleanField('Emotion Graph', default=True)
     emotion_info = BooleanField('Emotion Info', default=True)
-    track_activity = BooleanField('Track Activity', default=True)
-    track_steps = BooleanField('Track Steps', default=True)
-    track_heart_rate = BooleanField('Track Heart Rate', default=True)
-    track_blood_pressure = BooleanField('Blood Pressure', default=True)
-    heart_zones = BooleanField('Heart Zones', default=True)
+    track_activity = BooleanField('Track Activity', default=False)
+    track_steps = BooleanField('Track Steps', default=False)
+    track_heart_rate = BooleanField('Track Heart Rate', default=False)
+    track_blood_pressure = BooleanField('Blood Pressure', default=False)
+    heart_zones = BooleanField('Heart Zones', default=False)
     submit = SubmitField('Submit')
 
 
@@ -104,10 +104,9 @@ def generate_form(questionnaires):
     class AnswerQuestionnaireForm(FlaskForm):
         pass  # Fields will be added dynamically
 
-    for cond_id, condition_info in questionnaires.items():
-        # Create new radio field for each question in this condition
-        for index, question in enumerate(condition_info['questions']):
-            question_id = f"question_{cond_id}_{index}"
+    # Create new radio field for each question in this condition
+    for index,question in enumerate(questionnaires['questions']):
+            question_id = f"question_{questionnaires['id']}_{index}"
             setattr(
                 AnswerQuestionnaireForm,
                 question_id,
@@ -144,4 +143,3 @@ class EmotionNoteForm(FlaskForm):
         choices=[('Colleagues', 'Colleagues'), ('Friends', 'Friends'), ('Family', 'Family'), ('Partner', 'Partner'), ('Neighbours', 'Neighbours'), ('Strangers', 'Strangers')]
     )
     submit = SubmitField("Save")
-

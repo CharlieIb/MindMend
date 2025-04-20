@@ -1,27 +1,113 @@
 <div class="d-flex flex-column align-items-center justify-content-between {{ 'w-100' if heatmap_info.display_year_month == 'year' else 'medium_widget' }}">
     {% if heatmap_info.display_year_month == 'month' %}
-        <div class="d-flex flex-column align-items-center justify-content-between border rounded-3 p-1 medium_widget  {{ 'mb-3' if heatmap_info.month[1]|length < 6 else '' }}">
-            <h3 class="bg-light text-center rounded-3 py-1 w-100">Check In Activity</h3>
-            <div class="bg-light rounded-3 d-flex flex-column justify-content-center align-items-center w-100 {{ 'p-4' if heatmap_info.month[1]|length < 6 else 'p-3' }}">
-                {% for week in heatmap_info.month[1] %}
-                    <div class="d-flex">
-                        {% for day in week %}
-                            {% if day == heatmap_info.curr_day or day is not number and day[0] == heatmap_info.curr_day %}
+    <div class="d-flex flex-column align-items-center justify-content-between border rounded-3 p-1 medium_widget  {{ 'mb-3' if heatmap_info.month[1]|length < 6 else '' }}">
+        <h3 class="bg-light text-center rounded-3 py-1 w-100">Check In Activity</h3>
+        <div class="bg-light rounded-3 d-flex flex-column justify-content-center align-items-center w-100 {{ 'p-4' if heatmap_info.month[1]|length < 6 else 'p-3' }}">
+            <div class="bg-dark rounded w-100 m-0 mb-1">
+                <p class="text-center text-light m-0">
+                    {{ heatmap_info.months[heatmap_info.curr_month - 1] }}
+                </p>
+            </div>
+            {% for week in heatmap_info.month[1] %}
+            <div class="d-flex">
+                {% for day in week %}
+                {% if day == heatmap_info.curr_day or day is not number and day[0] == heatmap_info.curr_day %}
+                {% if day is not number %}
+                <div class="border border-danger rounded-1 m-1 {{ day[1]['colour'] }} heatmap_day"
+                     data-bs-toggle="tooltip"
+                     data-bs-placement="top"
+                     data-bs-custom-class="center-tooltip"
+                     title="{{ day[0] }}/{{ heatmap_info.curr_month }}/{{ heatmap_info.month[0][1] }} - {{ day[1]['emotion'] }}"
+                >
+                </div>
+                {% else %}
+                <div class="border border-danger rounded-1 m-1 heatmap_day"
+                     data-bs-toggle="tooltip"
+                     data-bs-placement="top"
+                     data-bs-custom-class="center-tooltip"
+                     title="{{ day }}"
+                >
+                </div>
+                {% endif %}
+                {% elif day == 0 %}
+                <div class="m-1 heatmap_day"></div>
+                {% elif day is number and day > heatmap_info.curr_day %}
+                <div class="border border-dark rounded-1 m-1 heatmap_day"
+                     data-bs-toggle="tooltip"
+                     data-bs-placement="top"
+                     data-bs-custom-class="center-tooltip"
+                     title="{{ day }}"
+                >
+                </div>
+                {% else %}
+                {% if day is not number %}
+                <div class="border border-success rounded-1 m-1 {{ day[1]['colour'] }} heatmap_day"
+                     data-bs-toggle="tooltip"
+                     data-bs-placement="top"
+                     data-bs-custom-class="center-tooltip"
+                     title="{{ day[0] }}/{{ heatmap_info.curr_month }}/{{ heatmap_info.month[0][1] }} - {{ day[1]['emotion'] }}"
+                >
+                </div>
+                {% else %}
+                <div class="border border-success rounded-1 m-1 heatmap_day"
+                     data-bs-toggle="tooltip"
+                     data-bs-placement="top"
+                     data-bs-custom-class="center-tooltip"
+                     title="{{ day }}"
+                >
+                </div>
+                {% endif %}
+                {% endif %}
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% else %}
+    <div class="border rounded-3 p-1 w-100">
+        <h3 class="bg-light text-center rounded-3 py-1">Check In Activity</h3>
+        <div class="overflow-auto bg-light p-3 rounded-3 w-100">
+            <div class="d-flex flex-nowrap">
+                {% for month in heatmap_info.year %}
+                {% set month_index = loop.index %}
+                <div class="flex-shrink-0 px-2">
+                    <div class="bg-dark rounded">
+                        <p class="text-center text-light mx-0 my-1">
+                            {{ heatmap_info.months[month_index - 1] }}
+                        </p>
+                    </div>
+                    <div class="d-flex justify-content-center align-items-center">
+                        <div>
+                            {% for week in month[1] %}
+                            <div class="d-flex flex-nowrap">
+                                {% for day in week %}
+                                {% if day == heatmap_info.curr_day and month_index == heatmap_info.curr_month
+                                or
+                                day is not number and day[0] == heatmap_info.curr_day and month_index ==
+                                heatmap_info.curr_month %}
                                 {% if day is not number %}
-                                    <div class="border border-danger rounded-1 m-1 bg-{{ day[1]['colour'] }} bg-opacity-50 heatmap_day"
-                                         data-bs-toggle="tooltip"
-                                         data-bs-placement="top"
-                                         data-bs-custom-class="center-tooltip"
-                                         title="{{ day[0] }}"
-                                    >
-                                    </div>
+                                <div class="border border-danger rounded-1 m-1 {{ day[1]['colour'] }} heatmap_day"
+                                     data-bs-toggle="tooltip"
+                                     data-bs-placement="top"
+                                     data-bs-custom-class="center-tooltip"
+                                     title="{{ day[0] }}/{{ month_index }}/{{ heatmap_info.year[0][0][1] }} - {{ day[1]['emotion'] }}"
+                                >
+                                </div>
                                 {% else %}
-                                    <div class="border border-danger rounded-1 m-1 heatmap_day">
-                                    </div>
+                                <div class="border border-danger rounded-1 m-1 heatmap_day"
+                                     data-bs-toggle="tooltip"
+                                     data-bs-placement="top"
+                                     data-bs-custom-class="center-tooltip"
+                                     title="{{ day }}"
+                                >
+                                </div>
                                 {% endif %}
-                            {% elif day == 0 %}
+                                {% elif day == 0 %}
                                 <div class="m-1 heatmap_day"></div>
-                            {% elif day is number and day > heatmap_info.curr_day %}
+                                {% elif day is number and day > heatmap_info.curr_day and month_index >=
+                                heatmap_info.curr_month
+                                or
+                                month_index > heatmap_info.curr_month %}
                                 <div class="border border-dark rounded-1 m-1 heatmap_day"
                                      data-bs-toggle="tooltip"
                                      data-bs-placement="top"
@@ -29,104 +115,36 @@
                                      title="{{ day }}"
                                 >
                                 </div>
-                            {% else %}
-                                {% if day is not number %}
-                                    <div class="border border-success rounded-1 m-1 bg-{{ day[1]['colour'] }} bg-opacity-50 heatmap_day"
-                                         data-bs-toggle="tooltip"
-                                         data-bs-placement="top"
-                                         data-bs-custom-class="center-tooltip"
-                                         title="{{ day[0] }}"
-                                    >
-                                    </div>
                                 {% else %}
-                                    <div class="border border-success rounded-1 m-1 heatmap_day"
-                                         data-bs-toggle="tooltip"
-                                         data-bs-placement="top"
-                                         data-bs-custom-class="center-tooltip"
-                                         title="{{ day }}"
-                                    >
-                                    </div>
-                                {% endif %}
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-    {% else %}
-        <div class="border rounded-3 p-1 w-100">
-            <h3 class="bg-light text-center rounded-3 py-1">Check In Activity</h3>
-            <div class="overflow-auto bg-light p-3 rounded-3 w-100">
-                <div class="d-flex flex-nowrap">
-                    {% for month in heatmap_info.year %}
-                        {% set month_index = loop.index %}
-                        <div class="flex-shrink-0 px-2">
-                            <div class="bg-dark rounded">
-                                <p class="text-center text-light mx-0 my-1">
-                                    {{ heatmap_info.months[month_index - 1] }}
-                                </p>
-                            </div>
-                            <div class="d-flex justify-content-center align-items-center">
-                                <div>
-                                    {% for week in month[1] %}
-                                        <div class="d-flex flex-nowrap">
-                                            {% for day in week %}
-                                                {% if day == heatmap_info.curr_day and month_index == heatmap_info.curr_month
-                                                    or
-                                                    day is not number and day[0] == heatmap_info.curr_day  and month_index == heatmap_info.curr_month %}
-                                                    {% if day is not number %}
-                                                        <div class="border border-danger rounded-1 m-1 bg-{{ day[1]['colour'] }} bg-opacity-50 heatmap_day"
-                                                             data-bs-toggle="tooltip"
-                                                             data-bs-placement="top"
-                                                             data-bs-custom-class="center-tooltip"
-                                                             title="{{ day[0] }}"
-                                                        >
-                                                        </div>
-                                                    {% else %}
-                                                        <div class="border border-danger rounded-1 m-1 heatmap_day"></div>
-                                                    {% endif %}
-                                                {% elif day == 0 %}
-                                                    <div class="m-1 heatmap_day"></div>
-                                                {% elif day is number and day > heatmap_info.curr_day and month_index >= heatmap_info.curr_month
-                                                    or
-                                                    month_index > heatmap_info.curr_month %}
-                                                    <div class="border border-dark rounded-1 m-1 heatmap_day"
-                                                         data-bs-toggle="tooltip"
-                                                         data-bs-placement="top"
-                                                         data-bs-custom-class="center-tooltip"
-                                                         title="{{ day }}"
-                                                    >
-                                                    </div>
-                                                {% else %}
-                                                    {% if day is not number %}
-                                                        <div class="border border-success rounded-1 m-1 bg-{{ day[1]['colour'] }} bg-opacity-50 heatmap_day"
-                                                             data-bs-toggle="tooltip"
-                                                             data-bs-placement="top"
-                                                             data-bs-custom-class="center-tooltip"
-                                                             title="{{ day[0] }}"
-                                                        >
-                                                        </div>
-                                                    {% else %}
-                                                        <div class="border border-success rounded-1 m-1 heatmap_day"
-                                                             data-bs-toggle="tooltip"
-                                                             data-bs-placement="top"
-                                                             data-bs-custom-class="center-tooltip"
-                                                             title="{{ day }}"
-                                                        >
-                                                        </div>
-                                                    {% endif %}
-                                                {% endif %}
-                                            {% endfor %}
-                                        </div>
-                                    {% endfor %}
+                                {% if day is not number %}
+                                <div class="border border-success rounded-1 m-1 {{ day[1]['colour'] }} heatmap_day"
+                                     data-bs-toggle="tooltip"
+                                     data-bs-placement="top"
+                                     data-bs-custom-class="center-tooltip"
+                                     title="{{ day[0] }}/{{ month_index }}/{{ heatmap_info.year[0][0][1] }} - {{ day[1]['emotion'] }}"
+                                >
                                 </div>
+                                {% else %}
+                                <div class="border border-success rounded-1 m-1 heatmap_day"
+                                     data-bs-toggle="tooltip"
+                                     data-bs-placement="top"
+                                     data-bs-custom-class="center-tooltip"
+                                     title="{{ day }}"
+                                >
+                                </div>
+                                {% endif %}
+                                {% endif %}
+                                {% endfor %}
                             </div>
+                            {% endfor %}
                         </div>
-                    {% endfor %}
-                    <div class="gap_year_display"></div>
+                    </div>
                 </div>
+                {% endfor %}
+                <div class="gap_year_display"></div>
             </div>
         </div>
+    </div>
     {% endif %}
     <form class="mt-2 w-100" action="" method="POST" novalidate enctype="multipart/form-data">
         {{ form_display.csrf_token() }}

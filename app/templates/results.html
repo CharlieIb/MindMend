@@ -3,17 +3,53 @@
 {% block content %}
 
 <div class="container">
-    <h1>Your Results</h1>
-    <hr class="border-5">
-        {% for score in scores  %}
-            <h5>{{ score.condition }} : {{ score.score }}</h5>
-        {% endfor %}
+     <h1 class="my-4">Your Results</h1>
 
-    <hr class="border-5">
-    <h5>Here are some recommendations:</h5>
+    <!-- Disclaimer -->
+     <div class="alert alert-info">
+         <strong> Disclaimer:</strong> This system does <em>not</em> provide an official clinical diagnosis.
+         It is designed to offer general guidance only. If you are concerned about your health, please seek professional medical advice.
+     </div>
 
-    <hr class="border-5">
-    <h5>Here are some useful resources:</h5>
-</div>
+     <hr class="border-5">
 
+    <!-- Result Card -->
+    {% for item in results %}
+        <div class="card my-3">
+            <div class="card-header">
+                <h5>{{ item.condition }}</h5>
+             </div>
+            <div class="card-body">
+
+            <!-- Diagnosis -->
+             {% if item.is_met_threshold %}
+                 <p><strong>Potential Diagnosis:</strong> {{ item.condition }}</p>
+             {% else %}
+                 <p>No significant indication for this condition based on your results. If you are still concerned, please seek professional medical advice.</p>
+             {% endif %}
+
+            <!-- Recommendations and Resources -->
+             {% if item.therapeutic_recs and item.resources %}
+                 <h3>Therapeutic Recommendations</h3>
+                 <ul>
+                     {% for rec in item.therapeutic_recs %}
+                         <li>{{ rec.description }}</li>
+                             {% if rec.treatments %}
+                                 ({{ rec.treatments }})
+                             {% endif %}
+                     {% endfor %}
+                 </ul>
+                 <h3>Additional Resources</h3>
+                 <ul>
+                     {% for rsc in item.resources %}
+                         <li>
+                             <a href="{{ rsc.link }}" target="_blank">{{ rsc.label }}</a>
+                         </li>
+                     {% endfor %}
+                 </ul>
+             {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+ </div>
 {%  endblock %}
