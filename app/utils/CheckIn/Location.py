@@ -9,7 +9,7 @@ class LocationManager:
         '''Loads locations into memory'''
         return {loc.name: loc.location_id for loc in self.session.query(Location).all()}
 
-    def get_activity_id_by_name(self, location_name):
+    def get_location_id_by_name(self, location_name):
         '''Gets the location id by the name'''
-        return self.session.query(Location).filter_by(name=location_name).scalar()
+        return self.session.query(Location.location_id).filter_by(name=location_name).scalar()
 

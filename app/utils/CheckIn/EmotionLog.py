@@ -71,7 +71,7 @@ emotions = [
          "button-color": "btn btn-outline-info"},
         {"title": "Anger", "feelings": ["Irritated", "Vexed", "Raged", "Annoyed", "Cross"],
          "button-color": "btn btn-outline-danger"},
-        {"title": "Fear", "feelings": ["Panicked", "Distressed", "Uneasy", "Alarmed", "Scared"],
+        {"title": "Love", "feelings": ["Affectionate", "Empathetic", "Grateful", "Warm", "Loved"],
          "button-color": "btn btn-outline-success"}
     ]
 

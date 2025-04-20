@@ -339,18 +339,28 @@ def emotion_details():
 
     if form.validate_on_submit():
         manager = EmotionLogManager(session=db.session, user_id=current_user.id)
+        activity_manager = ActivityManager(session=db.session)
+        person_manager = PersonManager(session=db.session)
+        location_manager = LocationManager(session=db.session)
+
+        activity_id = activity_manager.get_activity_id_by_name(form.activity.data)
+        person_id = person_manager.get_person_id_by_name(form.person.data)
+        location_id = location_manager.get_location_id_by_name(form.location.data)
 
         for val in selected_emotions:
             feeling, _ = val.split("::")
             manager.add_new_log(
                 emotion=feeling,
                 steps=0,
-                free_notes=form.notes.data
+                free_notes=form.notes.data,
+                activity_id = activity_id,
+                person_id = person_id,
+                location_id = location_id
             )
 
         session.pop('selected_emotions', None)
         flash("Successfully saved!", "success")
-        return redirect(url_for('home'))
+        return redirect(url_for('mindmirror'))
 
     return render_template('emotion_details.html', title="Tell us more", form=form)
 
@@ -425,3 +435,5 @@ def error_413(error):
 @app.errorhandler(500)
 def error_500(error):
     return render_template('errors/500.html', title='Error'), 500
+
+

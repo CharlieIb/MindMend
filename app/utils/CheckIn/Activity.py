@@ -11,5 +11,5 @@ class ActivityManager:
 
     def get_activity_id_by_name(self, activity_name):
         '''Gets the activity id by the name'''
-        return self.session.query(Activity).filter_by(name=activity_name).scalar()
+        return self.session.query(Activity.activity_id).filter_by(name=activity_name).scalar()
 

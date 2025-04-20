@@ -2,9 +2,9 @@ from flask_wtf import FlaskForm
 from wtforms import (SubmitField, HiddenField, StringField, PasswordField,
                      BooleanField, IntegerField, ValidationError, EmailField, RadioField)
 from wtforms.fields.simple import TextAreaField
-from wtforms.validators import DataRequired, NumberRange, Length, EqualTo
+from wtforms.validators import DataRequired, NumberRange, Length, EqualTo, Optional, optional
 from email_validator import validate_email, EmailNotValidError
-from wtforms.fields.choices import SelectMultipleField
+from wtforms.fields.choices import SelectMultipleField, SelectField
 from wtforms.widgets.core import ListWidget, CheckboxInput
 import re
 
@@ -130,5 +130,18 @@ class EmotionForm(FlaskForm):
     submit = SubmitField('Next')
 
 class EmotionNoteForm(FlaskForm):
-    notes = TextAreaField("How are you feeling?", validators=[DataRequired()])
+    notes = TextAreaField("How are you feeling?", validators=[optional()])
+    activity = SelectField(
+        'What activity were you doing at the time?',
+        choices=[('Working', 'Working'), ('Commuting', 'Commuting'), ('Socialising', 'Socialising'), ('Exercising', 'Exercising'), ('Studying', 'Studying'), ('Shopping', 'Shopping'), ('Relaxing', 'Relaxing')]
+    )
+    location = SelectField(
+        'Where were you?',
+        choices=[('Office', 'Office'), ('Home', 'Home'), ('Bar', 'Bar'), ('Gym', 'Gym'), ('Park', 'Park'), ('Cafe', 'Cafe'), ('Library', 'Library') ]
+    )
+    person = SelectField(
+        'Who were you with?',
+        choices=[('Colleagues', 'Colleagues'), ('Friends', 'Friends'), ('Family', 'Family'), ('Partner', 'Partner'), ('Neighbours', 'Neighbours'), ('Strangers', 'Strangers')]
+    )
     submit = SubmitField("Save")
+
