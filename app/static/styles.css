@@ -9,7 +9,6 @@ body {
     padding: 0;
 }
 
-
 /* NAVBAR */
 .navbar {
     position: sticky;
@@ -44,6 +43,15 @@ body {
     height: 25px;
     padding: 1px;
     margin: 1px;
+}
+
+/* Hover Shadow */
+.hover_shadow {
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.hover_shadow_lg:hover {
+    box-shadow: var(--bs-box-shadow-lg) !important;
 }
 
 /* HEATMAP */
