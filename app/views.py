@@ -91,7 +91,7 @@ def register():
         if existing_user:
             flash('Username not available', 'danger')
             return redirect(url_for('register'))
-        existing_email = db.session.scalar((sa.select(User).where(User.email == user.email)))
+        existing_email = db.session.scalar(sa.select(User).where(User.email == user.email))
         if existing_email:
             flash('Email already used', 'danger')
             return redirect(url_for('register'))
@@ -236,7 +236,8 @@ def settings():
 @app.route('/track_physiological', methods=['GET', 'POST'])
 @login_required
 def track_physiological():
-    current_user.track_physiological = not current_user.track_physiological
+    user = db.session.scalar(sa.select(User).where(User.username == current_user.username))
+    user.track_physiological = not user.track_physiological
     db.session.commit()
     flash(f"Your physiological is being tracked: {current_user.track_physiological}", 'success')
     return redirect(url_for('settings'))
@@ -245,7 +246,8 @@ def track_physiological():
 @app.route('/share_data', methods=['GET', 'POST'])
 @login_required
 def share_data():
-    current_user.share_data = not current_user.share_data
+    user = db.session.scalar(sa.select(User).where(User.username == current_user.username))
+    user.share_data = not user.share_data
     db.session.commit()
     flash(f"Your data is being shared: {current_user.share_data}", 'success')
     return redirect(url_for('settings'))
@@ -290,7 +292,8 @@ def mindmirror_edit():
     mind_mirror_display = current_user.user_settings.mind_mirror_display
     form = MindMirrorLayoutForm(data=mind_mirror_display)
     if form.validate_on_submit():
-        current_user.user_settings.mind_mirror_display = {
+        user = db.session.scalar(sa.select(User).where(User.username == current_user.username))
+        user.user_settings.mind_mirror_display = {
             'heatmap': form.heatmap.data,
             'emotion_graph': form.emotion_graph.data,
             'emotion_info': form.emotion_info.data,
@@ -300,7 +303,7 @@ def mindmirror_edit():
             'heart_zones': form.heart_zones.data
         }
         db.session.commit()
-
+        flash('MindMirror layout updated successfully!', 'success')
         return redirect(url_for('mindmirror'))
 
     return render_template(
