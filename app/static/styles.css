@@ -246,6 +246,9 @@ display: none;
 .dark_red_border {
     border: 1px solid rgba(128, 0, 0, 0.5);
 }
+
+
+/*
 input[type="checkbox"] {
     display: none;
 }
@@ -286,3 +289,4 @@ input[type="checkbox"]:checked + label.btn-outline-success {
     background-color: #198754;
     border-color: #198754;
 }
+*/
