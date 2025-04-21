@@ -13,6 +13,7 @@ from urllib.parse import urlsplit
 
 from app.utils.CheckIn.EmotionLog import emotions
 
+
 # Load data into classes on first load
 @app.before_request
 def before_request_handler():
@@ -359,9 +360,9 @@ def emotion_details():
                 emotion=feeling,
                 steps=0,
                 free_notes=form.notes.data,
-                activity_id = activity_id,
-                person_id = person_id,
-                location_id = location_id
+                activity_id=activity_id,
+                person_id=person_id,
+                location_id=location_id
             )
 
         session.pop('selected_emotions', None)
@@ -406,7 +407,6 @@ def answer_questionnaire():
         results = session.pop('results', [])  # Clear session storage
         return render_template('results.html', results=results, title="Questionnaire Result")
 
-
     cond_id = conditions[current_index]
     # Generate new form for each condition
     questionnaire = generate_questionnaires(cond_id)
@@ -418,13 +418,13 @@ def answer_questionnaire():
         for q_index, question in enumerate(questionnaire['questions']):
             field_name = f"question_{questionnaire['id']}_{q_index}"
             user_answer = getattr(form, field_name).data
-            if user_answer=='True':
+            if user_answer == 'True':
                 condition_score += question['value']
 
         cond_obj = app.condition_manager.get_condition(cond_id)
         # Convert SQLAlchemy objects to dictionaries as flask session cannot store SQLAlchemy objects
         recs = [
-            {'description': rec.description, 'treatments':rec.treatments}
+            {'description': rec.description, 'treatments': rec.treatments}
             for rec in app.therapeutic_rec_manager.get_recommendations_for_condition(cond_id)
         ]
         rsrcs = [
@@ -433,12 +433,12 @@ def answer_questionnaire():
         ]
         threshold_met = (condition_score > cond_obj.threshold)
         result = {
-                 'condition': cond_obj.name,
-                 'score': condition_score,
-                 'is_met_threshold': threshold_met,
-                 'therapeutic_recs': recs,
-                 'resources': rsrcs
-             }
+            'condition': cond_obj.name,
+            'score': condition_score,
+            'is_met_threshold': threshold_met,
+            'therapeutic_recs': recs,
+            'resources': rsrcs
+        }
         session['results'].append(result)
         session.modified = True
 
@@ -448,9 +448,11 @@ def answer_questionnaire():
             return redirect(url_for('answer_questionnaire', index=next_index))
         else:
             results = session.pop('results', [])  # Clear session and get results
-            return render_template('results.html',title="Questionnaire Result",results=results)
+            return render_template('results.html', title="Questionnaire Result", results=results)
 
-    return render_template('questionnaire.html',title='Questionnaire',form=form,questionnaires=questionnaire,current_index=current_index,conditions=conditions,enumerate=enumerate)
+    return render_template('questionnaire.html', title='Questionnaire', form=form, questionnaires=questionnaire,
+                           current_index=current_index, conditions=conditions, enumerate=enumerate)
+
 
 # Error handlers
 # Error handler for 403 Forbidden
