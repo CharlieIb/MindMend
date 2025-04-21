@@ -13,6 +13,7 @@ from urllib.parse import urlsplit
 
 from app.utils.CheckIn.EmotionLog import emotions
 
+
 # Load data into classes on first load
 @app.before_request
 def before_request_handler():
@@ -91,7 +92,7 @@ def register():
         if existing_user:
             flash('Username not available', 'danger')
             return redirect(url_for('register'))
-        existing_email = db.session.scalar((sa.select(User).where(User.email == user.email)))
+        existing_email = db.session.scalar(sa.select(User).where(User.email == user.email))
         if existing_email:
             flash('Email already used', 'danger')
             return redirect(url_for('register'))
@@ -236,7 +237,8 @@ def settings():
 @app.route('/track_physiological', methods=['GET', 'POST'])
 @login_required
 def track_physiological():
-    current_user.track_physiological = not current_user.track_physiological
+    user = db.session.scalar(sa.select(User).where(User.username == current_user.username))
+    user.track_physiological = not user.track_physiological
     db.session.commit()
     flash(f"Your physiological is being tracked: {current_user.track_physiological}", 'success')
     return redirect(url_for('settings'))
@@ -245,7 +247,8 @@ def track_physiological():
 @app.route('/share_data', methods=['GET', 'POST'])
 @login_required
 def share_data():
-    current_user.share_data = not current_user.share_data
+    user = db.session.scalar(sa.select(User).where(User.username == current_user.username))
+    user.share_data = not user.share_data
     db.session.commit()
     flash(f"Your data is being shared: {current_user.share_data}", 'success')
     return redirect(url_for('settings'))
@@ -290,7 +293,8 @@ def mindmirror_edit():
     mind_mirror_display = current_user.user_settings.mind_mirror_display
     form = MindMirrorLayoutForm(data=mind_mirror_display)
     if form.validate_on_submit():
-        current_user.user_settings.mind_mirror_display = {
+        user = db.session.scalar(sa.select(User).where(User.username == current_user.username))
+        user.user_settings.mind_mirror_display = {
             'heatmap': form.heatmap.data,
             'emotion_graph': form.emotion_graph.data,
             'emotion_info': form.emotion_info.data,
@@ -300,7 +304,7 @@ def mindmirror_edit():
             'heart_zones': form.heart_zones.data
         }
         db.session.commit()
-
+        flash('MindMirror layout updated successfully!', 'success')
         return redirect(url_for('mindmirror'))
 
     return render_template(
@@ -356,9 +360,9 @@ def emotion_details():
                 emotion=feeling,
                 steps=0,
                 free_notes=form.notes.data,
-                activity_id = activity_id,
-                person_id = person_id,
-                location_id = location_id
+                activity_id=activity_id,
+                person_id=person_id,
+                location_id=location_id
             )
 
         session.pop('selected_emotions', None)
@@ -403,7 +407,6 @@ def answer_questionnaire():
         results = session.pop('results', [])  # Clear session storage
         return render_template('results.html', results=results, title="Questionnaire Result")
 
-
     cond_id = conditions[current_index]
     # Generate new form for each condition
     questionnaire = generate_questionnaires(cond_id)
@@ -415,13 +418,13 @@ def answer_questionnaire():
         for q_index, question in enumerate(questionnaire['questions']):
             field_name = f"question_{questionnaire['id']}_{q_index}"
             user_answer = getattr(form, field_name).data
-            if user_answer=='True':
+            if user_answer == 'True':
                 condition_score += question['value']
 
         cond_obj = app.condition_manager.get_condition(cond_id)
         # Convert SQLAlchemy objects to dictionaries as flask session cannot store SQLAlchemy objects
         recs = [
-            {'description': rec.description, 'treatments':rec.treatments}
+            {'description': rec.description, 'treatments': rec.treatments}
             for rec in app.therapeutic_rec_manager.get_recommendations_for_condition(cond_id)
         ]
         rsrcs = [
@@ -430,12 +433,12 @@ def answer_questionnaire():
         ]
         threshold_met = (condition_score > cond_obj.threshold)
         result = {
-                 'condition': cond_obj.name,
-                 'score': condition_score,
-                 'is_met_threshold': threshold_met,
-                 'therapeutic_recs': recs,
-                 'resources': rsrcs
-             }
+            'condition': cond_obj.name,
+            'score': condition_score,
+            'is_met_threshold': threshold_met,
+            'therapeutic_recs': recs,
+            'resources': rsrcs
+        }
         session['results'].append(result)
         session.modified = True
 
@@ -445,9 +448,11 @@ def answer_questionnaire():
             return redirect(url_for('answer_questionnaire', index=next_index))
         else:
             results = session.pop('results', [])  # Clear session and get results
-            return render_template('results.html',title="Questionnaire Result",results=results)
+            return render_template('results.html', title="Questionnaire Result", results=results)
 
-    return render_template('questionnaire.html',title='Questionnaire',form=form,questionnaires=questionnaire,current_index=current_index,conditions=conditions,enumerate=enumerate)
+    return render_template('questionnaire.html', title='Questionnaire', form=form, questionnaires=questionnaire,
+                           current_index=current_index, conditions=conditions, enumerate=enumerate)
+
 
 # Error handlers
 # Error handler for 403 Forbidden

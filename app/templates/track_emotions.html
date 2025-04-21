@@ -1,15 +1,13 @@
 {% import 'widget_macro.html' as macro %}
-{% call macro.medium_widget_eight(
+{% call macro.medium_widget_six(
     medium_widget_eight,
     title="Emotion Info",
-    label_one="Calm", content_one=track_emotions_info.emotions.Calm,
-    label_two="Excited", content_two=track_emotions_info.emotions.Excited,
-    label_three="Anxious", content_three=track_emotions_info.emotions.Anxious,
-    label_four="Stressed", content_four=track_emotions_info.emotions.Stressed,
-    label_five="Energetic", content_five=track_emotions_info.emotions.Energetic,
-    label_six="Angry", content_six=track_emotions_info.emotions.Angry,
-    label_seven="Sad", content_seven=track_emotions_info.emotions.Sad,
-    label_eight="Happy", content_eight=track_emotions_info.emotions.Happy
+    label_one="Anger", content_one=track_emotions_info.emotions.Anger,
+    label_two="Anxious", content_two=track_emotions_info.emotions.Anxious,
+    label_three="Sad", content_three=track_emotions_info.emotions.Sad,
+    label_four="Happy", content_four=track_emotions_info.emotions.Happy,
+    label_five="Love", content_five=track_emotions_info.emotions.Love,
+    label_six="Calm", content_six=track_emotions_info.emotions.Calm
 ) %}
     {% set ns = namespace(base_class='') %}
     {% set total_bars = track_emotions_info.segments[-1].cumulative + 1 %}

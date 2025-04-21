@@ -33,14 +33,12 @@ class HeatMap:
 
     def group_emotions(self):
         emotions_table = [
-            {'emotion': 'Happy', 'colour': 'bright_yellow'},
-            {'emotion': 'Calm', 'colour': 'light_blue'},
-            {'emotion': 'Stressed', 'colour': 'grey'},
-            {'emotion': 'Energetic', 'colour': 'bright_orange'},
+            {'emotion': 'Anger', 'colour': 'dark_red'},
             {'emotion': 'Anxious', 'colour': 'red'},
             {'emotion': 'Sad', 'colour': 'dark_blue'},
-            {'emotion': 'Excited', 'colour': 'hot_pink'},
-            {'emotion': 'Angry', 'colour': 'dark_red'}
+            {'emotion': 'Happy', 'colour': 'bright_yellow'},
+            {'emotion': 'Love', 'colour': 'hot_pink'},
+            {'emotion': 'Calm', 'colour': 'light_blue'}
         ]
 
         group_data = []

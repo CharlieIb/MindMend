@@ -65,7 +65,7 @@ body {
 }
 
 .progress_bar_y {
-    height: 9px;
+    height: 6.25px;
     width: 145px;
     margin: 1px;
 }
@@ -168,22 +168,12 @@ display: none;
 /* EMOTION BACKGROUND */
 .Happy,
 .bright_yellow {
-    background-color: rgba(255, 235, 59, 0.5);
+    background-color: rgba(247, 200, 0, 0.5);
 }
 
 .Calm,
 .light_blue {
     background-color: rgba(173, 216, 230, 0.5);
-}
-
-.Stressed,
-.grey {
-    background-color: rgba(128, 128, 128, 0.5);
-}
-
-.Energetic,
-.bright_orange {
-    background-color: rgba(255, 165, 0, 0.5);
 }
 
 .Anxious,
@@ -196,35 +186,25 @@ display: none;
     background-color: rgba(0, 0, 128, 0.5);
 }
 
-.Excited,
+.Love,
 .hot_pink {
-    background-color: rgba(255, 105, 180, 0.5);
+    background-color: rgba(255, 100, 193, 0.5);
 }
 
-.Angry,
+.Anger,
 .dark_red {
-    background-color: rgba(128, 0, 0, 0.5);
+    background-color: rgba(139, 0, 0, 0.5);
 }
 
 /* EMOTION BORDERS */
 .Happy_border,
 .bright_yellow_border {
-    border: 1px solid rgba(255, 235, 59, 0.5);
+    border: 1px solid rgba(247, 200, 0, 0.5);
 }
 
 .Calm_border,
 .light_blue_border {
     border: 1px solid rgba(173, 216, 230, 0.5);
-}
-
-.Stressed_border,
-.grey_border {
-    border: 1px solid rgba(128, 128, 128, 0.5);
-}
-
-.Energetic_border,
-.bright_orange_border {
-    border: 1px solid rgba(255, 165, 0, 0.5);
 }
 
 .Anxious_border,
@@ -237,15 +217,18 @@ display: none;
     border: 1px solid rgba(0, 0, 128, 0.5);
 }
 
-.Excited_border,
+.Love_border,
 .hot_pink_border {
-    border: 1px solid rgba(255, 105, 180, 0.5);
+    border: 1px solid rgba(255, 100, 193, 0.5);
 }
 
-.Angry_border,
+.Anger_border,
 .dark_red_border {
-    border: 1px solid rgba(128, 0, 0, 0.5);
+    border: 1px solid rgba(139, 0, 0, 0.5);
 }
+
+
+/*
 input[type="checkbox"] {
     display: none;
 }
@@ -286,3 +269,4 @@ input[type="checkbox"]:checked + label.btn-outline-success {
     background-color: #198754;
     border-color: #198754;
 }
+*/

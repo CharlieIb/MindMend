@@ -43,22 +43,22 @@
     <div class="d-flex align-items-center">
         <div class="me-2">
             <h4 class="{{ bg_colour_one }} text-body-secondary text-center rounded-3 py-1 medium_widget_title">{{ label_one }}</h4>
-            <h4 class="bg-light fw-bold text-center rounded-3 p-3 mb-0">{{ content_one }}</h4>
+            <h4 class="bg-light fw-bold text-center rounded-3 p-1 mb-0">{{ content_one }}</h4>
 
-            <h4 class="{{ bg_colour_two }} text-body-secondary text-center rounded-3 py-1 mt-2 medium_widget_title">{{ label_two }}</h4>
-            <h4 class="bg-light fw-bold text-center rounded-3 p-3 mb-0">{{ content_two }}</h4>
+            <h4 class="{{ bg_colour_two }} text-body-secondary text-center rounded-3 py-1 mt-1 medium_widget_title">{{ label_two }}</h4>
+            <h4 class="bg-light fw-bold text-center rounded-3 p-1 mb-0">{{ content_two }}</h4>
 
-            <h4 class="{{ bg_colour_three }} text-body-secondary text-center rounded-3 py-1 mt-2 medium_widget_title">{{ label_three }}</h4>
-            <h4 class="bg-light fw-bold text-center rounded-3 p-3 mb-0">{{ content_three }}</h4>
+            <h4 class="{{ bg_colour_three }} text-body-secondary text-center rounded-3 py-1 mt-1 medium_widget_title">{{ label_three }}</h4>
+            <h4 class="bg-light fw-bold text-center rounded-3 p-1 mb-0">{{ content_three }}</h4>
 
-            <h4 class="{{ bg_colour_four }} text-body-secondary text-center rounded-3 py-1 mt-2 medium_widget_title">{{ label_four }}</h4>
-            <h4 class="bg-light fw-bold text-center rounded-3 p-3 mb-0">{{ content_four }}</h4>
+            <h4 class="{{ bg_colour_four }} text-body-secondary text-center rounded-3 py-1 mt-1 medium_widget_title">{{ label_four }}</h4>
+            <h4 class="bg-light fw-bold text-center rounded-3 p-1 mb-0">{{ content_four }}</h4>
 
-            <h4 class="{{ bg_colour_five }} text-body-secondary text-center rounded-3 py-1 mt-2 medium_widget_title">{{ label_five }}</h4>
-            <h4 class="bg-light fw-bold text-center rounded-3 p-3 mb-0">{{ content_five }}</h4>
+            <h4 class="{{ bg_colour_five }} text-body-secondary text-center rounded-3 py-1 mt-1 medium_widget_title">{{ label_five }}</h4>
+            <h4 class="bg-light fw-bold text-center rounded-3 p-1 mb-0">{{ content_five }}</h4>
 
         </div>
-        <div class="bg-light border rounded d-flex justify-content-center align-items-center mb-0 w-100 mh-100">
+        <div class="bg-light border rounded d-flex justify-content-center align-items-center m-0 w-100 h-100">
             {{ caller() }}
         </div>
     </div>
@@ -66,7 +66,7 @@
 </div>
 {% endmacro %}
 
-{% macro medium_widget_eight(
+{% macro medium_widget_six(
     medium_widget_eight,
     title="Title",
     label_one="", content_one=None,
@@ -74,9 +74,7 @@
     label_three="", content_three=None,
     label_four="", content_four=None,
     label_five="", content_five=None,
-    label_six="", content_six=None,
-    label_seven="", content_seven=None,
-    label_eight="", content_eight=None
+    label_six="", content_six=None
 ) %}
 {% set label = 'bg-light text-body-secondary text-center rounded-3 py-3 medium_widget_title' %}
 {% set content = 'bg-light fw-bold text-center rounded-3 py-3 medium_widget_title' %}
@@ -105,14 +103,6 @@
     <div class="d-flex justify-content-between w-100">
         <h4 class="{{ label }}">{{ label_six }}</h4>
         <h4 class="{{ content }}">{{ content_six }}</h4>
-    </div>
-    <div class="d-flex justify-content-between w-100">
-        <h4 class="{{ label }}">{{ label_seven }}</h4>
-        <h4 class="{{ content }}">{{ content_seven }}</h4>
-    </div>
-    <div class="d-flex justify-content-between w-100">
-        <h4 class="{{ label }}">{{ label_eight }}</h4>
-        <h4 class="{{ content }}">{{ content_eight }}</h4>
     </div>
     <div class="bg-light border rounded d-flex justify-content-center align-items-center w-100">
         {{ caller() }}
