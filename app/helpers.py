@@ -136,29 +136,38 @@ def get_health_info():
     return track_health_info
 
 
-def get_emotions_info():
+def get_emotions_info_from_logs(logs):
     default_emotions = {'Anger': 0, 'Anxious': 0, 'Sad': 0, 'Happy': 0, 'Love': 0, 'Calm': 0}
 
     try:
         emotions = default_emotions.copy()
-        for log in current_user.emotion_logs:
+        for log in logs:
             emotions[log.emotion] = emotions.get(log.emotion, 0) + 1
 
         total_emotions = sum(emotions.values())
+
         if total_emotions:
             emotions_percentage = {
-                emotion: round(((emotions[emotion] / total_emotions) * 100) / 2)
-                for emotion in emotions
+                emotion: round((count / total_emotions * 100) / 2)
+                for emotion, count in emotions.items()
             }
-            max_emotion, max_value = max(
-                emotions_percentage.items(), key=lambda item: item[1], default=(None, 0)
-            )
+
+            max_emotion, max_value = max(emotions_percentage.items(), key=lambda item: item[1], default=(None, 0))
             max_num = [max_emotion, max_value * 2]
+
             segments = []
             cumulative = 0
-            for emotion, value in emotions_percentage.items():
-                cumulative += value
-                segments.append({'emotion': emotion, 'value': value, 'cumulative': cumulative})
+            items = list(emotions_percentage.items())
+            for idx, (emo, val) in enumerate(items):
+                cumulative += val
+                cumulative = min(50, cumulative)
+                if idx == len(items) - 1:
+                    cumulative = 50
+                segments.append({
+                    'emotion': emo,
+                    'value': val,
+                    'cumulative': cumulative
+                })
         else:
             emotions_percentage = default_emotions.copy()
             segments = [
@@ -167,24 +176,6 @@ def get_emotions_info():
             ]
             max_num = [None, 0]
 
-        track_emotions_info = {
-            'emotions': emotions,
-            'total_emotion_logs': total_emotions,
-            'emotions_percentage': emotions_percentage,
-            'segments': segments,
-            'max_num': max_num
-        }
-        return track_emotions_info
-    except Exception as e:
-        print(f"Error: {e}")
-        emotions = default_emotions.copy()
-        total_emotions = 0
-        emotions_percentage = default_emotions.copy()
-        segments = [
-            {'emotion': emotion, 'value': 0, 'cumulative': 0}
-            for emotion in default_emotions
-        ]
-        max_num = [None, 0]
         return {
             'emotions': emotions,
             'total_emotion_logs': total_emotions,
@@ -192,6 +183,26 @@ def get_emotions_info():
             'segments': segments,
             'max_num': max_num
         }
+
+    except Exception as e:
+        print(f"Error: {e}")
+        emotions = default_emotions.copy()
+        emotions_percentage = default_emotions.copy()
+        segments = [
+            {'emotion': emotion, 'value': 0, 'cumulative': 0}
+            for emotion in default_emotions
+        ]
+        return {
+            'emotions': emotions,
+            'total_emotion_logs': 0,
+            'emotions_percentage': emotions_percentage,
+            'segments': segments,
+            'max_num': [None, 0]
+        }
+
+
+def get_emotions_info():
+    return get_emotions_info_from_logs(current_user.emotion_logs)
 
 
 ################### SCREENING TOOL ##############################
@@ -210,16 +221,16 @@ def generate_questionnaires(cond_id):
 
     # Store condition info and questions in the dictionary
     questionnaire = {
-            'id': cond_id,
-            'name': condition.name,
-            'threshold': condition.threshold,
-            'questions': [
-                {
-                    'q_number': question.q_number,
-                    'question': question.question,
-                    'value': question.value
-                }
-                for question in questions
-            ]
+        'id': cond_id,
+        'name': condition.name,
+        'threshold': condition.threshold,
+        'questions': [
+            {
+                'q_number': question.q_number,
+                'question': question.question,
+                'value': question.value
+            }
+            for question in questions
+        ]
     }
     return questionnaire
