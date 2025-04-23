@@ -10,7 +10,7 @@
     label_six="Calm", content_six=track_emotions_info.emotions.Calm
 ) %}
     {% set ns = namespace(base_class='') %}
-    {% set total_bars = track_emotions_info.segments[-1].cumulative %}
+    {% set total_bars = track_emotions_info.segments[-1].cumulative + 1 %}
     {% for i in range(1, total_bars) %}
         {% set ns.base_class = '' %}
         {% for segment in track_emotions_info.segments %}
