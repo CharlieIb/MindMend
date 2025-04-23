@@ -10,8 +10,8 @@
     label_six="Calm", content_six=track_emotions_info.emotions.Calm
 ) %}
     {% set ns = namespace(base_class='') %}
-    {% set total_bars = track_emotions_info.segments[-1].cumulative + 1 %}
-    {% for i in range(0, total_bars) %}
+    {% set total_bars = track_emotions_info.segments[-1].cumulative %}
+    {% for i in range(1, total_bars) %}
         {% set ns.base_class = '' %}
         {% for segment in track_emotions_info.segments %}
             {% if ns.base_class == '' and i <= segment.cumulative %}
@@ -22,7 +22,7 @@
             {% set ns.base_class = 'default' %}
         {% endif %}
         {% set border_class = ns.base_class ~ '_border' %}
-        {% set rounded_class = ' rounded-start' if i == 0 else ' rounded-end' if i == (total_bars - 1) else '' %}
+        {% set rounded_class = ' rounded-start' if i == 1 else ' rounded-end' if i == (total_bars - 1) else '' %}
         <div class="{{ ns.base_class }} {{ border_class }}{{ rounded_class }} progress_bar"></div>
     {% endfor %}
 {% endcall %}

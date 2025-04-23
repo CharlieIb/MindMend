@@ -1,6 +1,6 @@
 <div class="d-flex flex-column align-items-center justify-content-between {{ 'w-100' if heatmap_info.display_year_month == 'year' else 'medium_widget' }}">
     {% if heatmap_info.display_year_month == 'month' %}
-    <div class="d-flex flex-column align-items-center justify-content-between border rounded-3 p-1 medium_widget  {{ 'mb-3' if heatmap_info.month[1]|length < 6 else '' }}">
+    <div class="d-flex flex-column align-items-center justify-content-between border shadow hover_shadow hover_shadow_lg rounded-3 p-1 medium_widget  {{ 'mb-3' if heatmap_info.month[1]|length < 6 else '' }}">
         <h3 class="bg-light text-center rounded-3 py-1 w-100">Check In Activity</h3>
         <div class="bg-light rounded-3 d-flex flex-column justify-content-center align-items-center w-100 {{ 'p-4' if heatmap_info.month[1]|length < 6 else 'p-3' }}">
             <div class="bg-dark rounded w-100 m-0 mb-1">
@@ -64,7 +64,7 @@
         </div>
     </div>
     {% else %}
-    <div class="border rounded-3 p-1 w-100">
+    <div class="border shadow hover_shadow hover_shadow_lg rounded-3 p-1 w-100">
         <h3 class="bg-light text-center rounded-3 py-1">Check In Activity</h3>
         <div class="overflow-auto bg-light p-3 rounded-3 w-100">
             <div class="d-flex flex-nowrap">
