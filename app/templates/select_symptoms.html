@@ -2,34 +2,38 @@
 
 {% block content %}
 <div class="container">
-<h1 class="my-4">How are you feeling?</h1>
-<h3 class="mb-4">Choose symptom(s) that are applicable to you:</h3>
-<hr class="border-5">
+    <!-- Header -->
+    <h1 class="my-4">How are you feeling?</h1>
+    <p class="mb-4">Choose symptom(s) that are applicable to you:</p>
+    <hr class="border-5">
 
-<form method="POST" action="" novalidate>
-    {{ form.hidden_tag() }}
+    <form method="POST" action="" novalidate>
+        {{ form.hidden_tag() }}
 
-    <!-- Symptoms -->
-    <ul class="options-list">
-       {% for symptom in form.symptoms %}
-           <div class="col-mb-6 mb-2">
-          <label class="btn btn-outline-dark symptom-button">
-                 {{ symptom() }}  <!-- Hidden checkbox -->
-                 <span>{{ symptom.label.text }}</span>  <!-- Button text -->
-          </label>
-          </div>
-       {% endfor %}
-    </ul>
+        <!-- Display Symptoms -->
+        <div class="options-list">
+           {% for symptom in form.symptoms %}
+               <div class="col-mb-6 mb-2">
+                   <label class="symptom-btn btn btn-outline-secondary py-2 px-3" style="width: 300px;">
+                     {{ symptom(class="symptom-checkbox") }}
+                     <span>{{ symptom.label.text }}</span>
+                   </label>
+              </div>
+           {% endfor %}
 
-    <!-- Error Handling -->
-    {% if form.symptoms.errors %}
-        <div class="alert alert-danger mt-3">
-            {% for error in form.symptoms.errors %}
-                <span>{{ error }}</span><br>
-            {% endfor %}
+           <div class="col-md-4 col-sm-6 mb-3 mt-4">  <!-- Added mt-4 here -->
+                   {{ form.submit(class="btn btn-dark py-2") }}
+           </div>
         </div>
-    {% endif %}
-     {{ form.submit(class="btn btn-dark") }}
-</form>
+
+        <!-- Error Handling -->
+        {% if form.symptoms.errors %}
+            <div class="alert alert-danger mt-3">
+                {% for error in form.symptoms.errors %}
+                    <span>{{ error }}</span><br>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </form>
 </div>
 {% endblock %}
