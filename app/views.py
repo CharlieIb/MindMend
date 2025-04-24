@@ -109,7 +109,7 @@ def register():
 def contacts():
     contacts_info = {
         1: {'name': 'Mischa', 'email': 'mischa.mcla@gmail.com', 'phone': '07501878275'},
-        2: {'name': 'Charlie', 'email': '', 'phone': ''},
+        2: {'name': 'Charlie', 'email': 'cibbett325@gmail.com', 'phone': 'N/A'},
         3: {'name': 'Feyi', 'email': '', 'phone': ''},
         4: {'name': 'Aravind', 'email': '', 'phone': ''},
         5: {'name': 'Romas', 'email': '', 'phone': ''}
