@@ -12,6 +12,7 @@ def test_load_emotional_logs_by_user(session, test_user):
     session.execute(delete_statement)
     session.commit()
 
+    # Add logs for this test
     log1 = EmotionLog(user_id=test_user.id, emotion='Happy', steps=1000, time=datetime.now())
     log2 = EmotionLog(user_id=test_user.id, emotion='Sad', steps=500, time=datetime.now())
     session.add_all([log1, log2])
@@ -20,6 +21,7 @@ def test_load_emotional_logs_by_user(session, test_user):
     manager = EmotionLogManager(session, test_user.id)
     logs = manager.emotional_logs
 
+    # Verify that logs have been correctly into db
     assert len(logs) == 2
     assert log1.log_id in logs
     assert log2.log_id in logs
@@ -28,6 +30,8 @@ def test_load_emotional_logs_by_user(session, test_user):
 
 def test_get_emotion_log_existing(session, test_user):
     """Positive test: Retrieve an existing emotional log by its ID."""
+
+    # Data for test
     log = EmotionLog(user_id=test_user.id, emotion='Neutral', steps=700, time=datetime.now())
     session.add(log)
     session.commit()
@@ -38,6 +42,7 @@ def test_get_emotion_log_existing(session, test_user):
     manager = EmotionLogManager(session, test_user.id)
     retrieved_log = manager.get_emotion_log(log.log_id)
 
+    # Verify that retrieved log is correct
     assert retrieved_log is not None
     assert retrieved_log.log_id == log.log_id
     assert retrieved_log.emotion == 'Neutral'
@@ -47,6 +52,7 @@ def test_get_emotion_log_non_existent(session, test_user):
     manager = EmotionLogManager(session, test_user.id)
     retrieved_log = manager.get_emotion_log(999) # Make sure 999 is not used
 
+    # Verify that no log has been retrieved
     assert retrieved_log is None
 
 def test_add_new_log_mandatory_fields(session, test_user):
@@ -75,6 +81,7 @@ def test_add_new_log_all_fields(session, test_user, setup_conditions):
     """Positive test: Successfully add a new emotion log with all optional fields."""
 
     from app.models import Location, Activity, Person
+
     # Empty the tables first
     session.execute(sa.delete(Location))
     session.execute(sa.delete(Activity))
