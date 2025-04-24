@@ -1,5 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>General info about the app</h1>
+<div class="d-flex flex-wrap justify-content-center gap-4">
+    {% for i in range(10) %}
+    <img src="{{ url_for('static', filename='img/mindmend_logo.png') }}"
+         alt="MindMend Logo"
+         class="nav_bar_logo">
+    {% endfor %}
+    <h1 class="mt-2">MindMend</h1>
+</div>
 {% endblock %}

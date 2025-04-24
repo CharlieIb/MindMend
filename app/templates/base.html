@@ -17,38 +17,44 @@
     <nav class="navbar sticky-top bg-dark navbar_width d-flex flex-column" data-bs-theme="dark">
         <div class="container-fluid flex-column justify-content-start align-items-start h-100">
             {% if not current_user.is_anonymous %}
-                {% if current_user.role == 'Normal' %}
-                    <a class="navbar-brand fw-bold border-bottom"
-                       href="{{ url_for('mindmirror') }}">
-                        MindMend
-                    </a>
-                {% else %}
-                    <a class="navbar-brand fw-bold border-bottom"
-                       href="{{ url_for('home_admin', username=current_user.username) }}">
-                        MindMend
-                    </a>
-                {% endif %}
+            {% if current_user.role == 'Normal' %}
+            <a class="navbar-brand fw-bold border-bottom"
+               href="{{ url_for('mindmirror') }}">
+                <img src="{{ url_for('static', filename='img/mindmend_logo.png') }}"
+                     alt="MindMend Logo"
+                     class="nav_bar_logo pb-2">
+            </a>
+            {% else %}
+            <a class="navbar-brand fw-bold border-bottom"
+               href="{{ url_for('home_admin', username=current_user.username) }}">
+                <img src="{{ url_for('static', filename='img/mindmend_logo.png') }}"
+                     alt="MindMend Logo"
+                     class="nav_bar_logo pb-2">
+            </a>
+            {% endif %}
             {% else %}
             <a class="navbar-brand fw-bold border-bottom" href="{{ url_for('home') }}">
-                MindMend
+                <img src="{{ url_for('static', filename='img/mindmend_logo.png') }}"
+                     alt="MindMend Logo"
+                     class="nav_bar_logo pb-2">
             </a>
             {% endif %}
             <ul class="navbar-nav flex-column">
                 <li class="nav-item">
                     {% if not current_user.is_anonymous %}
-                        {% if current_user.role == 'Normal' %}
-                            <a class="nav-link"
-                               aria-current="page"
-                               href="{{ url_for('mindmirror') }}">
-                                MindMirror
-                            </a>
-                        {% else %}
-                            <a class="nav-link"
-                               aria-current="page"
-                               href="{{ url_for('home_admin', username=current_user.username) }}">
-                                Home
-                            </a>
-                        {% endif %}
+                    {% if current_user.role == 'Normal' %}
+                    <a class="nav-link"
+                       aria-current="page"
+                       href="{{ url_for('mindmirror') }}">
+                        MindMirror
+                    </a>
+                    {% else %}
+                    <a class="nav-link"
+                       aria-current="page"
+                       href="{{ url_for('home_admin', username=current_user.username) }}">
+                        Home
+                    </a>
+                    {% endif %}
                     {% else %}
                     <a class="nav-link" aria-current="page" href="{{ url_for('home') }}">
                         Home
@@ -58,29 +64,29 @@
             </ul>
             <ul class="navbar-nav flex-column justify-content-evenly w-100 flex-grow-1">
                 {% if not current_user.is_anonymous %}
-                    {% if current_user.role == 'Normal' %}
-                        <li class="nav-item border-top">
-                            <a class="nav-link" aria-current="page" href="{{ url_for('emotion_log') }}">
-                                Check In
-                            </a>
-                        </li>
-                        <li class="nav-item border-top">
-                            <a class="nav-link" aria-current="page" href="{{ url_for('select_symptoms') }}">
-                                Screening Tool
-                            </a>
-                        </li>
-                    {% else %}
-                        <li class="nav-item border-top">
-                            <a class="nav-link" aria-current="page" href="">
-                                Reach Out
-                            </a>
-                        </li>
-                        <li class="nav-item border-top">
-                            <a class="nav-link" aria-current="page" href="{{ url_for('admin') }}">
-                                Admin
-                            </a>
-                        </li>
-                    {% endif %}
+                {% if current_user.role == 'Normal' %}
+                <li class="nav-item border-top">
+                    <a class="nav-link" aria-current="page" href="{{ url_for('emotion_log') }}">
+                        Check In
+                    </a>
+                </li>
+                <li class="nav-item border-top">
+                    <a class="nav-link" aria-current="page" href="{{ url_for('select_symptoms') }}">
+                        Screening Tool
+                    </a>
+                </li>
+                {% else %}
+                <li class="nav-item border-top">
+                    <a class="nav-link" aria-current="page" href="">
+                        Reach Out
+                    </a>
+                </li>
+                <li class="nav-item border-top">
+                    <a class="nav-link" aria-current="page" href="{{ url_for('admin') }}">
+                        Admin
+                    </a>
+                </li>
+                {% endif %}
                 <li class="nav-item border-top">
                     <a class="nav-link" aria-current="page" href="{{ url_for('settings') }}">
                         Settings
@@ -100,13 +106,13 @@
     <div class="col d-flex flex-fill flex-column align-items-center">
         <div class="container m-2">
             {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
-                        <div class="alert alert-{{ category }}" role="alert">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                {% endif %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}" role="alert">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
             {% endwith %}
         </div>
         <div class="container mx-auto my-1 mb-3">
