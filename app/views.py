@@ -1,12 +1,12 @@
-from flask import render_template, redirect, url_for, flash, request, session, abort
+from flask import render_template, redirect, url_for, flash, request, session
 from app import app
 from app import db
-from app.forms import (ChooseForm, LoginForm, ChangePasswordForm, RegisterForm, SettingsForm,
-                       SelectSymptomsForm, generate_form, MindMirrorLayoutForm, EmotionForm, EmotionNoteForm)
+from app.utils.General.forms import (ChooseForm, LoginForm, ChangePasswordForm, RegisterForm, SettingsForm,
+                                     SelectSymptomsForm, generate_form, MindMirrorLayoutForm, EmotionForm, EmotionNoteForm)
 from app.models import User, EmotionLog
 from app.utils import EmotionLogManager, ActivityManager, LocationManager, PersonManager
-from app.helpers import (roles_required, get_emotions_info, get_health_info, get_heatmap_info, initialize_app, symptom_list,
-                         selectConditions, generate_questionnaires)
+from app.utils.General.helpers import (symptom_list, roles_required, get_emotions_info, get_health_info, get_heatmap_info, initialize_app,
+                                       selectConditions, generate_questionnaires)
 from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
 from urllib.parse import urlsplit

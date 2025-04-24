@@ -1,15 +1,15 @@
 from app import app
 from app import db
 from app.utils import (ConditionManager, ResourceManager, TherapeuticRecManager, TestResultManager, EmotionLogManager,
-                       ActivityManager, LocationManager, PersonManager, HeatMap, TrackHealth)
+                       HeatMap, TrackHealth)
 from functools import wraps
 from flask import abort, flash
 from flask_login import current_user
 from datetime import datetime
+from app.utils.ScreeningTool.symptom_to_condition_link import SYMPTOM_TO_CONDITION_MAP
 
 
-
-#################### GENERAL ####################
+##################### GENERAL ##################################
 # Defines a decorator that specifies roles allowed for a route --- move to helper.py folder?
 def roles_required(*roles):
     def decorator(f):
@@ -24,8 +24,9 @@ def roles_required(*roles):
     return decorator
 
 
-#################### Initializing App ####################
+################ Initializing App ####################
 initialized = False
+
 
 def initialize_app(app):
     global initialized
