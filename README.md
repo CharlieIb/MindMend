@@ -10,24 +10,29 @@ Disclaimer: The system does not replace medical professionals but serves as a co
 ## 2. System Requirements
 Refer to environment.yml 
 ## 3. Usage Instructions
-- Basic Usage
-- MindMirror Usage
-- CheckIn Usage
-- Screening Tool Usage
+### Basic Usage
+###  MindMirror Usage
+###  CheckIn Usage
+### Screening Tool Usage
 
 
 
 ## 4. Implemented Functionalities
-- Features:
+###  Features:
   1. CheckIn - Emotion Logging
     - Allows user to log their emotions regularly by selecting from an array of emotions and adding on more context to how they are feeling
   2. MindMirror - Insights
     - System provides an summary page based on the emotion logs and optionally physiological data where user can gain personal insights of how they have been feeling through a series of generated visualizations
   3. Screening Tool - Self-Assessment + Guidance
     - Allows user to take some diagnostic questionnaire that is tailored to the presenting symptoms they have selected and receive some therapeutic recommendations and any useful resources based on their responses to the questionnaire
-- Architecture:
-- Design Pattern:
-- Software Development Methodology: SCRUM
+###  Overall Software Architecture: Layered Architecture
+  - Software is divided into 4 Main Layers : 
+    - User Interface Layer(contains all HTML Flask templates)
+    - Application Layer (contains all Flask routes and functions)
+    - Data Access Layer (contains custom managers used for database)
+    - Data Storage Layer (contains database)
+###  Design Pattern:
+### Software Development Methodology: SCRUM
 
 
 ## 5. Contributions
