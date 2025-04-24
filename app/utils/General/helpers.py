@@ -1,12 +1,12 @@
 from app import app
 from app import db
 from app.utils import (ConditionManager, ResourceManager, TherapeuticRecManager, TestResultManager, EmotionLogManager,
-                       ActivityManager, LocationManager, PersonManager, HeatMap, TrackHealth)
+                       HeatMap, TrackHealth)
 from functools import wraps
 from flask import abort, flash
 from flask_login import current_user
 from datetime import datetime
-from app.utils.screeningtool import SYMPTOM_TO_CONDITION_MAP
+from app.utils.ScreeningTool.symptom_to_condition_link import SYMPTOM_TO_CONDITION_MAP
 
 
 ##################### GENERAL ##################################
