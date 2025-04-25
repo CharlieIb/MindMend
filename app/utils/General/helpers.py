@@ -6,8 +6,6 @@ from functools import wraps
 from flask import abort, flash
 from flask_login import current_user
 from datetime import datetime
-from app.utils.ScreeningTool.symptom_to_condition_link import SYMPTOM_TO_CONDITION_MAP
-
 
 ##################### GENERAL ##################################
 # Defines a decorator that specifies roles allowed for a route --- move to helper.py folder?
