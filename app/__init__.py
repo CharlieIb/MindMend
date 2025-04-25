@@ -13,7 +13,7 @@ login = LoginManager(app)
 login.login_view = 'login'
 
 from app import views, models
-from app.debug_utils import reset_db
+from app.utils.General.debug_utils import reset_db
 
 
 @app.shell_context_processor
