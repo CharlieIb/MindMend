@@ -51,7 +51,7 @@ def initialize_app(app):
 
 
 def _demo_managers(app):
-    """Demo/test function for the managers (remove in production)"""
+    """Demo/test function (remove)"""
     # cond_id = 1
     #
     # # Demo condition manager
@@ -66,7 +66,7 @@ def _demo_managers(app):
     # print(f"Demo:\n{condition.name}\n{questions}\n{recommendations}\n{resources}\n{user_test_results}")
 
 
-#################### MindMirror ####################
+######################### MindMirror ##################################
 def get_heatmap_info():
     now = datetime.now()
     curr_day, curr_month, curr_year = now.day, now.month, now.year
@@ -204,32 +204,6 @@ def get_emotions_info():
 
 
 ################### SCREENING TOOL ##############################
-# List of symptoms
-symptom_list = [('1','Excessive Worry/Anxiety'),('2','Panic Attack/Intense Fear'),('3','Fear/Intense Discomfort in Social Settings'),
-                 ('4','Avoidance of Social Situations'),('5','Low Mood'),('6','No Enjoyment in Anything'),('7','Low Energy/Fatigue'),
-                 ('8','Poor Concentration'),('9','Fluctuating Mood'),('10','Incredibly (unusually) Energetic'),
-                 ('11','Intentional Weight Loss (Large Amount)'), ('12','Intense Fear of Weight Gain'), ('13','Very Negative Body Image'),
-                 ('14','Trouble Quitting a Substance'), ('15','Physical Self Harm to Oneself')]
-
-# Mapping of symptom id  to condition id
-SYMPTOM_TO_CONDITION_MAP = {
-     '1': [1],      # ex, Symptom #1 triggers Condition #4
-     '2': [2],
-     '3': [3],
-     '4': [3],
-     '5': [4,10,11], # Symptom #5 triggers Condition #4, #10, #11
-     '6': [4,10,11],
-     '7': [4,10,11],
-     '8': [1,4,9],
-     '9': [10,11],
-     '10': [10,11],
-     '11': [5,6,7],
-     '12': [5,6,7],
-     '13': [5,6,7],
-     '14': [8],
-     '15': [12]
- }
-
 # Function to get condition ids from symptoms selected
 def selectConditions(selected_symptoms):
     condition_ids = []
@@ -238,7 +212,7 @@ def selectConditions(selected_symptoms):
     conditions = list(dict.fromkeys([id for id in condition_ids]))
     return conditions
 
-# Function to generate list of questions for each condition
+
 def generate_questionnaires(cond_id):
     condition = app.condition_manager.get_condition(cond_id)
     questions = app.condition_manager.get_questions_for_condition(cond_id)
