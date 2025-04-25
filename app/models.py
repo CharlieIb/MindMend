@@ -42,7 +42,7 @@ class User(UserMixin, db.Model):
 def load_user(id):
     # Need app context for db.session
     with current_app.app_context():
-        # Added eager loading for load_user, such that the emotion logs and settings are loaded when the user logs in
+        # Eager loading for emotion logs and user_settings to ensure they are loaded when the user logs in
         return db.session.execute(
             db.select(User).filter_by(id=int(id)).options(
                 so.joinedload(User.emotion_logs),
@@ -137,7 +137,7 @@ class EmotionLog(db.Model):
     blood_pressure: so.Mapped[Optional[str]] = so.mapped_column(sa.String(20), nullable=True)
     free_notes: so.Mapped[Optional[str]] = so.mapped_column(sa.Text, nullable=True)
 
-    # Foreign Keys (nullable=True is correct for Optional Mapped)
+    # Foreign Keys
     location_id: so.Mapped[Optional[int]] = so.mapped_column(sa.Integer, sa.ForeignKey("locations.location_id"), nullable=True)
     activity_id: so.Mapped[Optional[int]] = so.mapped_column(sa.Integer, sa.ForeignKey("activities.activity_id"), nullable=True)
     person_id: so.Mapped[Optional[int]] = so.mapped_column(sa.Integer, sa.ForeignKey("people.person_id"), nullable=True)
@@ -167,10 +167,8 @@ class Condition(db.Model):
     threshold: so.Mapped[int] = so.mapped_column(sa.Integer, nullable=False)
 
     # Relationships:
-    questions: so.Mapped[list['ConditionQuestion']] = so.relationship(back_populates="condition",
-                                                                      cascade="all, delete-orphan")
-    test_result: so.Mapped[list['TestResult']] = so.relationship(back_populates="condition",
-                                                                 cascade="all, delete-orphan")
+    questions: so.Mapped[list['ConditionQuestion']] = so.relationship(back_populates="condition", cascade="all, delete-orphan")
+    test_result: so.Mapped[list['TestResult']] = so.relationship(back_populates="condition", cascade="all, delete-orphan")
 
     # Relationships through secondary tables
     therapeutic_recs: so.Mapped[list['TherapeuticRec']] = so.relationship(

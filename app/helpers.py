@@ -9,7 +9,7 @@ from datetime import datetime
 
 
 
-##################### GENERAL ##################################
+#################### GENERAL ####################
 # Defines a decorator that specifies roles allowed for a route --- move to helper.py folder?
 def roles_required(*roles):
     def decorator(f):
@@ -24,9 +24,8 @@ def roles_required(*roles):
     return decorator
 
 
-################ Initializing App ####################
+#################### Initializing App ####################
 initialized = False
-
 
 def initialize_app(app):
     global initialized
@@ -53,7 +52,7 @@ def initialize_app(app):
 
 
 def _demo_managers(app):
-    """Demo/test function (remove)"""
+    """Demo/test function for the managers (remove in production)"""
     # cond_id = 1
     #
     # # Demo condition manager
@@ -68,7 +67,7 @@ def _demo_managers(app):
     # print(f"Demo:\n{condition.name}\n{questions}\n{recommendations}\n{resources}\n{user_test_results}")
 
 
-######################### MindMirror ##################################
+#################### MindMirror ####################
 def get_heatmap_info():
     now = datetime.now()
     curr_day, curr_month, curr_year = now.day, now.month, now.year

@@ -10,11 +10,20 @@ import app
 import sqlalchemy as sa
 
 
-
-
-
-
 fake = Faker()
+
+
+
+'''
+The reset_db() function below allows us to quickly re-fill the database with the app data.
+For testing during development and illustration of functionality, reset db randomly generates 100 emotion
+logs for user bob. This is for illustration purposes only and will not be present in production
+'''
+
+
+
+
+#### Random generate of emotion logs ######
 
 # Possible combinations with realistic correlations
 emotion_combinations = [
@@ -26,7 +35,7 @@ emotion_combinations = [
     ("Sad", (500, 2000), (120, 360), (65, 85), "105/70-125/80", [2, 7], [7], [3, 4]),
     ("Anger", (100, 9000), (10, 180), (85, 200), "90/80-125/95", [1, 3], [1, 2, 5], [1, 2, 4])
 ]
-
+# Generate the random emotion logs
 def generate_emotion_logs(user_id, count=100):
     logs = []
     used_times = set()
@@ -47,7 +56,7 @@ def generate_emotion_logs(user_id, count=100):
         activity_id = random.choice(emotion_profile[6])
         person_id = random.choice(emotion_profile[7])
 
-        # Generate timestamp - spread over last 90 days
+        # Generate timestamp - spread over last 120 days
         while True:
             time_candidate = datetime.utcnow() - timedelta(
                 days=random.randint(1, 120),
@@ -77,7 +86,7 @@ def generate_emotion_logs(user_id, count=100):
         )
         logs.append(log)
     return logs
-
+# Generate free notes for each of the artifical logs
 def generate_free_note(activity_id, location_id, person_id, emotion):
     activities = {
         1: "working",
@@ -117,10 +126,13 @@ def generate_free_note(activity_id, location_id, person_id, emotion):
 
     return random.choice(templates)
 
+# (Re-fills) database with both necessary app data and artificial emotion logs for testing and development
 def reset_db():
+    # Make sure database is empty
     db.drop_all()
     db.create_all()
 
+    # Add users for development
     u1 = User(username="bob", email="bob@mail.com", role="Normal")
     u2 = User(username="mischa", email="mischa@mail.com", role="Admin")
     u3 = User(username="charlie", email="charlie@mail.com", role="Admin")
@@ -144,9 +156,9 @@ def reset_db():
         app.logger.error(f'Error loading User data: {err}', exc_info=True)
         print('Error loading User data into database')
 
-    ##################### CHECKIN ##############################
+    #################### CHECKIN ####################
 
-    ## Location/Activity/Person
+    ## Location Table
     location1 = Location(name="Office")
     location2 = Location(name="Home")
     location3 = Location(name="Bar")
@@ -206,7 +218,7 @@ def reset_db():
 
 
 
-    # Generate and add logs to database
+    # Generate and add logs to database, alterable
     emotion_logs = generate_emotion_logs(user_id=1, count=100)
     db.session.add_all(emotion_logs)
     try:
@@ -218,9 +230,9 @@ def reset_db():
         app.logger.error(f'Error loading EmotionLog data: {err}', exc_info=True)
         print('Error loading EmotionLog data into database')
 
-    ########################## SCREENINGTOOL ##########################
+    #################### SCREENINGTOOL ####################
 
-    # Condition/Condition Questions/TherapeuticRecs/Resources
+    # Condition/Condition Questions/TherapeuticRecs/Resources Tables
     conditions_data = [
         {
             "name": "Generalized Anxiety Disorder (GAD)",
@@ -636,6 +648,7 @@ def reset_db():
         app.logger.error(f'Error loading Screening Tool data: {err}', exc_info=True)
         print('Error loading Screening Tool data into database')
 
+    # TestResult Table - Artificial data
     test_results_data = [
         {
             "user_id": 1,
@@ -675,7 +688,7 @@ def reset_db():
         },
     ]
 
-    ##### insert the data into the table ####
+    # insert test result data into the table
     for result_data in test_results_data:
         test_result = TestResult(
             user_id=result_data["user_id"],
@@ -696,13 +709,13 @@ def reset_db():
 
 
 
-    ############################## MIND MIRROR ###################################
+    #################### MIND MIRROR ####################
     # Notifcations:
     u1.notifications.append(Notification(message="New therapeutic recommendations available.", is_read=False,))
     u1.notifications.append(Notification(message="Your test results are ready!", is_read=False,))
 
 
-    ################################ REACHOUT ###################################
+    #################### REACHOUT ####################
     # Support Requests:
     #u1.support_request.append(SupportRequest(description="Need help with understanding my test results."))
 
