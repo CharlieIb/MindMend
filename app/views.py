@@ -12,6 +12,7 @@ import sqlalchemy as sa
 from urllib.parse import urlsplit
 
 from app.utils.CheckIn.EmotionLog import emotions
+from app.utils.General.helpers import get_notifications
 
 
 # Load data into classes on first load
@@ -275,6 +276,8 @@ def mindmirror():
     track_health_info = get_health_info()
     track_emotions_info = get_emotions_info()
 
+    notification_info = get_notifications()
+
     return render_template(
         'mindmirror.html',
         title='MindMirror',
@@ -282,7 +285,8 @@ def mindmirror():
         heatmap_info=heatmap_info,
         mindmirror_display=current_user.user_settings.mind_mirror_display,
         track_health_info=track_health_info,
-        track_emotions_info=track_emotions_info
+        track_emotions_info=track_emotions_info,
+        notification_info=notification_info
     )
 
 
