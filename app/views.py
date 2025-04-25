@@ -4,8 +4,8 @@ from app import db
 from app.forms import (ChooseForm, LoginForm, ChangePasswordForm, RegisterForm, SettingsForm,
                        SelectSymptomsForm, generate_form, MindMirrorLayoutForm, EmotionForm, EmotionNoteForm)
 from app.models import User, EmotionLog
-from app.utils import symptom_list, EmotionLogManager, ActivityManager, LocationManager, PersonManager
-from app.helpers import (roles_required, get_emotions_info, get_health_info, get_heatmap_info, initialize_app,
+from app.utils import EmotionLogManager, ActivityManager, LocationManager, PersonManager
+from app.helpers import (roles_required, get_emotions_info, get_health_info, get_heatmap_info, initialize_app, symptom_list,
                          selectConditions, generate_questionnaires)
 from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
@@ -373,31 +373,32 @@ def emotion_details():
 
 
 # Screening Tool
-# First Page: Select Symptoms
+# Landing Page: Page for user to select Presenting Symptoms
 @app.route('/select_symptoms', methods=['GET', 'POST'])
 @login_required
 def select_symptoms():
+    # Creates Flask Form containing symptoms as options to select from
     form = SelectSymptomsForm()
     form.symptoms.choices = symptom_list
 
     if form.validate_on_submit():
         selected_symptoms = form.symptoms.data
-        session['selected_symptoms'] = selected_symptoms  # Store selected_symptoms in flask session
+        session['selected_symptoms'] = selected_symptoms  # Store user selected symptoms in flask session
 
         return redirect(url_for('answer_questionnaire'))
     return render_template('select_symptoms.html', title="Choose Symptoms", form=form)
 
 
-# Second Page: Answer Questionnaire
+# Second Page: Page for user to answer given questionnaire
 @app.route('/answer_questionnaire', methods=['GET', 'POST'])
 @login_required
 def answer_questionnaire():
-    # Initialize session results properly
+    # Initialize session results
     if 'results' not in session:
         session['results'] = []
         session.modified = True
 
-    selected_symptoms = session.get('selected_symptoms')
+    selected_symptoms = session.get('selected_symptoms') # Loads previously selected symptoms by user
     conditions = selectConditions(selected_symptoms)  # Selects appropriate condition_ids from selected symptoms
 
     current_index = int(request.args.get('index', 0))
@@ -407,8 +408,9 @@ def answer_questionnaire():
         results = session.pop('results', [])  # Clear session storage
         return render_template('results.html', results=results, title="Questionnaire Result")
 
+
+    # Creates new flask form for each condition
     cond_id = conditions[current_index]
-    # Generate new form for each condition
     questionnaire = generate_questionnaires(cond_id)
     AnswerQuestionnaireForm = generate_form(questionnaire)
     form = AnswerQuestionnaireForm(obj=None)
@@ -417,10 +419,11 @@ def answer_questionnaire():
         condition_score = 0
         for q_index, question in enumerate(questionnaire['questions']):
             field_name = f"question_{questionnaire['id']}_{q_index}"
-            user_answer = getattr(form, field_name).data
+            user_answer = getattr(form, field_name).data #Gets User response for question
             if user_answer == 'True':
-                condition_score += question['value']
+                condition_score += question['value'] # Adds question score if marked as 'True'
 
+        # Retrieve and store condition information and user score
         cond_obj = app.condition_manager.get_condition(cond_id)
         # Convert SQLAlchemy objects to dictionaries as flask session cannot store SQLAlchemy objects
         recs = [

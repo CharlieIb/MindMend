@@ -2,9 +2,11 @@
 
 {% block content %}
 <div class="container">
+    <!-- Header -->
     <h1 class="my-4">Diagnostic Questionnaire</h1>
     <p>Below is a questionnaire for you to complete, based off of your presenting symptom(s):</p>
 
+    <!-- Disclaimer -->
     <p><em>This tool only provides general guidance and is <strong>not</strong> an official diagnosis.</em></p>
 
     <!-- Progress Bar -->
@@ -22,23 +24,18 @@
     <form method="POST" action="{{ url_for('answer_questionnaire', index=current_index) }}">
         {{ form.hidden_tag() }}
 
-        <!-- Error Handling -->
-        {% if form.errors %}
-        <div class="alert alert-danger">
-            <ul>
-                {% for field, errors in form.errors.items() %}
-                    {% for error in errors %}
-                        <li>{{ field }}: {{ error }}</li>
-                    {% endfor %}
-                {% endfor %}
-            </ul>
-        </div>
-        {% endif %}
-        <!-- Questions -->
+        <!-- Display Questions -->
         {% for index, question in enumerate(questionnaires.questions) %}
             <div>
                 <p>{{ question.question }}</p>
-                {{ form['question_' ~ questionnaires.id ~ '_'  ~ index]() }}
+                <div style="margin-left: 20px;">
+                    {% for subfield in form['question_' ~ questionnaires.id ~ '_' ~ index] %}
+                        <div class="mb-2">
+                            {{ subfield }}
+                            {{ subfield.label }}
+                        </div>
+                    {% endfor %}
+                </div>
                 <hr>
             </div>
         {% endfor %}
@@ -55,6 +52,18 @@
             </button>
         </div>
 
+        <!-- Error Handling -->
+        {% if form.errors %}
+            <div class="alert alert-danger">
+                <ul>
+                    {% for field, errors in form.errors.items() %}
+                        {% for error in errors %}
+                            <li>{{ field }}: {{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
     </form>
 </div>
 {% endblock %}
