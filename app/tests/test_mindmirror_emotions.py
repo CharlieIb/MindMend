@@ -1,5 +1,5 @@
 from collections import namedtuple
-from app.helpers import get_emotions_info_from_logs
+from app.utils.General import get_emotions_info_from_logs
 
 # Stub for emotion logs
 Log = namedtuple('Log', ['emotion'])

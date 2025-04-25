@@ -1,6 +1,6 @@
 import pytest
 from datetime import datetime, timedelta
-import app.utils.build_heatmap as heatmap_module
+import app.utils.MindMirror.build_heatmap as heatmap_module
 from app.utils import HeatMap
 
 Log = lambda date, emotion: {'date': date, 'emotion': emotion, 'colour': None}
