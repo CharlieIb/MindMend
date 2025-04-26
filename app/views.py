@@ -2,17 +2,17 @@ from flask import render_template, redirect, url_for, flash, request, session
 from app import app
 from app import db
 from app.utils.General import (ChooseForm, LoginForm, ChangePasswordForm, RegisterForm, SettingsForm,
-                                     SelectSymptomsForm, generate_form, MindMirrorLayoutForm, EmotionForm, EmotionNoteForm,
-                               roles_required, get_emotions_info, get_health_info, get_heatmap_info, initialize_app, symptom_list,
-                                       selectConditions, generate_questionnaires)
+                               SelectSymptomsForm, generate_form, MindMirrorLayoutForm, EmotionForm, EmotionNoteForm,
+                               roles_required, get_emotions_info, get_health_info, get_heatmap_info, initialize_app,
+                               symptom_list,
+                               selectConditions, generate_questionnaires)
 from app.utils import EmotionLogManager, ActivityManager, LocationManager, PersonManager
-from app.models import User
+from app.utils.MindMirror.notification_service import NotificationService
+from app.models import User, Notification
 from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
 from urllib.parse import urlsplit
-
 from app.utils.CheckIn.EmotionLog import emotions
-from app.utils.General.helpers import get_notifications
 
 
 # Load data into classes on first load
@@ -276,7 +276,9 @@ def mindmirror():
     track_health_info = get_health_info()
     track_emotions_info = get_emotions_info()
 
-    notification_info = get_notifications()
+    service = NotificationService(db.session)
+    limit = int(request.args.get('limit', 5))
+    notification_info = service.get_notifications(limit)
 
     return render_template(
         'mindmirror.html',
@@ -316,6 +318,16 @@ def mindmirror_edit():
         title='Edit MindMirror',
         form=form
     )
+
+
+@app.route('/notification_seen')
+@login_required
+def notification_seen():
+    notif_id = int(request.args.get('notif_id'))
+    notif = db.session.get(Notification, notif_id)
+    notif.is_read = True
+    db.session.commit()
+    return redirect(url_for('mindmirror'))
 
 
 # CheckIn
@@ -402,7 +414,7 @@ def answer_questionnaire():
         session['results'] = []
         session.modified = True
 
-    selected_symptoms = session.get('selected_symptoms') # Loads previously selected symptoms by user
+    selected_symptoms = session.get('selected_symptoms')  # Loads previously selected symptoms by user
     conditions = selectConditions(selected_symptoms)  # Selects appropriate condition_ids from selected symptoms
 
     current_index = int(request.args.get('index', 0))
@@ -411,7 +423,6 @@ def answer_questionnaire():
     if current_index >= len(conditions):
         results = session.pop('results', [])  # Clear session storage
         return render_template('results.html', results=results, title="Questionnaire Result")
-
 
     # Creates new flask form for each condition
     cond_id = conditions[current_index]
@@ -423,9 +434,9 @@ def answer_questionnaire():
         condition_score = 0
         for q_index, question in enumerate(questionnaire['questions']):
             field_name = f"question_{questionnaire['id']}_{q_index}"
-            user_answer = getattr(form, field_name).data #Gets User response for question
+            user_answer = getattr(form, field_name).data  # Gets User response for question
             if user_answer == 'True':
-                condition_score += question['value'] # Adds question score if marked as 'True'
+                condition_score += question['value']  # Adds question score if marked as 'True'
 
         # Retrieve and store condition information and user score
         cond_obj = app.condition_manager.get_condition(cond_id)
