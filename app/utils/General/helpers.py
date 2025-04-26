@@ -2,13 +2,10 @@ from app import app
 from app import db
 from app.utils import (ConditionManager, ResourceManager, TherapeuticRecManager, TestResultManager, EmotionLogManager,
                        ActivityManager, LocationManager, PersonManager, HeatMap, TrackHealth)
-from app.models import User, Notification, EmotionLog
 from functools import wraps
 from flask import abort, flash
 from flask_login import current_user
-import sqlalchemy as sa
-from datetime import datetime, timedelta
-from collections import Counter
+from datetime import datetime
 
 
 #################### GENERAL ####################
@@ -205,95 +202,6 @@ def get_emotions_info_from_logs(logs):
 
 def get_emotions_info():
     return get_emotions_info_from_logs(current_user.emotion_logs)
-
-
-def should_notify(latest_time, period_days=1):
-    return (datetime.utcnow() - latest_time) >= timedelta(days=period_days)
-
-
-def create_notification(message, frequency):
-    notif = Notification(
-        user_id=current_user.id,
-        time=datetime.utcnow(),
-        message=message,
-        frequency=frequency
-    )
-    db.session.add(notif)
-    db.session.commit()
-    return notif
-
-
-def get_last_notification_time(frequency: str):
-    return db.session.scalar(
-        sa.select(Notification.time)
-        .where(
-            Notification.user_id == current_user.id,
-            Notification.frequency == frequency
-        )
-        .order_by(Notification.time.desc())
-        .limit(1)
-    )
-
-
-def get_last_notifications(limit: int):
-    stmt = (
-        sa.select(Notification)
-        .where(Notification.user_id == current_user.id)
-        .order_by(Notification.time.desc())
-        .limit(limit)
-    )
-    return db.session.scalars(stmt).all()
-
-
-def daily_notification(logs):
-    last_daily = get_last_notification_time('daily')
-    if last_daily and last_daily.date() == datetime.utcnow().date():
-        return None
-
-    if not logs or should_notify(logs[-1].time, period_days=1):
-        return create_notification(
-            "Don't forget to do your Check-In logs today!",
-            'daily'
-        )
-    return None
-
-
-def weekly_notification(logs):
-    last_weekly = get_last_notification_time('weekly')
-    if last_weekly and not should_notify(last_weekly, period_days=7):
-        return None
-
-    now = datetime.utcnow()
-    week_ago = now - timedelta(days=7)
-    recent = [log for log in logs if week_ago <= log.time <= now]
-
-    if not recent:
-        msg = "You haven't logged any emotions last week. Go to Check-In to get started."
-    else:
-        counts = Counter(log.emotion for log in recent)
-        top, cnt = counts.most_common(1)[0]
-        msg = (
-            f"You logged feeling {top} the most in the last week:\n"
-            f"{cnt} out of {len(recent)} entries."
-        )
-
-    return create_notification(msg, 'weekly')
-
-
-def get_notifications(limit: int = 15):
-    logs = db.session.scalars(
-        sa.select(EmotionLog)
-        .where(EmotionLog.user_id == current_user.id)
-        .order_by(EmotionLog.time)
-    ).all()
-
-    daily_notification(logs)
-    weekly_notification(logs)
-
-    last_notifications = get_last_notifications(limit)
-    if all(notif.is_read for notif in last_notifications):
-        return {'all_read': True, 'notifications': last_notifications}
-    return {'all_read': False, 'notifications': last_notifications}
 
 
 ################### SCREENING TOOL ##############################
