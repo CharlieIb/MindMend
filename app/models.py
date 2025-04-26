@@ -151,9 +151,9 @@ class EmotionLog(db.Model):
 
     def __repr__(self):
         return (f"EmotionLog("
-                f"Log Id: {self.log_id}, User Id: {self.user_id}, Time: {self.time},"
-                f"Emotion: {self.emotion}, Steps: {self.steps}, Activity Duration: {self.activity_duration},"
-                f"Heart_rate: {self.heart_rate}, Blood Pressure: {self.blood_pressure},"
+                f"Log Id: {self.log_id}, User Id: {self.user_id}, Time: {self.time}, "
+                f"Emotion: {self.emotion}, Steps: {self.steps}, Activity Duration: {self.activity_duration}, "
+                f"Heart_rate: {self.heart_rate}, Blood Pressure: {self.blood_pressure}, "
                 f"Free Notes: {self.free_notes})")
 
 
@@ -266,6 +266,8 @@ class Notification(db.Model):
     time: so.Mapped[sa.DateTime] = so.mapped_column(sa.DateTime, default=datetime.utcnow)
     message: so.Mapped[str] = so.mapped_column(sa.Text, nullable=False)
     is_read: so.Mapped[bool] = so.mapped_column(sa.Boolean, default=False)
+    frequency: so.Mapped[str] = so.mapped_column(sa.String(24), nullable=True)
+
 
     # Relationships
     user: so.Mapped['User'] = so.relationship(back_populates="notifications")
