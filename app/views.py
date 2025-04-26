@@ -327,7 +327,13 @@ def notification_seen():
     notif = db.session.get(Notification, notif_id)
     notif.is_read = True
     db.session.commit()
-    return redirect(url_for('mindmirror'))
+
+    limit = request.args.get('limit', 15)
+    is_open = request.args.get('is_open', 'false')
+
+    return redirect(
+        url_for('mindmirror', limit=limit, is_open=is_open)
+    )
 
 
 # CheckIn

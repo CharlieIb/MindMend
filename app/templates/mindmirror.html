@@ -4,8 +4,8 @@
 {% block content %}
 <div class="d-flex justify-content-between align-items-center p-1">
     {% set limit = request.args.get('limit', 1)|int %}
-    {% set is_open = limit > 5 %}
-    <div class="dropdown {{ 'show' if is_open }}" data-bs-auto-close="outside">
+    {% set is_open = (limit > 5) or request.args.get('is_open', false) == 'true' %}
+    <div class="dropdown {% if is_open %}show{% endif %}" data-bs-auto-close="outside">
         <button class="btn
         {{ 'notification_colour_unread' if not notification_info.all_read else 'btn-dark opacity-75' }}"
                 type="button"
@@ -17,7 +17,7 @@
         </button>
         <div class="d-flex flex-column align-items-center justify-content-center
         dropdown-menu dropdown-menu-dark
-        p-3 mt-2 gap-2 {{ 'show' if is_open }}"
+        p-3 mt-2 gap-2 {% if is_open %}show{% endif %}"
              aria-labelledby="notificationDropdown"
         >
             {% for notification in notification_info.notifications %}
@@ -37,7 +37,7 @@
                 text-decoration-none
                 {{ 'notification_colour_unread' if not notification.is_read else 'notification_colour_read' }}
                 p-3 h-100 w-100"
-                   href="{{ url_for('notification_seen', notif_id=notification.notification_id) }}"
+                   href="{{ url_for('notification_seen', notif_id=notification.notification_id, is_open='true') }}"
                 >
                     {% if notification.is_read %}
                     <i class="bi bi-eye-fill" aria-label="Seen" role="button"></i>
