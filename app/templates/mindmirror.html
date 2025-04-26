@@ -3,36 +3,64 @@
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-center p-1">
-    <div class="dropdown">
-        <button class="btn btn-dark opacity-75 dropdown-toggle"
+    {% set limit = request.args.get('limit', 1)|int %}
+    {% set is_open = limit > 5 %}
+    <div class="dropdown {{ 'show' if is_open }}" data-bs-auto-close="outside">
+        <button class="btn
+        {{ 'notification_colour_unread' if not notification_info.all_read else 'btn-dark opacity-75' }}"
                 type="button"
                 id="notificationDropdown"
                 data-bs-toggle="dropdown"
-                aria-expanded="false"
+                aria-expanded="{{ 'true' if is_open else 'false' }}"
         >
             <i class="bi bi-app-indicator"></i>
         </button>
-        <div class="d-flex flex-column dropdown-menu dropdown-menu-dark p-3 gap-2"
+        <div class="d-flex flex-column align-items-center justify-content-center
+        dropdown-menu dropdown-menu-dark
+        p-3 mt-2 gap-2 {{ 'show' if is_open }}"
              aria-labelledby="notificationDropdown"
         >
-            {% for id, notification in notification_info.items() %}
-            {% if notification.info != None %}
-            <div class="d-flex justify-content-center align-items-center flex-wrap
-            bg-info-subtle rounded
-            text-dark
-            dropdown-item
+            {% for notification in notification_info.notifications %}
+            {% if notification.message != None %}
+            <div class="d-flex justify-content-center align-items-center gap-2">
+                <div class="d-flex justify-content-center align-items-center flex-wrap
+            {{ 'notification_colour_unread' if not notification.is_read else 'notification_colour_read' }}
+            rounded
             notification_width">
-                <p class="text-wrap text-break text-center m-0">{{ notification.info }}</p>
+                    <a class="dropdown-item rounded text-wrap text-break text-decoration-none"
+                       href="{{ url_for(notification.link) if notification.link else '' }}">
+                        {{ notification.message }}
+                    </a>
+                </div>
+                <a class="dropdown-item
+                rounded
+                text-decoration-none
+                {{ 'notification_colour_unread' if not notification.is_read else 'notification_colour_read' }}
+                p-3 h-100 w-100"
+                   href="{{ url_for('notification_seen', notif_id=notification.notification_id) }}"
+                >
+                    {% if notification.is_read %}
+                    <i class="bi bi-eye-fill" aria-label="Seen" role="button"></i>
+                    {% else %}
+                    <i class="bi bi-eye" aria-label="'Unread" role="button"></i>
+                    {% endif %}
+                </a>
             </div>
             {% endif %}
             {% endfor %}
+            {% if notification_info.all_logs < limit %}
+            <a class="dropdown-item rounded notification_colour_unread text-center w-50"
+               href="{{ url_for('mindmirror', limit=limit+5) }}">
+                See More
+            </a>
+            {% endif %}
         </div>
     </div>
     <div class="btn btn-dark opacity-75 invisible">
         <i class="bi bi-pencil-square"></i>
     </div>
     <h1 class="mb-0 text-center">Welcome {{ current_user.username }}</h1>
-    <button class="btn btn-dark opacity-75 dropdown-toggle invisible"
+    <button class="btn btn-dark opacity-75 invisible"
             type="button"
     >
         <i class="bi bi-app-indicator"></i>
