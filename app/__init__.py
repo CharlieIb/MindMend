@@ -10,6 +10,11 @@ app.jinja_env.undefined = StrictUndefined
 app.config.from_object(Config)
 db = SQLAlchemy(app)
 login = LoginManager(app)
+
+# Message if user does not have access to page
+login.login_message = 'Please log in to access this page.'
+login.login_message_category = 'danger'
+
 login.login_view = 'login'
 
 from app import views, models

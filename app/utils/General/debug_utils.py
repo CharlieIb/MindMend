@@ -9,19 +9,13 @@ from faker import Faker
 import app
 import sqlalchemy as sa
 
-
 fake = Faker()
-
-
 
 '''
 The reset_db() function below allows us to quickly re-fill the database with the app data.
 For testing during development and illustration of functionality, reset db randomly generates 100 emotion
 logs for user bob. This is for illustration purposes only and will not be present in production
 '''
-
-
-
 
 #### Random generate of emotion logs ######
 
@@ -35,6 +29,8 @@ emotion_combinations = [
     ("Sad", (500, 2000), (120, 360), (65, 85), "105/70-125/80", [2, 7], [7], [3, 4]),
     ("Anger", (100, 9000), (10, 180), (85, 200), "90/80-125/95", [1, 3], [1, 2, 5], [1, 2, 4])
 ]
+
+
 # Generate the random emotion logs
 def generate_emotion_logs(user_id, count=100):
     logs = []
@@ -86,6 +82,8 @@ def generate_emotion_logs(user_id, count=100):
         )
         logs.append(log)
     return logs
+
+
 # Generate free notes for each of the artifical logs
 def generate_free_note(activity_id, location_id, person_id, emotion):
     activities = {
@@ -125,6 +123,7 @@ def generate_free_note(activity_id, location_id, person_id, emotion):
     ]
 
     return random.choice(templates)
+
 
 # (Re-fills) database with both necessary app data and artificial emotion logs for testing and development
 def reset_db():
@@ -216,14 +215,13 @@ def reset_db():
         app.logger.error(f'Error loading People data: {err}', exc_info=True)
         print('Error loading People data into database')
 
-
-
     # Generate and add logs to database, alterable
     emotion_logs = generate_emotion_logs(user_id=1, count=100)
     db.session.add_all(emotion_logs)
     try:
         db.session.commit()
-        print(f"EmotionLog table data successfully added {len(emotion_logs)} emotion logs to the database for user 1 (Bob).")
+        print(
+            f"EmotionLog table data successfully added {len(emotion_logs)} emotion logs to the database for user 1 (Bob).")
     except sa.exc.IntegrityError as err:
         app.logger.error(f'Error loading EmotionLog data: {err}', exc_info=True)
     except Exception as err:
@@ -251,8 +249,10 @@ def reset_db():
             ],
             "therapeutic_recs": [
                 {"description": "Reach out to your doctor for further help", "treatments": "Medical help"},
-                {"description": "Practice mindfulness meditation for 10 minutes daily.", "treatments": "Mindfulness-Based Stress Reduction (MBSR)"},
-                {"description": "Engage in regular physical exercise, such as yoga or jogging.", "treatments": "Exercise Therapy"},
+                {"description": "Practice mindfulness meditation for 10 minutes daily.",
+                 "treatments": "Mindfulness-Based Stress Reduction (MBSR)"},
+                {"description": "Engage in regular physical exercise, such as yoga or jogging.",
+                 "treatments": "Exercise Therapy"},
             ],
             "resources": [
                 {"label": "Anxiety and Depression Association of America", "link": "https://adaa.org"},
@@ -377,9 +377,10 @@ def reset_db():
             ],
             "therapeutic_recs": [
                 {"description": "Reach out to your doctor for further help", "treatments": "Medical help"},
-                {"description": "Work with a dietitian to develop a healthy meal plan.", "treatments": "Nutritional Counseling"},
+                {"description": "Work with a dietitian to develop a healthy meal plan.",
+                 "treatments": "Nutritional Counseling"},
                 {"description": "Engage in family-based therapy (FBT) to address underlying issues.",
-                "treatments": "Family-Based Therapy"},
+                 "treatments": "Family-Based Therapy"},
             ],
             "resources": [
                 {"label": "National Eating Disorders Association", "link": "https://www.nationaleatingdisorders.org"},
@@ -435,8 +436,9 @@ def reset_db():
             "therapeutic_recs": [
                 {"description": "Reach out to your doctor for further help", "treatments": "Medical help"},
                 {"description": "Engage in dialectical behavior therapy (DBT) to manage emotional eating.",
-                "treatments": "DBT"},
-                {"description": "Keep a food diary to identify triggers for binge episodes.", "treatments": "Self-Monitoring"},
+                 "treatments": "DBT"},
+                {"description": "Keep a food diary to identify triggers for binge episodes.",
+                 "treatments": "Self-Monitoring"},
             ],
             "resources": [
                 {"label": "Binge Eating Disorder Association", "link": "https://www.bedaonline.com"},
@@ -452,18 +454,26 @@ def reset_db():
             "name": "Substance Use Disorder",
             "threshold": 3,
             "questions": [
-                {"q_number": 1, "question": "Have you had a strong desire/compulsion to consume the substance?", "value": 1},
-                {"q_number": 2, "question": "Do you find yourself thinking (preoccupied) with use of the substance?", "value": 1},
+                {"q_number": 1, "question": "Have you had a strong desire/compulsion to consume the substance?",
+                 "value": 1},
+                {"q_number": 2, "question": "Do you find yourself thinking (preoccupied) with use of the substance?",
+                 "value": 1},
                 {"q_number": 3,
                  "question": "Have you experienced any symptoms when trying to cut down or quit?", "value": 1},
                 {"q_number": 4, "question": "Have you found it difficult to quit the substance?", "value": 1},
-                {"q_number": 5, "question": "Do you find yourself having to take more of the substance for the same effect?", "value": 1},
-                {"q_number": 6, "question": "Does the substance have harmful effects on yourself and your relationships?", "value": 1},
+                {"q_number": 5,
+                 "question": "Do you find yourself having to take more of the substance for the same effect?",
+                 "value": 1},
+                {"q_number": 6,
+                 "question": "Does the substance have harmful effects on yourself and your relationships?", "value": 1},
             ],
             "therapeutic_recs": [
                 {"description": "Reach out to your doctor for further help", "treatments": "Medical help"},
-                 {"description": "Consider joining a support group like Alcoholics Anonymous (AA) or Narcotics Anonymous (NA).", "treatments": "Support Groups"},
-                {"description": "Work with a medical professional to address underlying causes of substance use.","treatments": "CBT"},
+                {
+                    "description": "Consider joining a support group like Alcoholics Anonymous (AA) or Narcotics Anonymous (NA).",
+                    "treatments": "Support Groups"},
+                {"description": "Work with a medical professional to address underlying causes of substance use.",
+                 "treatments": "CBT"},
             ],
             "resources": [
                 {"label": "Substance Abuse and Mental Health Services Administration",
@@ -525,7 +535,7 @@ def reset_db():
             "therapeutic_recs": [
                 {"description": "Reach out to your doctor for further help", "treatments": "Medical help"},
                 {"description": "Work with a psychiatrist to stabilize mood with medications like lithium.",
-                "treatments": "Medication Management"},
+                 "treatments": "Medication Management"},
                 {"description": "Engage in psychoeducation to understand and manage mood episodes.",
                  "treatments": "Psychoeducation"},
             ],
@@ -706,18 +716,13 @@ def reset_db():
         app.logger.error(f'Error loading TestResult data: {err}', exc_info=True)
         print('Error loading TestResult data into database')
 
-
-
-
     #################### MIND MIRROR ####################
     # Notifcations:
-    u1.notifications.append(Notification(message="New therapeutic recommendations available.", is_read=False,))
-    u1.notifications.append(Notification(message="Your test results are ready!", is_read=False,))
-
+    u1.notifications.append(Notification(message="New therapeutic recommendations available.", is_read=False, ))
 
     #################### REACHOUT ####################
     # Support Requests:
-    #u1.support_request.append(SupportRequest(description="Need help with understanding my test results."))
+    # u1.support_request.append(SupportRequest(description="Need help with understanding my test results."))
 
     try:
         db.session.commit()

@@ -21,12 +21,14 @@ class User(UserMixin, db.Model):
     share_data: so.Mapped[bool] = so.mapped_column(default=False, nullable=False)
 
     # Relationships
-    user_settings: so.Mapped['UserSettings'] = so.relationship(back_populates="user", cascade="all, delete-orphan", uselist=False)
+    user_settings: so.Mapped['UserSettings'] = so.relationship(back_populates="user", cascade="all, delete-orphan",
+                                                               uselist=False)
     emotion_logs: so.Mapped[list['EmotionLog']] = so.relationship(back_populates="user", cascade="all, delete-orphan")
     test_result: so.Mapped[list['TestResult']] = so.relationship(back_populates="user", cascade="all, delete-orphan")
-    notifications: so.Mapped[list['Notification']] = so.relationship(back_populates="user", cascade="all, delete-orphan")
-    support_request: so.Mapped['SupportRequest'] = so.relationship(back_populates="user", cascade="all, delete-orphan", uselist=False)
-
+    notifications: so.Mapped[list['Notification']] = so.relationship(back_populates="user",
+                                                                     cascade="all, delete-orphan")
+    support_request: so.Mapped['SupportRequest'] = so.relationship(back_populates="user", cascade="all, delete-orphan",
+                                                                   uselist=False)
 
     def __repr__(self):
         return f"User(id={self.id}, username={self.username}, email={self.email}, role={self.role}, track_physiological={self.track_physiological})"
@@ -138,8 +140,10 @@ class EmotionLog(db.Model):
     free_notes: so.Mapped[Optional[str]] = so.mapped_column(sa.Text, nullable=True)
 
     # Foreign Keys
-    location_id: so.Mapped[Optional[int]] = so.mapped_column(sa.Integer, sa.ForeignKey("locations.location_id"), nullable=True)
-    activity_id: so.Mapped[Optional[int]] = so.mapped_column(sa.Integer, sa.ForeignKey("activities.activity_id"), nullable=True)
+    location_id: so.Mapped[Optional[int]] = so.mapped_column(sa.Integer, sa.ForeignKey("locations.location_id"),
+                                                             nullable=True)
+    activity_id: so.Mapped[Optional[int]] = so.mapped_column(sa.Integer, sa.ForeignKey("activities.activity_id"),
+                                                             nullable=True)
     person_id: so.Mapped[Optional[int]] = so.mapped_column(sa.Integer, sa.ForeignKey("people.person_id"), nullable=True)
 
     # Relationships
@@ -148,12 +152,11 @@ class EmotionLog(db.Model):
     activity: so.Mapped[Optional['Activity']] = so.relationship(back_populates="emotion_logs")
     person: so.Mapped[Optional['Person']] = so.relationship(back_populates="emotion_logs")
 
-
     def __repr__(self):
         return (f"EmotionLog("
-                f"Log Id: {self.log_id}, User Id: {self.user_id}, Time: {self.time},"
-                f"Emotion: {self.emotion}, Steps: {self.steps}, Activity Duration: {self.activity_duration},"
-                f"Heart_rate: {self.heart_rate}, Blood Pressure: {self.blood_pressure},"
+                f"Log Id: {self.log_id}, User Id: {self.user_id}, Time: {self.time}, "
+                f"Emotion: {self.emotion}, Steps: {self.steps}, Activity Duration: {self.activity_duration}, "
+                f"Heart_rate: {self.heart_rate}, Blood Pressure: {self.blood_pressure}, "
                 f"Free Notes: {self.free_notes})")
 
 
@@ -167,8 +170,10 @@ class Condition(db.Model):
     threshold: so.Mapped[int] = so.mapped_column(sa.Integer, nullable=False)
 
     # Relationships:
-    questions: so.Mapped[list['ConditionQuestion']] = so.relationship(back_populates="condition", cascade="all, delete-orphan")
-    test_result: so.Mapped[list['TestResult']] = so.relationship(back_populates="condition", cascade="all, delete-orphan")
+    questions: so.Mapped[list['ConditionQuestion']] = so.relationship(back_populates="condition",
+                                                                      cascade="all, delete-orphan")
+    test_result: so.Mapped[list['TestResult']] = so.relationship(back_populates="condition",
+                                                                 cascade="all, delete-orphan")
 
     # Relationships through secondary tables
     therapeutic_recs: so.Mapped[list['TherapeuticRec']] = so.relationship(
@@ -266,6 +271,8 @@ class Notification(db.Model):
     time: so.Mapped[sa.DateTime] = so.mapped_column(sa.DateTime, default=datetime.utcnow)
     message: so.Mapped[str] = so.mapped_column(sa.Text, nullable=False)
     is_read: so.Mapped[bool] = so.mapped_column(sa.Boolean, default=False)
+    frequency: so.Mapped[str] = so.mapped_column(sa.String(24), nullable=True)
+    link: so.Mapped[str] = so.mapped_column(sa.String(256), nullable=True)
 
     # Relationships
     user: so.Mapped['User'] = so.relationship(back_populates="notifications")
