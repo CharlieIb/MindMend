@@ -1,11 +1,12 @@
 from app import app
 from app import db
 from app.utils import (ConditionManager, ResourceManager, TherapeuticRecManager, TestResultManager, EmotionLogManager,
-                       ActivityManager, LocationManager, PersonManager, HeatMap, TrackHealth)
+                       HeatMap, TrackHealth)
 from functools import wraps
 from flask import abort, flash
 from flask_login import current_user
 from datetime import datetime
+from typing import Any, Dict, List, Tuple
 
 
 #################### GENERAL ####################
@@ -68,99 +69,126 @@ def _demo_managers(app):
 
 
 #################### MindMirror ####################
-def get_heatmap_info():
+def get_heatmap_info() -> Dict[str, Any]:
+    """
+    Gather all necessary heatmap data for the current user and date.
+
+    Returns:
+        A dictionary containing:
+        - 'curr_day', 'curr_month', 'curr_year': current date integers.
+        - 'month': month layout from HeatMap.month_display().
+        - 'year': year layout from HeatMap.year_display().
+        - 'months': list of month names January–December.
+    """
     now = datetime.now()
     curr_day, curr_month, curr_year = now.day, now.month, now.year
 
-    data_log = [
+    data_log: List[Dict[str, Any]] = [
         {'date': log.time, 'emotion': log.emotion}
         for log in current_user.emotion_logs
     ]
 
     heatmap = HeatMap(curr_day, curr_month, curr_year, data_log)
-    month, year = heatmap.month_display(), heatmap.year_display()
-    months = [
-        'January', 'February', 'March',
-        'April', 'May', 'June',
-        'July', 'August', 'September',
-        'October', 'November', 'December'
+    month_layout: List[Any] = heatmap.month_display()
+    year_layout: List[Any] = heatmap.year_display()
+
+    months: List[str] = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
     ]
 
-    heatmap_info = {
+    return {
         'curr_day': curr_day,
         'curr_month': curr_month,
         'curr_year': curr_year,
-        'month': month,
-        'year': year,
+        'month': month_layout,
+        'year': year_layout,
         'months': months
     }
-    return heatmap_info
 
 
-def get_health_info():
-    # Data would normally get queries from db and passed to TrackHealth
-    steps, activity_duration, heart_rate = 6908, 110, [50, 64, 153]
-    track_health = TrackHealth(
+def get_health_info() -> Dict[str, Any]:
+    """
+    Collect health metrics and computed analytics for the current user.
+
+    Returns:
+        A dictionary containing:
+        - Raw inputs: 'steps', 'activity_duration', 'heart_rate', 'age'.
+        - Goals: 'steps_goal', 'activity_duration_goal'.
+        - Percentages: 'steps_percentage_complete', 'activity_percentage_complete'.
+        - Heart-rate stats: 'max_heart_rate', 'min_heart_rate', 'avg_heart_rate'.
+        - Scaled heart-rate info: 'heart_rate_range', 'heart_zones', 'heart_zones_scaled'.
+    """
+    # Sample data—replace with real queries
+    steps: int = 6908
+    activity_duration: int = 110
+    heart_rate: List[int] = [50, 64, 153]
+
+    tracker = TrackHealth(
         steps=steps,
         activity_duration=activity_duration,
         heart_rate=heart_rate
     )
-    steps_goal = track_health.steps_goal
-    steps_percentage_complete = track_health.steps_percentage_complete()
 
-    # Basic Implementation - if no aged saved / logged
-    age = track_health.age
-
-    activity_duration_goal = track_health.activity_duration_goal
-    activity_percentage_complete = track_health.activity_percentage_complete()
-
-    max_heart_rate = track_health.max_heart_rate()
-    min_heart_rate = track_health.min_heart_rate()
-    avg_heart_rate = track_health.avg_heart_rate()
-    heart_rate_range = track_health.heart_rate_range()
-    heart_rate_zones = track_health.heart_rate_zones()
-    heart_zones_progress_bar = track_health.heart_rate_zone_progress_bar()
-
-    track_health_info = {
+    return {
         'steps': steps,
-        'steps_goal': steps_goal, 'steps_percentage_complete': steps_percentage_complete,
+        'steps_goal': tracker.steps_goal,
+        'steps_percentage_complete': tracker.steps_percentage_complete(),
         'activity_duration': activity_duration,
-        'activity_duration_goal': activity_duration_goal, 'activity_percentage_complete': activity_percentage_complete,
+        'activity_duration_goal': tracker.activity_duration_goal,
+        'activity_percentage_complete': tracker.activity_percentage_complete(),
         'heart_rate': heart_rate,
-        'max_heart_rate': max_heart_rate, 'min_heart_rate': min_heart_rate, 'avg_heart_rate': avg_heart_rate,
-        'heart_rate_range': heart_rate_range,
-        'heart_zones_scaled': heart_zones_progress_bar, 'heart_zones': heart_rate_zones,
-        'age': age
+        'max_heart_rate': tracker.max_heart_rate(),
+        'min_heart_rate': tracker.min_heart_rate(),
+        'avg_heart_rate': tracker.avg_heart_rate(),
+        'heart_rate_range': tracker.heart_rate_range(),
+        'heart_zones': tracker.heart_rate_zones(),
+        'heart_zones_scaled': tracker.heart_rate_zone_progress_bar(),
+        'age': tracker.age
     }
-    return track_health_info
 
 
-def get_emotions_info_from_logs(logs):
-    default_emotions = {'Anger': 0, 'Anxious': 0, 'Sad': 0, 'Happy': 0, 'Love': 0, 'Calm': 0}
+def get_emotions_info_from_logs(logs: List[Any]) -> Dict[str, Any]:
+    """
+    Summarise emotion logs into counts, percentages and chart segments.
+
+    Args:
+        logs: Iterable of log objects with .emotion attribute.
+
+    Returns:
+        A dictionary containing:
+        - 'emotions': counts per emotion.
+        - 'total_emotion_logs': total number of logs.
+        - 'emotions_percentage': half-scaled percentage per emotion (0–50).
+        - 'segments': list of dicts with 'emotion', 'value', 'cumulative' (0–50 scale) for charting.
+        - 'max_num': [top_emotion, raw_count]
+    """
+    default_emotions: Dict[str, int] = {
+        'Anger': 0, 'Anxious': 0, 'Sad': 0,
+        'Happy': 0, 'Love': 0, 'Calm': 0
+    }
 
     try:
         emotions = default_emotions.copy()
         for log in logs:
             emotions[log.emotion] = emotions.get(log.emotion, 0) + 1
 
-        total_emotions = sum(emotions.values())
-
-        if total_emotions:
+        total = sum(emotions.values())
+        if total > 0:
+            # percentages on 0–100, then halved to 0–50
             emotions_percentage = {
-                emotion: round((count / total_emotions * 100) / 2)
-                for emotion, count in emotions.items()
+                emo: round(count / total * 50)
+                for emo, count in emotions.items()
             }
+            # find top emotion
+            top_emotion, top_val = max(emotions.items(), key=lambda x: x[1])
+            max_num = [top_emotion, top_val]
 
-            max_emotion, max_value = max(emotions_percentage.items(), key=lambda item: item[1], default=(None, 0))
-            max_num = [max_emotion, max_value * 2]
-
-            segments = []
+            segments: List[Dict[str, Any]] = []
             cumulative = 0
-            items = list(emotions_percentage.items())
-            for idx, (emo, val) in enumerate(items):
-                cumulative += val
-                cumulative = min(50, cumulative)
-                if idx == len(items) - 1:
+            for i, (emo, val) in enumerate(emotions_percentage.items()):
+                cumulative = min(50, cumulative + val)
+                if i == len(emotions_percentage) - 1:
                     cumulative = 50
                 segments.append({
                     'emotion': emo,
@@ -170,37 +198,41 @@ def get_emotions_info_from_logs(logs):
         else:
             emotions_percentage = default_emotions.copy()
             segments = [
-                {'emotion': emotion, 'value': 0, 'cumulative': -1}
-                for emotion in default_emotions
+                {'emotion': emo, 'value': 0, 'cumulative': -1}
+                for emo in default_emotions
             ]
             max_num = [None, 0]
 
         return {
             'emotions': emotions,
-            'total_emotion_logs': total_emotions,
+            'total_emotion_logs': total,
             'emotions_percentage': emotions_percentage,
             'segments': segments,
             'max_num': max_num
         }
 
     except Exception as e:
+        # fallback on error
         print(f"Error: {e}")
-        emotions = default_emotions.copy()
-        emotions_percentage = default_emotions.copy()
-        segments = [
-            {'emotion': emotion, 'value': 0, 'cumulative': 0}
-            for emotion in default_emotions
-        ]
         return {
-            'emotions': emotions,
+            'emotions': default_emotions.copy(),
             'total_emotion_logs': 0,
-            'emotions_percentage': emotions_percentage,
-            'segments': segments,
+            'emotions_percentage': default_emotions.copy(),
+            'segments': [
+                {'emotion': emo, 'value': 0, 'cumulative': 0}
+                for emo in default_emotions
+            ],
             'max_num': [None, 0]
         }
 
 
-def get_emotions_info():
+def get_emotions_info() -> Dict[str, Any]:
+    """
+    Retrieve emotion summary for the current user.
+
+    Returns:
+        The same structure as get_emotions_info_from_logs.
+    """
     return get_emotions_info_from_logs(current_user.emotion_logs)
 
 
