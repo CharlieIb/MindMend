@@ -518,7 +518,7 @@ def reset_db():
             ],
         },
         {
-            "name": "Type 1 Bipolar Disorder",
+            "name": "Type 1/2 Bipolar Disorder",
             "threshold": 7,
             "questions": [
                 {"q_number": 1,
@@ -542,34 +542,6 @@ def reset_db():
             "resources": [
                 {"label": "International Bipolar Foundation", "link": "https://ibpf.org"},
                 {"label": "Bipolar Disorder Management Guide",
-                 "link": "https://www.helpguide.org/articles/bipolar-disorder/bipolar-disorder-symptoms-and-causes.htm"},
-                {"label": "University of Birmingham Therapeutic Support",
-                 "link": "https://intranet.birmingham.ac.uk/student/your-wellbeing/mental-health/therapeutic-support.aspx"},
-                {"label": "University of Birmingham Mental Health & Wellbeing Service",
-                 "link": "https://intranet.birmingham.ac.uk/student/your-wellbeing/mental-health/index.aspx"}
-            ],
-        },
-        {
-            "name": "Type 2 Bipolar Disorder",
-            "threshold": 7,
-            "questions": [
-                {"q_number": 1,
-                 "question": "Have you had periods of extremely high energy or activity lasting at least one week?",
-                 "value": 3},
-                {"q_number": 2, "question": "Did you feel unusually confident or grandiose during these periods?",
-                 "value": 2},
-                {"q_number": 3, "question": "Did you sleep much less but still feel energetic?", "value": 1},
-                {"q_number": 4,
-                 "question": "Did you engage in impulsive or risky behaviors (e.g., spending sprees, reckless driving)?",
-                 "value": 1},
-                {"q_number": 5, "question": "Have you had at least one major depressive episode?", "value": 1},
-            ],
-            "therapeutic_recs": [
-                {"description": "Reach out to your doctor for further help", "treatments": "Medical help"},
-            ],
-            "resources": [
-                {"label": "Depression and Bipolar Support Alliance", "link": "https://www.dbsalliance.org"},
-                {"label": "Bipolar Disorder Self-Help Guide",
                  "link": "https://www.helpguide.org/articles/bipolar-disorder/bipolar-disorder-symptoms-and-causes.htm"},
                 {"label": "University of Birmingham Therapeutic Support",
                  "link": "https://intranet.birmingham.ac.uk/student/your-wellbeing/mental-health/therapeutic-support.aspx"},
