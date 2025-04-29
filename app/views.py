@@ -356,6 +356,9 @@ def notification_seen() -> Any:
     Mark a notification as read and redirect back to MindMirror.
 
     Expects 'notif_id', 'limit', and 'is_open' in query parameters.
+
+    Returns:
+        Redirect for mindmirror.thml
     """
     # Parse parameters
     notif_id: int = int(request.args.get('notif_id', 0))
