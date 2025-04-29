@@ -1,12 +1,32 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="d-flex flex-wrap justify-content-center gap-4">
-    {% for i in range(10) %}
-    <img src="{{ url_for('static', filename='img/mindmend_logo.png') }}"
-         alt="MindMend Logo"
-         class="nav_bar_logo">
-    {% endfor %}
-    <h1 class="mt-2">MindMend</h1>
+<div class="d-flex flex-column align-items-center">
+  <div class="d-flex flex-wrap justify-content-center gap-4">
+      {% for i in range(10) %}
+      <img src="{{ url_for('static', filename='img/mindmend_logo.png') }}"
+           alt="MindMend Logo"
+           class="nav_bar_logo">
+      {% endfor %}
+      <h1 class="mt-2">MindMend</h1>
+  </div>
+
+  <p class="lead text-center mt-4">
+    MindMend is a mental-health screening and self-monitoring app
+    designed especially for university students. Select the symptoms
+    you’re experiencing, this will bring you onto recommend questionnaires to complete.
+    You will be provided personalised diagnostic scores, therapeutic recommendations,
+    and trusted resources. You can also “Check-In” daily to log how you
+    feel and see your emotion trends in MindMirror.
+  </p>
+
+  <div class="row mt-3">
+    <div class="col text-center">
+      <a class="btn btn-primary" href="{{ url_for('select_symptoms') }}">Start Screening Tool</a>
+    </div>
+    <div class="col text-center">
+      <a class="btn btn-secondary" href="{{ url_for('emotion_log') }}">Check-In Now</a>
+    </div>
+  </div>
 </div>
 {% endblock %}
