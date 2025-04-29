@@ -13,6 +13,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
 from urllib.parse import urlsplit
 from app.utils.CheckIn.EmotionLog import emotions
+from typing import Any, Dict
 
 
 # Load data into classes on first load
@@ -260,10 +261,23 @@ def share_data():
 # MindMirror - landing page
 @app.route('/mindmirror', methods=['GET', 'POST'])
 @login_required
-def mindmirror():
+def mindmirror() -> Any:
+    """
+    Landing page for the MindMirror dashboard.
+
+    Handles toggling between month/year heatmap display and
+    gathers data for heatmap, health tracking, emotion summaries,
+    and notifications.
+
+    Returns:
+        Rendered template for the MindMirror page.
+    """
+    # Form to choose display mode (month/year)
     form_display = ChooseForm()
-    display_year_month = session.get('display_year_month', 'month')
+    display_year_month: str = session.get('display_year_month', 'month')
+
     if form_display.validate_on_submit():
+        # Toggle display mode
         if form_display.change.data == 'year':
             display_year_month = 'month'
         elif form_display.change.data == 'month':
@@ -271,21 +285,23 @@ def mindmirror():
         session['display_year_month'] = display_year_month
         return redirect(url_for('mindmirror'))
 
-    heatmap_info = get_heatmap_info()
+    # Fetch data for heatmap and tracking widgets
+    heatmap_info: Dict[str, Any] = get_heatmap_info()
     heatmap_info['display_year_month'] = display_year_month
-    track_health_info = get_health_info()
-    track_emotions_info = get_emotions_info()
+    track_health_info: Dict[str, Any] = get_health_info()
+    track_emotions_info: Dict[str, Any] = get_emotions_info()
 
+    # Notification widget: latest 'limit' notifications
     service = NotificationService(db.session)
-    limit = int(request.args.get('limit', 5))
+    limit: int = int(request.args.get('limit', 5))
     notification_info = service.get_notifications(limit)
 
     return render_template(
         'mindmirror.html',
         title='MindMirror',
         form_display=form_display,
-        heatmap_info=heatmap_info,
         mindmirror_display=current_user.user_settings.mind_mirror_display,
+        heatmap_info=heatmap_info,
         track_health_info=track_health_info,
         track_emotions_info=track_emotions_info,
         notification_info=notification_info
@@ -295,11 +311,24 @@ def mindmirror():
 # MindMirror - edit what widgets are shown page
 @app.route('/mindmirror_edit', methods=['GET', 'POST'])
 @login_required
-def mindmirror_edit():
-    mind_mirror_display = current_user.user_settings.mind_mirror_display
-    form = MindMirrorLayoutForm(data=mind_mirror_display)
+def mindmirror_edit() -> Any:
+    """
+    Page to edit which widgets appear on the MindMirror dashboard.
+
+    Renders a form pre-populated with current settings; updates
+    user preferences on submit.
+
+    Returns:
+        Rendered template for editing MindMirror layout or redirect on success.
+    """
+    settings_info = current_user.user_settings.mind_mirror_display
+    form = MindMirrorLayoutForm(data=settings_info)
+
     if form.validate_on_submit():
-        user = db.session.scalar(sa.select(User).where(User.username == current_user.username))
+        # Load user object and update settings
+        user: User = db.session.scalar(
+            db.select(User).where(User.username == current_user.username)
+        )
         user.user_settings.mind_mirror_display = {
             'heatmap': form.heatmap.data,
             'emotion_graph': form.emotion_graph.data,
@@ -322,15 +351,27 @@ def mindmirror_edit():
 
 @app.route('/notification_seen')
 @login_required
-def notification_seen():
-    notif_id = int(request.args.get('notif_id'))
-    notif = db.session.get(Notification, notif_id)
-    notif.is_read = True
-    db.session.commit()
+def notification_seen() -> Any:
+    """
+    Mark a notification as read and redirect back to MindMirror.
 
-    limit = request.args.get('limit', 15)
-    is_open = request.args.get('is_open', 'false')
+    Expects 'notif_id', 'limit', and 'is_open' in query parameters.
 
+    Returns:
+        Redirect for mindmirror.thml
+    """
+    # Parse parameters
+    notif_id: int = int(request.args.get('notif_id', 0))
+    limit: int = int(request.args.get('limit', 15))
+    is_open: str = request.args.get('is_open', 'false')
+
+    # Update notification status
+    notif: Notification = db.session.get(Notification, notif_id)
+    if notif:
+        notif.is_read = True
+        db.session.commit()
+
+    # Redirect back to MindMirror with previous view params
     return redirect(
         url_for('mindmirror', limit=limit, is_open=is_open)
     )
