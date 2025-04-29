@@ -25,11 +25,25 @@ def before_request_handler():
 # Not logged In Access
 @app.route('/')
 def home():
+    """
+    Home for users with no account, explains App.
+
+    Returns:
+        Render template for index.html
+    """
     return render_template('index.html', title='Home')
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    """
+    Manages user login, checks if password matches username saved in db.
+    If it does users data is loaded for the session.
+    Also manages redirects to page user was trying to access or register.
+
+    Returns:
+        Render template for login page or redirects to page user was trying to access and register page.
+    """
     if current_user.is_authenticated:
         return redirect(url_for('home'))
     form_login = LoginForm()
@@ -82,6 +96,12 @@ def login():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    """
+    Manages User registration and checks they password strength and that they are using a University email.
+
+    Returns:
+        Render template for register, and once registered redirects login page.
+    """
     form = RegisterForm()
     if form.validate_on_submit():
         user = User()
@@ -109,6 +129,12 @@ def register():
 # Both logged in and not logged in
 @app.route('/contact')
 def contacts():
+    """
+    Contact page at footer of app, displays a table with teams contact details.
+
+    Returns:
+        Render template for contacts page
+    """
     contacts_info = {
         1: {'name': 'Mischa', 'email': 'mischa.mcla@gmail.com', 'phone': 'N/A'},
         2: {'name': 'Charlie', 'email': 'cibbett325@gmail.com', 'phone': 'N/A'},
@@ -123,6 +149,14 @@ def contacts():
 @app.route('/admin/<username>')
 @login_required
 def home_admin(username):
+    """
+    Home page for admin users - no further implementation at the moment.
+
+    :param username: Admin username.
+
+    Returns:
+        Render template for home_admin.html
+    """
     username = current_user.username
     return render_template('home_admin.html', title=f"Home {username}", username=username)
 
@@ -131,6 +165,14 @@ def home_admin(username):
 @login_required
 @roles_required('Admin')
 def admin():
+    """
+    Page for managing Admin Privileges, with ability to see all Users in the system as well as info about each.
+    Also contains the ability to delete users and change users role, eg: Admin -> Normal or Normal -> Admin.
+    Has checks to prevent deleting the last Admin in the system.
+
+    Returns:
+         Render template of admin.html
+    """
     form = ChooseForm()
     if current_user.role != 'Admin':
         flash('You do not have permission to access this page', 'danger')
@@ -196,6 +238,12 @@ def admin():
 @app.route('/change_password', methods=['GET', 'POST'])
 @login_required
 def change_password():
+    """
+    Manages Change Password ability and makes sure it meets password requirements.
+
+    Returns:
+         Render template for change_password or redirect for home if password is changed successfully.
+    """
     form = ChangePasswordForm()
     if form.validate_on_submit():
         user = db.session.scalar(
@@ -216,6 +264,12 @@ def change_password():
 @app.route('/logout')
 @login_required
 def logout():
+    """
+    Logs User out.
+
+    Returns:
+        Redirects to home page.
+    """
     logout_user()
     return redirect(url_for('home'))
 
@@ -223,6 +277,13 @@ def logout():
 @app.route('/settings', methods=['GET', 'POST'])
 @login_required
 def settings():
+    """
+    Manages users settings and gives Users the option to change their password or logout.
+    Users can also choose whether they want their data shared or physiological data tracked.
+
+    Returns:
+        Render template for settings.html or redirects home if user logs out and change password.
+    """
     form = SettingsForm()
     if form.validate_on_submit():
         if form.logout.data:
@@ -239,6 +300,12 @@ def settings():
 @app.route('/track_physiological', methods=['GET', 'POST'])
 @login_required
 def track_physiological():
+    """
+    Changes track physiological data on or off.
+
+    Returns:
+        Redirect for setting page.
+    """
     user = db.session.scalar(sa.select(User).where(User.username == current_user.username))
     user.track_physiological = not user.track_physiological
     db.session.commit()
@@ -249,6 +316,12 @@ def track_physiological():
 @app.route('/share_data', methods=['GET', 'POST'])
 @login_required
 def share_data():
+    """
+    Changes share data on or off.
+
+    Returns:
+         Redirect for setting page.
+    """
     user = db.session.scalar(sa.select(User).where(User.username == current_user.username))
     user.share_data = not user.share_data
     db.session.commit()
