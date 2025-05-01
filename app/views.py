@@ -450,7 +450,7 @@ def notification_seen() -> Any:
     )
 
 
-# CheckIn
+# CheckIn - User selects emotions
 @app.route('/check-in', methods=['GET', 'POST'])
 @login_required
 def emotion_log():
