@@ -119,3 +119,15 @@ def setup_conditions(session):
         'conditions': [cond1, cond2, cond3],
         'questions': [q1_c1, q2_c1, q1_c2]
     }
+
+@pytest.fixture
+def client(app):
+    """Simulates HTTP requests."""
+    return app.test_client()
+
+@pytest.fixture
+def logged_in_user(client, session, test_user):
+    """Mocks a logged-in user."""
+    with client.session_transaction() as sess:
+        sess['_user_id'] = str(test_user.id)
+    return test_user
