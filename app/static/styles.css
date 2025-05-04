@@ -231,67 +231,68 @@ display: none;
 
 /* EMOTION BACKGROUND */
 .Happy,
-.bright_yellow {
-    background-color: rgba(247, 200, 0, 0.5);
+.yellow {
+    background-color: rgba(var(--bs-warning-rgb), 0.5);
 }
 
 .Calm,
-.light_blue {
-    background-color: rgba(173, 216, 230, 0.5);
+.dark_blue {
+    background-color: rgba(var(--bs-primary-rgb), 0.5);
 }
 
 .Anxious,
-.red {
-    background-color: rgba(220, 20, 60, 0.5);
+.grey {
+    background-color: rgba(var(--bs-secondary-rgb), 0.5);
 }
 
 .Sad,
-.dark_blue {
-    background-color: rgba(0, 0, 128, 0.5);
+.blue {
+    background-color: rgba(var(--bs-info-rgb), 0.5);
 }
 
 .Love,
-.hot_pink {
-    background-color: rgba(255, 100, 193, 0.5);
+.green {
+    background-color: rgba(var(--bs-success-rgb), 0.5);
 }
 
 .Anger,
-.dark_red {
-    background-color: rgba(139, 0, 0, 0.5);
+.red {
+    background-color: rgba(var(--bs-danger-rgb), 0.5);
 }
 
 /* EMOTION BORDERS */
 .Happy_border,
-.bright_yellow_border {
-    border: 1px solid rgba(247, 200, 0, 0.5);
+.yellow_border {
+    border: 1px solid rgba(var(--bs-warning-rgb), 0.5);
 }
 
 .Calm_border,
-.light_blue_border {
-    border: 1px solid rgba(173, 216, 230, 0.5);
+.dark_blue_border {
+    border: 1px solid rgba(var(--bs-primary-rgb), 0.5);
 }
 
 .Anxious_border,
 .red_border {
-    border: 1px solid rgba(220, 20, 60, 0.5);
+    border: 1px solid rgba(var(--bs-secondary-rgb), 0.5);
 }
 
 .Sad_border,
-.dark_blue_border {
-    border: 1px solid rgba(0, 0, 128, 0.5);
+.blue_border {
+    border: 1px solid rgba(var(--bs-info-rgb), 0.5);
 }
 
 .Love_border,
-.hot_pink_border {
-    border: 1px solid rgba(255, 100, 193, 0.5);
+.green_border {
+    border: 1px solid rgba(var(--bs-success-rgb), 0.5);
 }
 
 .Anger_border,
-.dark_red_border {
-    border: 1px solid rgba(139, 0, 0, 0.5);
+.red_border {
+    border: 1px solid rgba(var(--bs-danger-rgb), 0.5);
 }
 
 
+/* Emotions in Check In */
 input[type="checkbox"]:hide-checkbox {
     display: none;
 }
