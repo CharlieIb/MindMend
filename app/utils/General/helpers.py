@@ -238,6 +238,8 @@ def get_emotions_info() -> Dict[str, Any]:
 
 ################### SCREENING TOOL ##############################
 # List of symptoms
+# The tuple’s first element (string ID) is what the form POSTs;
+# the second element is what the user sees in the multi-select UI.
 symptom_list = [('1', 'Excessive Worry/Anxiety'), ('2', 'Panic Attack/Intense Fear'),
                 ('3', 'Fear/Intense Discomfort in Social Settings'),
                 ('4', 'Avoidance of Social Situations'), ('5', 'Low Mood'), ('6', 'No Enjoyment in Anything'),
@@ -248,22 +250,24 @@ symptom_list = [('1', 'Excessive Worry/Anxiety'), ('2', 'Panic Attack/Intense Fe
                 ('14', 'Trouble Quitting a Substance'), ('15', 'Physical Self Harm to Oneself')]
 
 # Mapping of symptom id  to condition id
+#  This table is the source that links each front-end
+#   symptom choice to one-or-more condition IDs stored in the database.
 SYMPTOM_TO_CONDITION_MAP = {
-    '1': [1],  # ex, Symptom #1 triggers Condition #4
+    '1': [1],      # “Excessive Worry”  →  Generalised Anxiety (cond_id 1)
     '2': [2],
     '3': [3],
-    '4': [3],
-    '5': [4, 10, 11],  # Symptom #5 triggers Condition #4, #10, #11
-    '6': [4, 10, 11],
-    '7': [4, 10, 11],
-    '8': [1, 4, 9],
-    '9': [10, 11],
-    '10': [10, 11],
+    '4': [3],      # two symptoms map to Social Anxiety (3)
+    '5': [4, 10],  # low mood may flag Depression or Bipolar types
+    '6': [4, 10],
+    '7': [4, 10],
+    '8': [1, 4, 9], # poor concentration overlaps Anxiety/Depression/ADHD
+    '9': [10],
+    '10': [10],
     '11': [5, 6, 7],
     '12': [5, 6, 7],
     '13': [5, 6, 7],
     '14': [8],
-    '15': [12]
+    '15': [11]
 }
 
 
