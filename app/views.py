@@ -12,7 +12,6 @@ from app.models import User, Notification
 from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
 from urllib.parse import urlsplit
-from app.utils.CheckIn.EmotionLog import emotions
 from typing import Any, Dict
 
 
@@ -455,6 +454,7 @@ def notification_seen() -> Any:
 @login_required
 def emotion_log():
     form = EmotionForm()
+    emotions = EmotionLogManager.list_emotions()
 
     form.emotions.choices = [
         (f"{feeling}::{emotion['title']}", feeling)
