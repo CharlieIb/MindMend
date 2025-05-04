@@ -20,7 +20,7 @@ def test_single_happy_log():
     assert info['total_emotion_logs'] == 1
 
     # one log == 100%, bar units -> 100 / 2 == 50
-    assert info['max_num'] == ['Happy', 100]
+    assert info['max_num'] == ['Happy', 1]
     assert info['emotions_percentage']['Happy'] == 50
 
 
@@ -28,23 +28,32 @@ def test_multiple_logs():
     # 2 Sad, 1 Anger
     logs = [Log('Sad'), Log('Sad'), Log('Anger')]
     info = get_emotions_info_from_logs(logs)
-    # one three total == 3
+
+    # total logs == 3
     assert info['total_emotion_logs'] == 3
 
-    # Sad -> rounded(2/3) == 67, then divide by two to fit bar == ~33
-    sad_percent = round((2 / 3) * 100 / 2)
-    assert info['emotions_percentage']['Sad'] == sad_percent
-    assert info['max_num'] == ['Sad', sad_percent * 2]
+    # half-scaled bar units: round((2/3)*50) == 33
+    expected_bar = round((2 / 3) * 50)
+    assert info['emotions_percentage']['Sad'] == expected_bar
+
+    # max_num returns raw count == 2
+    assert info['max_num'] == ['Sad', 2]
 
 
 def test_tie_breaker_order():
-    # 1 Happy, 1 Calm -> both 50% -> tie
+    # 1 Happy, 1 Calm → both tied
     logs = [Log('Happy'), Log('Calm')]
     info = get_emotions_info_from_logs(logs)
 
-    # Which ever appears first in dict order wins (Anger, Anxious, Sad, Happy, Love, Calm)
+    # Tie goes to the first emotion in your default order
     assert info['max_num'][0] == 'Happy'
-    assert info['max_num'][1] == info['emotions_percentage']['Happy'] * 2
+
+    # And max_num[1] is the raw count (1), not 50
+    assert info['max_num'][1] == 1
+
+    # If you also want to check the bar-unit percentage:
+    expected_bar = round((1 / info['total_emotion_logs']) * 50)
+    assert info['emotions_percentage']['Happy'] == expected_bar
 
 
 def test_segments():
