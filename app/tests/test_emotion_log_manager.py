@@ -67,7 +67,7 @@ def test_add_new_log_mandatory_fields(session, test_user):
     logs_in_db = session.execute(q).scalars().all()
     assert len(logs_in_db) == initial_log_count + 1
     new_log = logs_in_db[-1]
-    assert new_log.emotion == 'Excited'
+    assert new_log.emotion == 'Happy'
     assert new_log.steps == 2000
     assert new_log.activity_duration is None
     assert new_log.heart_rate is None
@@ -102,7 +102,7 @@ def test_add_new_log_all_fields(session, test_user, setup_conditions):
     initial_log_count = len(manager.emotional_logs)
 
     manager.add_new_log(
-        emotion='Calm',
+        emotion='Relaxed',
         steps=50,
         activity_duration=30,
         heart_rate=65,
