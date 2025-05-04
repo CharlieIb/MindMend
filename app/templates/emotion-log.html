@@ -23,7 +23,7 @@
                                        id="emotion-{{ val[0]|lower|replace(' ', '-') }}"
                                        name="{{ field.name }}"
                                        value="{{ field._value() }}"
-                                       class="d-none"
+                                       class="d-none hide-checkbox"
                                        {% if field.checked %}checked{% endif %}>
                                 <label for="emotion-{{ val[0]|lower|replace(' ', '-') }}"
                                        class="btn text-dark {{ emotion['button-color'] }} w-100">

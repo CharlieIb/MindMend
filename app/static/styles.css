@@ -292,8 +292,7 @@ display: none;
 }
 
 
-/*
-input[type="checkbox"] {
+input[type="checkbox"]:hide-checkbox {
     display: none;
 }
 
@@ -333,4 +332,3 @@ input[type="checkbox"]:checked + label.btn-outline-success {
     background-color: #198754;
     border-color: #198754;
 }
-*/
