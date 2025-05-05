@@ -30,7 +30,7 @@ def test_group_emotions_filter_and_adds_colours():
 
     assert len(grouped) == 1
     assert grouped[0]['emotion'] == 'Happy'
-    assert grouped[0]['colour'] == 'bright_yellow'
+    assert grouped[0]['colour'] == 'yellow'
     assert grouped[0]['date'] == datetime(2025, 4, 10)
 
 
@@ -66,13 +66,13 @@ def test_month_display_marks_logged_days(freeze_now):
                 day, info = cell
                 if day == 5:
                     found = True
-                    assert info == {'emotion': 'Anger', 'colour': 'dark_red'}
+                    assert info == {'emotion': 'Anger', 'colour': 'red'}
     assert found, 'Day 5 should be annotated in the April heatmap'
 
 
 def test_year_display_marks_each_month_correctly(freeze_now):
     log_date = datetime(2025, 1, 20)
-    logs = [{'date': log_date, 'emotion': 'Love', 'colour': 'hot_pink'}]
+    logs = [{'date': log_date, 'emotion': 'Love', 'colour': 'green'}]
     hm = HeatMap(1, 1, 2025, logs)
 
     year_info = hm.year_display()
@@ -87,5 +87,5 @@ def test_year_display_marks_each_month_correctly(freeze_now):
                 day, info = cell
                 if day == 20:
                     found = True
-                    assert info == {'emotion': 'Love', 'colour': 'hot_pink'}
+                    assert info == {'emotion': 'Love', 'colour': 'green'}
     assert found, 'Day 20 in June should be annotated in the yearly heatmap'
