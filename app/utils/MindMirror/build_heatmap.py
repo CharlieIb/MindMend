@@ -79,12 +79,12 @@ class HeatMap:
             - 'colour': associated colour name.
         """
         emotions_table = [
-            {'emotion': 'Anger', 'colour': 'dark_red'},
-            {'emotion': 'Anxious', 'colour': 'red'},
-            {'emotion': 'Sad', 'colour': 'dark_blue'},
-            {'emotion': 'Happy', 'colour': 'bright_yellow'},
-            {'emotion': 'Love', 'colour': 'hot_pink'},
-            {'emotion': 'Calm', 'colour': 'light_blue'}
+            {'emotion': 'Anger', 'colour': 'red'},
+            {'emotion': 'Anxious', 'colour': 'grey'},
+            {'emotion': 'Sad', 'colour': 'blue'},
+            {'emotion': 'Happy', 'colour': 'yellow'},
+            {'emotion': 'Love', 'colour': 'green'},
+            {'emotion': 'Calm', 'colour': 'dark_blue'}
         ]
         mapped: List[Dict[str, str]] = []
         for log in self.data_log:
