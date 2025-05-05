@@ -49,13 +49,15 @@ Refer to environment.yml
      - Allows user to take some diagnostic questionnaire that is tailored to the presenting symptoms they have selected and receive some therapeutic recommendations and any useful resources based on their responses to the questionnaire
 ###  Overall Software Architecture: Layered Architecture
   - Software is divided into 4 Main Layers : 
-    - User Interface Layer(contains all HTML Flask templates)
-    - Application Layer (contains all Flask routes and functions)
+    - User Interface Layer(contains all Flask routes and all HTML templates and the CSS stylesheet)
+    - Application Layer (contains all functions found in utils/General)
     - Data Access Layer (contains custom managers used for database)
     - Data Storage Layer (contains database)
 ###  Design Pattern:
-### Software Development Methodology: SCRUM
-- Using Jira in 1/2-week sprints for task tracking
+### Software Development Methodology: Agile/SCRUMBAN
+- Using Jira to facilitate this approach
+- 1/2-week sprints
+- Kanban board for easy task tracking
 
 ---
 
