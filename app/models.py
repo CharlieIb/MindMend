@@ -28,7 +28,7 @@ class User(UserMixin, db.Model):
     notifications: so.Mapped[list['Notification']] = so.relationship(back_populates="user",
                                                                      cascade="all, delete-orphan")
     support_request: so.Mapped['SupportRequest'] = so.relationship(back_populates="user", cascade="all, delete-orphan",
-                                                                   uselist=False)
+                                                                    uselist=False)
 
     def __repr__(self):
         return f"User(id={self.id}, username={self.username}, email={self.email}, role={self.role}, track_physiological={self.track_physiological})"
