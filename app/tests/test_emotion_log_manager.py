@@ -1,6 +1,5 @@
-import pytest
-from app.models import EmotionLog, User
-from app.utils.CheckIn.EmotionLog import EmotionLogManager
+from app.models import EmotionLog
+from app.utils.DatabaseAccess.CheckIn import EmotionLogManager
 from datetime import datetime
 import sqlalchemy as sa
 
