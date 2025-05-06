@@ -1,7 +1,7 @@
 # ./app/utils/__init__.py
 from .MindMirror import HeatMap, TrackHealth
-from .ScreeningTool import ConditionManager, ResourceManager, TherapeuticRecManager, TestResultManager
-from .CheckIn import EmotionLogManager, ActivityManager, LocationManager, PersonManager
+from app.utils.DatabaseAccess.ScreeningTool import ConditionManager, ResourceManager, TherapeuticRecManager, TestResultManager
+from app.utils.DatabaseAccess.CheckIn import EmotionLogManager, ActivityManager, LocationManager, PersonManager
 from .General import (reset_db, ChooseForm, RegisterForm, LoginForm, ChangePasswordForm,
                    SettingsForm, MindMirrorLayoutForm, SelectSymptomsForm,
                    EmotionForm, EmotionNoteForm, roles_required, initialize_app,

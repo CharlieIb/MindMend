@@ -1,6 +1,6 @@
 import pytest
 from app import app as flask_app
-from app.utils.ScreeningTool.Condition import ConditionManager
+from app.utils.DatabaseAccess.ScreeningTool import ConditionManager
 from app.utils.General.helpers import selectConditions, generate_questionnaires
 from app.models import Condition, ConditionQuestion
 

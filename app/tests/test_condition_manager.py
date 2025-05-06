@@ -1,6 +1,5 @@
-import pytest
 from app.models import Condition, ConditionQuestion
-from app.utils.ScreeningTool.Condition import ConditionManager
+from app.utils.DatabaseAccess.ScreeningTool import ConditionManager
 
 def test_load_conditions(session, setup_conditions):
     """Positive test: Load all conditions into memory."""
