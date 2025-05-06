@@ -23,7 +23,7 @@ class User(UserMixin, db.Model):
     # Relationships
     user_settings: so.Mapped['UserSettings'] = so.relationship(back_populates="user", cascade="all, delete-orphan",
                                                                uselist=False)
-    emotion_logs: so.Mapped[list['EmotionLog']] = so.relationship(back_populates="user", cascade="all, delete-orphan")
+    emotion_logs: so.Mapped[list['EmotionLog']] = so.relationship(back_populates="user")
     test_result: so.Mapped[list['TestResult']] = so.relationship(back_populates="user", cascade="all, delete-orphan")
     notifications: so.Mapped[list['Notification']] = so.relationship(back_populates="user",
                                                                      cascade="all, delete-orphan")
