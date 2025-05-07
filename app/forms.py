@@ -122,7 +122,7 @@ def generate_form(questionnaires):
 class EmotionForm(FlaskForm):
     emotions = SelectMultipleField(
         'Emotions',
-        choices=[],  # Set in view
+        choices=[],
         option_widget=CheckboxInput(),
         widget=ListWidget(prefix_label=False)
     )
@@ -132,15 +132,15 @@ class EmotionNoteForm(FlaskForm):
     notes = TextAreaField("How are you feeling?", validators=[Optional()])
     activity = SelectField(
         'What activity were you doing at the time?',
-        choices=[('Working', 'Working'), ('Commuting', 'Commuting'), ('Socialising', 'Socialising'), ('Exercising', 'Exercising'), ('Studying', 'Studying'), ('Shopping', 'Shopping'), ('Relaxing', 'Relaxing')]
+        choices=[('N/A', 'N/A'), ('Working', 'Working'), ('Commuting', 'Commuting'), ('Socialising', 'Socialising'), ('Exercising', 'Exercising'), ('Studying', 'Studying'), ('Shopping', 'Shopping'), ('Relaxing', 'Relaxing')]
     )
     location = SelectField(
         'Where were you?',
-        choices=[('Office', 'Office'), ('Home', 'Home'), ('Bar', 'Bar'), ('Gym', 'Gym'), ('Park', 'Park'), ('Cafe', 'Cafe'), ('Library', 'Library') ]
+        choices=[('N/A', 'N/A'), ('Office', 'Office'), ('Home', 'Home'), ('Bar', 'Bar'), ('Gym', 'Gym'), ('Park', 'Park'), ('Cafe', 'Cafe'), ('Library', 'Library') ]
     )
     person = SelectField(
         'Who were you with?',
-        choices=[('Colleagues', 'Colleagues'), ('Friends', 'Friends'), ('Family', 'Family'), ('Partner', 'Partner'), ('Neighbours', 'Neighbours'), ('Strangers', 'Strangers')]
+        choices=[('N/A', 'N/A'), ('Colleagues', 'Colleagues'), ('Friends', 'Friends'), ('Family', 'Family'), ('Partner', 'Partner'), ('Neighbours', 'Neighbours'), ('Strangers', 'Strangers')]
     )
     submit = SubmitField("Save")
 
