@@ -11,8 +11,12 @@ as well as provide tools for emotional self-reflection.
 ---
 
 ## 2. System Requirements
-
-Refer to environment.yml 
+1. Refer to environment.yml
+2. Once all dependencies are installed, make sure to open a Flask Shell in the terminal and run reset_db() to create the data and tables.
+    ```commandline
+    flask shell
+    >>> reset_db()
+    ```
 
 ---
 
@@ -20,9 +24,15 @@ Refer to environment.yml
 ### Setup
 ### Basic Usage
 1. Create an account via Registration Page or Login using default user (username:bob, password:bob.pw)
+   > To register a university email will need to be used, which should end with '.ac.uk'
 2. Other Settings:
 ###  MindMirror Usage
 1. Navigate to "MindMirror" Tab on Navigation Bar
+- MindMirror offers a user-friendly dashboard where users can access their personal logs and collected data.
+- The current focus is on emotional tracking, providing clear visualisations of mood trends and detailed insights for specific days.
+- Future updates will enhance the ability to interpret and visualise physiological data; for now, users can view basic information related to this.
+- Users can customise the information displayed on their dashboard by using the edit button located in the top right corner.
+- The notification centre provides daily reminders to complete check-in logs and weekly updates highlighting their most frequently logged emotions. This can be found in the top left corner. 
 ###  CheckIn Usage
 1. Navigate to "Check In" Tab on Navigation Bar
 2. Choose Emotions
@@ -64,8 +74,8 @@ Refer to environment.yml
 ## 5. Contributions
 | Student Name & ID | Contribution(%) | Key Contributions / Tasks Completed | Comments (if any) | Signature |
 |-------------------|-----------------|-------------------------------------|-------------------|-----------|
-|Charles Anthony Ibbett 2902681|                 |                                     |                   |           |
-|Feyi Badejo 2830160 |                 |                                     |                   |           |
-|Aravind Seeralan 2769274|                 |                                     |                   |           |
-|Romas Ibrahim Almalhi 2799948|                 |                                     |                   |           |
-|Mischa McLaughlin 2879928|                 |                                     |                   |           |
+|Charles Anthony Ibbett 2902681| 20%             |                                     |                   |           |
+|Feyi Badejo 2830160 | 20%             |                                     |                   |           |
+|Aravind Seeralan 2769274| 20%             |                                     |                   |           |
+|Romas Ibrahim Almalhi 2799948| 20%             | Diagnostic Screening Tool           |                   | RA        |
+|Mischa McLaughlin 2879928| 20%             | MindMirror                          |                   | MM        |
