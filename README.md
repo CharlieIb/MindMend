@@ -13,10 +13,14 @@ as well as provide tools for emotional self-reflection.
 ## 2. System Requirements
 1. Refer to environment.yml
 2. Once all dependencies are installed, make sure to open a Flask Shell in the terminal and run reset_db() to create the data and tables.
-    ```commandline
-    flask shell
-    >>> reset_db()
-    ```
+    1. **Run:**
+        ```
+       flask shell
+       ```
+   2. **Once in the python flask shell:**
+      ```
+      >>> reset_db()
+      ```
 
 ---
 
@@ -59,7 +63,7 @@ as well as provide tools for emotional self-reflection.
      - Allows user to take some diagnostic questionnaire that is tailored to the presenting symptoms they have selected and receive some therapeutic recommendations and any useful resources based on their responses to the questionnaire
 ###  Overall Software Architecture: Layered Architecture
   - Software is divided into 4 Main Layers : 
-    - User Interface Layer(contains all Flask routes and all HTML templates and the CSS stylesheet)
+    - User Interface Layer (contains all Flask routes and all HTML templates and the CSS stylesheet/JS scripts)
     - Application Layer (contains all functions found in utils/General)
     - Data Access Layer (contains custom managers used for database)
     - Data Storage Layer (contains database)
