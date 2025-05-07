@@ -75,7 +75,7 @@ as well as provide tools for emotional self-reflection.
 | Student Name & ID | Contribution(%) | Key Contributions / Tasks Completed | Comments (if any) | Signature |
 |-------------------|-----------------|-------------------------------------|-------------------|-----------|
 |Charles Anthony Ibbett 2902681| 20%             |                                     |                   |           |
-|Feyi Badejo 2830160 | 20%             |                                     |                   |           |
+|Feyi Badejo 2830160 | 20%             |               CheckIn                      |                   |   FB        |
 |Aravind Seeralan 2769274| 20%             | Diagnostic Screening Tool           |                   | AS        |
 |Romas Ibrahim Almalhi 2799948| 20%             | Diagnostic Screening Tool           |                   | RA        |
 |Mischa McLaughlin 2879928| 20%             | MindMirror                          |                   | MM        |
