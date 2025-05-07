@@ -35,8 +35,8 @@ as well as provide tools for emotional self-reflection.
 - The notification centre provides daily reminders to complete check-in logs and weekly updates highlighting their most frequently logged emotions. This can be found in the top left corner. 
 ###  CheckIn Usage
 1. Navigate to "Check In" Tab on Navigation Bar
-2. Choose Emotions
-3. Add Context
+2. Choose Emotions: Select emotion you are feeling at the moment from 6 categories of emotions and click submit
+3. Add Context: Optionally add some context to how you are feeling, eg. description, activity, people and location. Submit after completing fields
 ### Screening Tool Usage
 1. Navigate to "Screening Tool" Tab on Navigation Bar
 2. Start Assessment: Select all presenting symptoms that are applicable to you from the list provided, and click submit
@@ -76,6 +76,6 @@ as well as provide tools for emotional self-reflection.
 |-------------------|-----------------|-------------------------------------|-------------------|-----------|
 |Charles Anthony Ibbett 2902681| 20%             |                                     |                   |           |
 |Feyi Badejo 2830160 | 20%             |                                     |                   |           |
-|Aravind Seeralan 2769274| 20%             |                                     |                   |           |
+|Aravind Seeralan 2769274| 20%             | Diagnostic Screening Tool           |                   | AS        |
 |Romas Ibrahim Almalhi 2799948| 20%             | Diagnostic Screening Tool           |                   | RA        |
 |Mischa McLaughlin 2879928| 20%             | MindMirror                          |                   | MM        |
