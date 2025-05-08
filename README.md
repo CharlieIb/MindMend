@@ -68,6 +68,7 @@ as well as provide tools for emotional self-reflection.
     - Data Access Layer (contains custom managers used for database)
     - Data Storage Layer (contains database)
 ###  Design Pattern:
+-  The Decorator design pattern is used throughout the application.  Decorators, indicated by the @ symbol, are employed from both SQLAlchemy and Flask-Login.  Additionally, we've created custom decorators, located in app/utils/General/helpers.py, to manage route access based on user roles.  For example, in views.py, the /admin route uses this to ensure only users with the 'admin' role can access it (in the line of code: @roles_required('Admin')). 
 ### Software Development Methodology: Agile/SCRUMBAN
 - Using Jira to facilitate this approach
 - 1/2-week sprints
