@@ -147,6 +147,7 @@ def contacts():
 # Only Admin Access
 @app.route('/admin/<username>')
 @login_required
+@roles_required('Admin')
 def home_admin(username):
     """
     Home page for admin users - no further implementation at the moment.
